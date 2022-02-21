@@ -1,0 +1,40 @@
+﻿<ContentDialog
+    x:Class="ContentDialogExample.ContentDialog1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ContentDialogExample"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="TITLE"
+    PrimaryButtonText="Button1"
+    SecondaryButtonText="Button2"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <Grid x:Name = "gridMain" >
+        <Image x:Name = "imgMidiSettingBackground" Source = "ms-appx:///Images/MidiSettingBackground.png" Stretch = "None" />
+        <Image x:Name = "imgMidiSettingsClickArea" Source = "ms-appx:///Images/MidiSettingsClickArea.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator1" Source = "ms-appx:///Images/Oscillator1.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator2" Source = "ms-appx:///Images/Oscillator2.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator3" Source = "ms-appx:///Images/Oscillator3.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator4" Source = "ms-appx:///Images/Oscillator4.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator5" Source = "ms-appx:///Images/Oscillator5.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator6" Source = "ms-appx:///Images/Oscillator6.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator7" Source = "ms-appx:///Images/Oscillator7.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator8" Source = "ms-appx:///Images/Oscillator8.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator9" Source = "ms-appx:///Images/Oscillator9.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator10" Source = "ms-appx:///Images/Oscillator10.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator11" Source = "ms-appx:///Images/Oscillator11.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator12" Source = "ms-appx:///Images/Oscillator12.png" Stretch = "None" />
+        <Image x:Name = "imgBackground" Source = "ms-appx:///Images/Background.png" Stretch = "Uniform" />
+        <Grid x:Name = "gridControls" SizeChanged = "gridMain_SizeChanged" />
+        <Image x:Name = "imgClickArea" Source = "ms-appx:///Images/MidiSettingsClickArea.png" Stretch = "None" Opacity = "0"
+				PointerMoved = "imgClickArea_PointerMoved"
+				ImageOpened = "imgClickArea_ImageOpened"
+				PointerWheelChanged = "imgClickArea_PointerWheelChanged"
+				PointerReleased = "imgClickArea_PointerReleased"
+				PointerPressed = "imgClickArea_PointerPressed"
+				Tapped = "imgClickArea_Tapped" />
+    </Grid >
+</ContentDialog>

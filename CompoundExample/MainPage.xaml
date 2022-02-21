@@ -1,0 +1,132 @@
+﻿<Page
+    x:Class="CompositeExample.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CompositeExample"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name = "gridMain" >
+        <Image x:Name = "imgAdsrBackground" Source = "ms-appx:///Images/AdsrBackground.png" Stretch = "None" />
+        <Image x:Name = "imgADSRGraphBackground" Source = "ms-appx:///Images/ADSRGraphBackground.png" Stretch = "None" />
+        <Image x:Name = "imgAdsrModA" Source = "ms-appx:///Images/AdsrModA.png" Stretch = "None" />
+        <Image x:Name = "imgAdsrModD" Source = "ms-appx:///Images/AdsrModD.png" Stretch = "None" />
+        <Image x:Name = "imgAdsrModOff" Source = "ms-appx:///Images/AdsrModOff.png" Stretch = "None" />
+        <Image x:Name = "imgAdsrModR" Source = "ms-appx:///Images/AdsrModR.png" Stretch = "None" />
+        <Image x:Name = "imgAdsrModS" Source = "ms-appx:///Images/AdsrModS.png" Stretch = "None" />
+        <Image x:Name = "imgAM1" Source = "ms-appx:///Images/AM1.png" Stretch = "None" />
+        <Image x:Name = "imgAM2" Source = "ms-appx:///Images/AM2.png" Stretch = "None" />
+        <Image x:Name = "imgAMUp2" Source = "ms-appx:///Images/AMUp2.png" Stretch = "None" />
+        <Image x:Name = "imgAMUp2Left1" Source = "ms-appx:///Images/AMUp2Left1.png" Stretch = "None" />
+        <Image x:Name = "imgArrowknob_75" Source = "ms-appx:///Images/Arrowknob_75.png" Stretch = "None" />
+        <Image x:Name = "imgBlackKey" Source = "ms-appx:///Images/BlackKey.png" Stretch = "None" />
+        <Image x:Name = "imgCommonAdsr" Source = "ms-appx:///Images/CommonAdsr.png" Stretch = "None" />
+        <Image x:Name = "imgControlPanelBackground" Source = "ms-appx:///Images/ControlPanelBackground.png" Stretch = "None" />
+        <Image x:Name = "img0" Source = "ms-appx:///Images/Digit0.png" Stretch = "None" />
+        <Image x:Name = "img0Dot" Source = "ms-appx:///Images/Digit0Dot.png" Stretch = "None" />
+        <Image x:Name = "img1" Source = "ms-appx:///Images/Digit1.png" Stretch = "None" />
+        <Image x:Name = "img1Dot" Source = "ms-appx:///Images/Digit1Dot.png" Stretch = "None" />
+        <Image x:Name = "img2" Source = "ms-appx:///Images/Digit2.png" Stretch = "None" />
+        <Image x:Name = "img2Dot" Source = "ms-appx:///Images/Digit2Dot.png" Stretch = "None" />
+        <Image x:Name = "img3" Source = "ms-appx:///Images/Digit3.png" Stretch = "None" />
+        <Image x:Name = "img3Dot" Source = "ms-appx:///Images/Digit3Dot.png" Stretch = "None" />
+        <Image x:Name = "img4" Source = "ms-appx:///Images/Digit4.png" Stretch = "None" />
+        <Image x:Name = "img4Dot" Source = "ms-appx:///Images/Digit4Dot.png" Stretch = "None" />
+        <Image x:Name = "img5" Source = "ms-appx:///Images/Digit5.png" Stretch = "None" />
+        <Image x:Name = "img5Dot" Source = "ms-appx:///Images/Digit5Dot.png" Stretch = "None" />
+        <Image x:Name = "img6" Source = "ms-appx:///Images/Digit6.png" Stretch = "None" />
+        <Image x:Name = "img6Dot" Source = "ms-appx:///Images/Digit6Dot.png" Stretch = "None" />
+        <Image x:Name = "img7" Source = "ms-appx:///Images/Digit7.png" Stretch = "None" />
+        <Image x:Name = "img7Dot" Source = "ms-appx:///Images/Digit7Dot.png" Stretch = "None" />
+        <Image x:Name = "img8" Source = "ms-appx:///Images/Digit8.png" Stretch = "None" />
+        <Image x:Name = "img8Dot" Source = "ms-appx:///Images/Digit8Dot.png" Stretch = "None" />
+        <Image x:Name = "img9" Source = "ms-appx:///Images/Digit9.png" Stretch = "None" />
+        <Image x:Name = "img9Dot" Source = "ms-appx:///Images/Digit9Dot.png" Stretch = "None" />
+        <Image x:Name = "imgDisplayBackground" Source = "ms-appx:///Images/DisplayBackground.png" Stretch = "None" />
+        <Image x:Name = "imgFilterAdsrNegative" Source = "ms-appx:///Images/FilterAdsrNegative.png" Stretch = "None" />
+        <Image x:Name = "imgFilterAdsrPositive" Source = "ms-appx:///Images/FilterAdsrPositive.png" Stretch = "None" />
+        <Image x:Name = "imgFilterAmModulator" Source = "ms-appx:///Images/FilterAmModulator.png" Stretch = "None" />
+        <Image x:Name = "imgFilterBackground" Source = "ms-appx:///Images/FilterBackground.png" Stretch = "None" />
+        <Image x:Name = "imgFilterButtonBackground" Source = "ms-appx:///Images/FilterButtonBackground.png" Stretch = "None" />
+        <Image x:Name = "imgFilterFixed" Source = "ms-appx:///Images/FilterFixed.png" Stretch = "None" />
+        <Image x:Name = "imgFilterFmModulator" Source = "ms-appx:///Images/FilterFmModulator.png" Stretch = "None" />
+        <Image x:Name = "imgFilterOff" Source = "ms-appx:///Images/FilterOff.png" Stretch = "None" />
+        <Image x:Name = "imgFilterPmModulator" Source = "ms-appx:///Images/FilterPmModulator.png" Stretch = "None" />
+        <Image x:Name = "imgFM1" Source = "ms-appx:///Images/FM1.png" Stretch = "None" />
+        <Image x:Name = "imgFM2" Source = "ms-appx:///Images/FM2.png" Stretch = "None" />
+        <Image x:Name = "imgFMUp2" Source = "ms-appx:///Images/FMUp2.png" Stretch = "None" />
+        <Image x:Name = "imgFMUp2Left1" Source = "ms-appx:///Images/FMUp2Left1.png" Stretch = "None" />
+        <Image x:Name = "imgGraphDisplayBackground" Source = "ms-appx:///Images/GraphDisplayBackground.png" Stretch = "None" />
+        <Image x:Name = "imgHangingWire" Source = "ms-appx:///Images/HangingWire.png" Stretch = "None" />
+        <Image x:Name = "imgImageSelector" Source = "ms-appx:///Images/ImageSelector.png" Stretch = "None" />
+        <Image x:Name = "imgimgControlPanelBackground" Source = "ms-appx:///Images/imgControlPanelBackground.png" Stretch = "None" />
+        <Image x:Name = "imgLayout4" Source = "ms-appx:///Images/Layout4.png" Stretch = "None" />
+        <Image x:Name = "imgLayout6" Source = "ms-appx:///Images/Layout6.png" Stretch = "None" />
+        <Image x:Name = "imgLayout8" Source = "ms-appx:///Images/Layout8.png" Stretch = "None" />
+        <Image x:Name = "imgLayout12" Source = "ms-appx:///Images/Layout12.png" Stretch = "None" />
+        <Image x:Name = "imgLedOff" Source = "ms-appx:///Images/LedOff.png" Stretch = "None" />
+        <Image x:Name = "imgLedOn" Source = "ms-appx:///Images/LedOn.png" Stretch = "None" />
+        <Image x:Name = "imgLoadFromFile" Source = "ms-appx:///Images/LoadFromFile.png" Stretch = "None" />
+        <Image x:Name = "imgLoadFromLibrary" Source = "ms-appx:///Images/LoadFromLibrary.png" Stretch = "None" />
+        <Image x:Name = "imgLogotype" Source = "ms-appx:///Images/Logotype.png" Stretch = "None" />
+        <Image x:Name = "imgLongButton" Source = "ms-appx:///Images/LongButton.png" Stretch = "None" />
+        <Image x:Name = "imgModAll" Source = "ms-appx:///Images/ModAll.png" Stretch = "None" />
+        <Image x:Name = "imgModAM" Source = "ms-appx:///Images/ModAM.png" Stretch = "None" />
+        <Image x:Name = "imgModFilterButtonBackground" Source = "ms-appx:///Images/ModFilterButtonBackground.png" Stretch = "None" />
+        <Image x:Name = "imgModFilterDepth" Source = "ms-appx:///Images/ModFilterDepth.png" Stretch = "None" />
+        <Image x:Name = "imgModFilterFreq" Source = "ms-appx:///Images/ModFilterFreq.png" Stretch = "None" />
+        <Image x:Name = "imgModFilterKeyFollow" Source = "ms-appx:///Images/ModFilterKeyFollow.png" Stretch = "None" />
+        <Image x:Name = "imgModFilterOff" Source = "ms-appx:///Images/ModFilterOff.png" Stretch = "None" />
+        <Image x:Name = "imgModFilterQ" Source = "ms-appx:///Images/ModFilterQ.png" Stretch = "None" />
+        <Image x:Name = "imgModFM" Source = "ms-appx:///Images/ModFM.png" Stretch = "None" />
+        <Image x:Name = "imgModPM" Source = "ms-appx:///Images/ModPM.png" Stretch = "None" />
+        <Image x:Name = "imgModulatorHandle" Source = "ms-appx:///Images/ModulatorHandle.png" Stretch = "None" />
+        <Image x:Name = "imgMonit" Source = "ms-appx:///Images/Monit.png" Stretch = "None" />
+        <Image x:Name = "imgOscillator" Source = "ms-appx:///Images/Oscillator.png" Stretch = "None" />
+        <Image x:Name = "imgOscillatorBackground" Source = "ms-appx:///Images/OscillatorBackground.png" Stretch = "None" />
+        <Image x:Name = "imgPedalDown" Source = "ms-appx:///Images/PedalDown.png" Stretch = "None" />
+        <Image x:Name = "imgPedalUp" Source = "ms-appx:///Images/PedalUp.png" Stretch = "None" />
+        <Image x:Name = "imgPM1" Source = "ms-appx:///Images/PM1.png" Stretch = "None" />
+        <Image x:Name = "imgPM2" Source = "ms-appx:///Images/PM2.png" Stretch = "None" />
+        <Image x:Name = "imgPMUp2" Source = "ms-appx:///Images/PMUp2.png" Stretch = "None" />
+        <Image x:Name = "imgPMUp2Left1" Source = "ms-appx:///Images/PMUp2Left1.png" Stretch = "None" />
+        <Image x:Name = "imgSaveToFile" Source = "ms-appx:///Images/SaveToFile.png" Stretch = "None" />
+        <Image x:Name = "imgScreenshot" Source = "ms-appx:///Images/Screenshot.png" Stretch = "None" />
+        <Image x:Name = "imgSelectADSR" Source = "ms-appx:///Images/SelectADSR.png" Stretch = "None" />
+        <Image x:Name = "imgSelectFixFreq" Source = "ms-appx:///Images/SelectFixFreq.png" Stretch = "None" />
+        <Image x:Name = "imgSelectKeyboard" Source = "ms-appx:///Images/SelectKeyboard.png" Stretch = "None" />
+        <Image x:Name = "imgSelectNoise" Source = "ms-appx:///Images/SelectNoise.png" Stretch = "None" />
+        <Image x:Name = "imgSelectorAdsrFm" Source = "ms-appx:///Images/SelectorAdsrFm.png" Stretch = "None" />
+        <Image x:Name = "imgSelectorViewOff" Source = "ms-appx:///Images/SelectorViewOff.png" Stretch = "None" />
+        <Image x:Name = "imgSelectorViewOn" Source = "ms-appx:///Images/SelectorViewOn.png" Stretch = "None" />
+        <Image x:Name = "imgSelectPedalDown" Source = "ms-appx:///Images/SelectPedalDown.png" Stretch = "None" />
+        <Image x:Name = "imgSelectPedalUp" Source = "ms-appx:///Images/SelectPedalUp.png" Stretch = "None" />
+        <Image x:Name = "imgSelectPulse" Source = "ms-appx:///Images/SelectPulse.png" Stretch = "None" />
+        <Image x:Name = "imgSelectRandom" Source = "ms-appx:///Images/SelectRandom.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSawDwn" Source = "ms-appx:///Images/SelectSawDwn.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSawUp" Source = "ms-appx:///Images/SelectSawUp.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSine" Source = "ms-appx:///Images/SelectSine.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSoundOff" Source = "ms-appx:///Images/SelectSoundOff.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSoundOn" Source = "ms-appx:///Images/SelectSoundOn.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSquare" Source = "ms-appx:///Images/SelectSquare.png" Stretch = "None" />
+        <Image x:Name = "imgSelectTriangle" Source = "ms-appx:///Images/SelectTriangle.png" Stretch = "None" />
+        <Image x:Name = "imgSeparateAdsr" Source = "ms-appx:///Images/SeparateAdsr.png" Stretch = "None" />
+        <Image x:Name = "imgUsingGraphicsCardOff" Source = "ms-appx:///Images/UsingGraphicsCardOff.png" Stretch = "None" />
+        <Image x:Name = "imgUsingGraphicsCardOn" Source = "ms-appx:///Images/UsingGraphicsCardOn.png" Stretch = "None" />
+        <Image x:Name = "imgView" Source = "ms-appx:///Images/View.png" Stretch = "None" />
+        <Image x:Name = "imgWhiteKey" Source = "ms-appx:///Images/WhiteKey.png" Stretch = "None" />
+        <Image x:Name = "imgWood" Source = "ms-appx:///Images/Wood.png" Stretch = "None" />
+        <Image x:Name = "imgFiller" Source = "ms-appx:///Images/Filler.png" Stretch = "None" />
+        <Image x:Name = "imgBackground" Source = "ms-appx:///Images/Background.png" Stretch = "Uniform" />
+        <Grid x:Name = "gridControls" SizeChanged = "gridMain_SizeChanged" />
+        <TextBlock x:Name="text" />
+        <Image x:Name = "imgClickArea" Source = "ms-appx:///Images/Background.png" Stretch = "None" Opacity = "0"
+				PointerMoved = "imgClickArea_PointerMoved"
+				ImageOpened = "imgClickArea_ImageOpened"
+				PointerWheelChanged = "imgClickArea_PointerWheelChanged"
+				PointerReleased = "imgClickArea_PointerReleased"
+				PointerPressed = "imgClickArea_PointerPressed"
+				Tapped = "imgClickArea_Tapped" />
+    </Grid >
+</Page>
