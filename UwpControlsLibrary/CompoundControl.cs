@@ -41,7 +41,6 @@ namespace UwpControlsLibrary
             GridControls = gridControls;
             this.controls = controls;
             SubType = subType;
-            HitTarget = true;
 
             if (imageList != null)
             {
@@ -69,9 +68,11 @@ namespace UwpControlsLibrary
                 case EventType.POINTER_RELEASED:
                     PointerReleased(e);
                     break;
-                case EventType.TAPPED:
+                case EventType.POINTER_TAPPED:
                     break;
-                case EventType.MOUSE_WHEEL:
+                case EventType.POINTER_RIGHT_TAPPED:
+                    break;
+                case EventType.POINTER_WHEEL_CHANGED:
                     break;
             }
             return -1;
@@ -90,14 +91,6 @@ namespace UwpControlsLibrary
         public void PointerReleased(PointerRoutedEventArgs e)
         {
 
-        }
-
-        public AreaButton AddAreaButton(int Id, Grid gridControls, Rect HitArea)
-        {
-            AreaButton areaButton = new AreaButton(controls, Id, gridControls,
-                new Rect(this.HitArea.Left + HitArea.Left, this.HitArea.Top + HitArea.Top, HitArea.Width, HitArea.Height));
-            SubControls.ControlsList.Add(areaButton);
-            return areaButton;
         }
 
         public MomentaryButton AddMomentaryButton(int Id, Grid gridControls, Image[] imageList, Point position)
@@ -133,12 +126,12 @@ namespace UwpControlsLibrary
             return control;
         }
 
-        public Knob AddKnob(int Id, Grid gridControls, Image[] imageList, Point position, Boolean HighPrecision,
+        public Knob AddKnob(int Id, Grid gridControls, Image[] imageList, Point position,
             int MinValue = 0, int MaxValue = 127, int AngleStart = 45, int AngleEnd = 315, Double StepSize = 1)
         {
             Knob control = new Knob(controls, Id, gridControls, imageList,
                 new Point(this.HitArea.Left + position.X, this.HitArea.Top + position.Y),
-                HighPrecision, MinValue, MaxValue, AngleStart, AngleEnd, StepSize);
+                MinValue, MaxValue, AngleStart, AngleEnd, StepSize);
             SubControls.ControlsList.Add(control);
             return control;
         }
@@ -153,41 +146,43 @@ namespace UwpControlsLibrary
         }
 
         public VerticalSlider AddVerticalSlider(int Id, Grid gridControls, Image[] imageList, 
-            Rect hitArea, Boolean HighPrecision,
+            Rect hitArea,
             int MinValue = 0, int MaxValue = 127)
         {
             VerticalSlider control = new VerticalSlider(controls, Id, gridControls, imageList,
                 new Rect(this.HitArea.Left + hitArea.Left, this.HitArea.Top + hitArea.Top, hitArea.Width, hitArea.Height),
-                MinValue, MaxValue, HighPrecision);
+                MinValue, MaxValue);
             SubControls.ControlsList.Add(control);
             return control;
         }
 
         public HorizontalSlider AddHorizontalSlider(int Id, Grid gridControls, Image[] imageList, Rect hitArea,
-            int MinValue = 0, int MaxValue = 127, Boolean HighPrecision = false)
+            int MinValue = 0, int MaxValue = 127)
         {
             HorizontalSlider control = new HorizontalSlider(controls, Id, gridControls, imageList,
                 new Rect(this.HitArea.Left + hitArea.Left, this.HitArea.Top + hitArea.Top, hitArea.Width, hitArea.Height),
-                MinValue, MaxValue, HighPrecision);
+                MinValue, MaxValue);
             SubControls.ControlsList.Add(control);
             return control;
         }
 
         public Joystick AddJoystick(int Id, Grid gridControls, Image[] imageList, Rect hitArea,
-            int MinValueX = 0, int MaxValueX = 127, int MinValueY = 0, int MaxValueY = 127, Boolean HighPrecision = false)
+            int MinValueX = 0, int MaxValueX = 127, int MinValueY = 0, int MaxValueY = 127)
         {
             Joystick control = new Joystick(controls, Id, gridControls, imageList,
                 new Rect(this.HitArea.Left + hitArea.Left, this.HitArea.Top + hitArea.Top, hitArea.Width, hitArea.Height),
-                MinValueX, MaxValueX, MinValueY, MaxValueY, HighPrecision);
+                MinValueX, MaxValueX, MinValueY, MaxValueY);
             SubControls.ControlsList.Add(control);
             return control;
         }
 
-        public Label AddLabel(int Id, Grid gridControls, Rect hitArea, TextBlock textBlock, int FontSize)
+        public Label AddLabel(int Id, Grid gridControls, Rect hitArea, string text, int fontSize,
+            HorizontalAlignment alignment = HorizontalAlignment.Center, TextAlignment textAlignment = TextAlignment.Center,
+            ControlTextWeight textWeight = ControlTextWeight.NORMAL, TextWrapping textWrapping = TextWrapping.NoWrap, Brush foreground = null)
         {
             Label control = new Label(controls, Id, gridControls,
                 new Rect(this.HitArea.Left + hitArea.Left, this.HitArea.Top + hitArea.Top, hitArea.Width, hitArea.Height),
-                textBlock, FontSize);
+                text, fontSize, textAlignment, textWeight);
             SubControls.ControlsList.Add(control);
             return control;
         }

@@ -326,7 +326,7 @@ namespace CompositeExample
 
         private void CreateControls()
         {
-            Controls.InitControls(gridControls);
+            Controls.Init(gridControls);
             SetupGrid();
             oscillators = new CompoundControl[oscillatorCount];
             displays = new CompoundControl[displayCount];
@@ -385,13 +385,13 @@ namespace CompositeExample
                         imgClickArea, i, (Int32)type.OSCILLATOR, gridControls, new Image[] { imgOscillatorBackground },
                         AssembleHitarea(type.OSCILLATOR, x, y, 0, 0));
                     oscillators[i].AddKnob((Int32)OscillatorControls.MODULATION, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobOscillatorX, knobOscillatorY), false, 0, 127, 30, 330, 2);
+                        new Point(knobOscillatorX, knobOscillatorY), 0, 127, 30, 330, 2);
                     oscillators[i].AddKnob((Int32)OscillatorControls.FREQUENCY, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobOscillatorX + knobOscillatorSpacingX, knobOscillatorY), false, 0, 127, 30, 330, 2);
+                        new Point(knobOscillatorX + knobOscillatorSpacingX, knobOscillatorY), 0, 127, 30, 330, 2);
                     oscillators[i].AddKnob((Int32)OscillatorControls.FINE_TUNE, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobOscillatorX + knobOscillatorSpacingX * 2, knobOscillatorY), false, 0, 127, 30, 330, 8);
+                        new Point(knobOscillatorX + knobOscillatorSpacingX * 2, knobOscillatorY), 0, 127, 30, 330, 8);
                     oscillators[i].AddKnob((Int32)OscillatorControls.VOLUME, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobOscillatorX + knobOscillatorSpacingX * 3, knobOscillatorY), false, 0, 127, 30, 330, 2);
+                        new Point(knobOscillatorX + knobOscillatorSpacingX * 3, knobOscillatorY), 0, 127, 30, 330, 2);
                     oscillators[i].AddRotator((Int32)OscillatorControls.WAVE, gridControls,
                         new Image[] { imgSelectSquare, imgSelectSawDwn, imgSelectSawUp, imgSelectTriangle, imgSelectSine, imgSelectRandom, imgSelectNoise },
                         new Point(buttonOscillatorX, buttonOscillatorY));
@@ -409,14 +409,14 @@ namespace CompositeExample
                     oscillators[i].AddRotator((Int32)OscillatorControls.MODULATION_KNOB_TARGET, gridControls,
                         new Image[] { imgModAM, imgModFM, imgModPM, imgModAll },
                         new Point(modButtonOscillatorX, buttonOscillatorY + buttonOscillatorSpacingY));
-                    oscillators[i].AddAreaButton((Int32)OscillatorControls.AM_SOCKET, gridControls,
-                        new Rect(inputOffsetX, inputOffsetY, 30, 30));
-                    oscillators[i].AddAreaButton((Int32)OscillatorControls.FM_SOCKET, gridControls,
-                        new Rect(inputOffsetX + inputSpacing, inputOffsetY, 30, 30));
-                    oscillators[i].AddAreaButton((Int32)OscillatorControls.PM_SOCKET, gridControls,
-                        new Rect(inputOffsetX + inputSpacing * 2, inputOffsetY, 30, 30));
-                    oscillators[i].AddAreaButton((Int32)OscillatorControls.OUT_SOCKET, gridControls,
-                        new Rect(outputOffsetX, outputOffsetY, 30, 30));
+                    oscillators[i].AddRotator((Int32)OscillatorControls.AM_SOCKET, gridControls,
+                        new Image[] { imgSocket }, new Point(inputOffsetX, inputOffsetY));
+                    oscillators[i].AddRotator((Int32)OscillatorControls.FM_SOCKET, gridControls,
+                        new Image[] { imgSocket }, new Point(inputOffsetX + inputSpacing, inputOffsetY));
+                    oscillators[i].AddRotator((Int32)OscillatorControls.PM_SOCKET, gridControls,
+                        new Image[] { imgSocket }, new Point(inputOffsetX + inputSpacing * 2, inputOffsetY));
+                    oscillators[i].AddRotator((Int32)OscillatorControls.OUT_SOCKET, gridControls,
+                        new Image[] { imgSocket }, new Point(outputOffsetX, outputOffsetY));
                     i++;
                 }
             }
@@ -432,15 +432,15 @@ namespace CompositeExample
                         gridControls, new Image[] { imgFilterBackground },
                         AssembleHitarea(type.FILTER, x, y, 0, 0));
                     filters[i].AddKnob((Int32)FilterControls.Q, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobFilterX, knobFilterY), false, 0, 127, 30, 330, 2);
+                        new Point(knobFilterX, knobFilterY), 0, 127, 30, 330, 2);
                     filters[i].AddKnob((Int32)FilterControls.FREQUENCY_CENTER, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobFilterX + knobFiltersSpacingX, knobFilterY), false, 0, 127, 30, 330, 2);
+                        new Point(knobFilterX + knobFiltersSpacingX, knobFilterY), 0, 127, 30, 330, 2);
                     filters[i].AddKnob((Int32)FilterControls.KEYBOARD_FOLLOW, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobFilterX + knobFiltersSpacingX * 2, knobFilterY), false, 0, 127, 30, 330, 2);
+                        new Point(knobFilterX + knobFiltersSpacingX * 2, knobFilterY), 0, 127, 30, 330, 2);
                     filters[i].AddKnob((Int32)FilterControls.DEPTH, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobFilterX + knobFiltersSpacingX * 3, knobFilterY), false, 0, 127, 30, 330, 2);
+                        new Point(knobFilterX + knobFiltersSpacingX * 3, knobFilterY), 0, 127, 30, 330, 2);
                     filters[i].AddKnob((Int32)FilterControls.FILTER_MIX, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobFilterX + knobFiltersSpacingX * 4, knobFilterY), false, 0, 127, 30, 330, 2);
+                        new Point(knobFilterX + knobFiltersSpacingX * 4, knobFilterY), 0, 127, 30, 330, 2);
                     filters[i].AddRotator((Int32)FilterControls.FILTER_FUNCTION, gridControls,
                         new Image[] { imgFilterOff, imgFilterFixed, imgFilterAdsrPositive, imgFilterAdsrNegative,
                             imgFilterAmModulator, imgFilterFmModulator, imgFilterPmModulator },
@@ -462,13 +462,13 @@ namespace CompositeExample
                         imgClickArea, i, (Int32)type.ADSR, gridControls, new Image[] { imgAdsrBackground },
                         AssembleHitarea(type.ADSR, x, y, 0, 0));
                     adsrs[i].AddKnob((Int32)AdsrControls.ADSR_A, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobAdsrX, knobAdsrY), false, 0, 127, 30, 330, 2);
+                        new Point(knobAdsrX, knobAdsrY), 0, 127, 30, 330, 2);
                     adsrs[i].AddKnob((Int32)AdsrControls.ADSR_D, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobAdsrX + knobAdsrSpacingX, knobAdsrY), false, 0, 127, 30, 330, 2);
+                        new Point(knobAdsrX + knobAdsrSpacingX, knobAdsrY), 0, 127, 30, 330, 2);
                     adsrs[i].AddKnob((Int32)AdsrControls.ADSR_S, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobAdsrX + knobAdsrSpacingX * 2, knobAdsrY), false, 0, 127, 30, 330, 2);
+                        new Point(knobAdsrX + knobAdsrSpacingX * 2, knobAdsrY), 0, 127, 30, 330, 2);
                     adsrs[i].AddKnob((Int32)AdsrControls.ADSR_R, gridControls, new Image[] { imgArrowknob_75 },
-                        new Point(knobAdsrX + knobAdsrSpacingX * 3, knobAdsrY), false, 0, 127, 30, 330, 2);
+                        new Point(knobAdsrX + knobAdsrSpacingX * 3, knobAdsrY), 0, 127, 30, 330, 2);
                     adsrs[i].AddRotator((Int32)AdsrControls.PEDAL_HOLD, gridControls,
                         new Image[] { imgPedalUp, imgPedalDown }, new Point(342, 145));
                     Graph graph = adsrs[i].AddGraph((int)AdsrControls.ADSR_GRAPH, gridControls, new Image[] { imgADSRGraphBackground },

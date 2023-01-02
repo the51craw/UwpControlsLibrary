@@ -16,6 +16,7 @@ namespace UwpControlsLibrary
     {
         public void OnPointerPressed(object sender, PointerEventHandler e)
         {
+
         }
 
         public void OnPointerReleased(object sender, PointerEventHandler e)

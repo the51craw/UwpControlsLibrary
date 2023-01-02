@@ -11,7 +11,7 @@
     <AssemblyName>SampleApplication</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.20348.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -136,12 +136,30 @@
     <Content Include="Images\BlackKey.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\BlackKeyDown.png" />
     <Content Include="Images\ButtonDown.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Digit0.png" />
+    <Content Include="Images\Digit1.png" />
+    <Content Include="Images\Digit2.png" />
+    <Content Include="Images\Digit3.png" />
+    <Content Include="Images\Digit4.png" />
+    <Content Include="Images\Digit5.png" />
+    <Content Include="Images\Digit6.png" />
+    <Content Include="Images\Digit7.png" />
+    <Content Include="Images\Digit8.png" />
+    <Content Include="Images\Digit9.png" />
+    <Content Include="Images\Dot.png" />
     <Content Include="Images\Filler.png" />
+    <Content Include="Images\GraphBackground.png" />
     <Content Include="Images\HorizontalSliderBackground.png" />
     <Content Include="Images\HorizontalSliderHandle.png" />
+    <Content Include="Images\ImageButtonDownOff.png" />
+    <Content Include="Images\ImageButtonDownOn.png" />
+    <Content Include="Images\ImageButtonHover.png" />
+    <Content Include="Images\ImageButtonUpOff.png" />
+    <Content Include="Images\ImageButtonUpOn.png" />
     <Content Include="Images\IndicatorOff.png" />
     <Content Include="Images\IndicatorOn.png" />
     <Content Include="Images\JoystickBackground.png" />
@@ -151,9 +169,11 @@
     <Content Include="Images\Knob.png" />
     <Content Include="Images\LedOff.png" />
     <Content Include="Images\LedOn.png" />
-    <Content Include="Images\MrMartinLogotype.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Images\Minus.png" />
+    <Content Include="Images\MrMartin.png" />
+    <Content Include="Images\Noise.png" />
+    <Content Include="Images\PopupMenuButtonBackground.png" />
+    <Content Include="Images\SawtoothWave.png" />
     <Content Include="Images\Selection0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -166,6 +186,8 @@
     <Content Include="Images\Selection3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\SineWave.png" />
+    <Content Include="Images\SquareWave.png" />
     <Content Include="Images\StaticImage.png" />
     <Content Include="Images\Stick1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -183,6 +205,7 @@
     <Content Include="Images\WhiteKey.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\WhiteKeyDown.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

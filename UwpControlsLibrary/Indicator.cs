@@ -2,6 +2,7 @@
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 
 namespace UwpControlsLibrary
@@ -70,6 +71,53 @@ namespace UwpControlsLibrary
             CopyImages(imageList);
             ControlSizing = new ControlSizing(controls, this);
             ImageList[imageList.Length - 1].Visibility = Visibility.Collapsed;
+        }
+
+        public void SetDeSelected()
+        {
+        }
+
+        public void HandleEvent(PointerRoutedEventArgs e, EventType eventType)
+        {
+            switch (eventType)
+            {
+                case EventType.POINTER_MOVED:
+                    HandlePointerMovedEvent(e);
+                    break;
+                case EventType.POINTER_PRESSED:
+                    HandlePointerPressedEvent(e);
+                    break;
+                case EventType.POINTER_RELEASED:
+                    HandlePointerReleasedEvent(e);
+                    break;
+                case EventType.POINTER_TAPPED:
+                    HandlePointerWheelChangedEvent(e);
+                    break;
+            }
+        }
+
+        public void HandlePointerMovedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerReleasedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerWheelChangedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerTapped(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
+        {
         }
     }
 }

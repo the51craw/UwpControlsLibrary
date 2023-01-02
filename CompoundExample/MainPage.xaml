@@ -114,6 +114,7 @@
         <Image x:Name = "imgSeparateAdsr" Source = "ms-appx:///Images/SeparateAdsr.png" Stretch = "None" />
         <Image x:Name = "imgUsingGraphicsCardOff" Source = "ms-appx:///Images/UsingGraphicsCardOff.png" Stretch = "None" />
         <Image x:Name = "imgUsingGraphicsCardOn" Source = "ms-appx:///Images/UsingGraphicsCardOn.png" Stretch = "None" />
+        <Image x:Name = "imgSocket" Source = "ms-appx:///Images/Socket.png" Stretch = "None" />
         <Image x:Name = "imgView" Source = "ms-appx:///Images/View.png" Stretch = "None" />
         <Image x:Name = "imgWhiteKey" Source = "ms-appx:///Images/WhiteKey.png" Stretch = "None" />
         <Image x:Name = "imgWood" Source = "ms-appx:///Images/Wood.png" Stretch = "None" />
@@ -127,6 +128,7 @@
 				PointerWheelChanged = "imgClickArea_PointerWheelChanged"
 				PointerReleased = "imgClickArea_PointerReleased"
 				PointerPressed = "imgClickArea_PointerPressed"
-				Tapped = "imgClickArea_Tapped" />
+				Tapped = "imgClickArea_Tapped"
+				RightTapped = "imgClickArea_RightTapped" />
     </Grid >
 </Page>

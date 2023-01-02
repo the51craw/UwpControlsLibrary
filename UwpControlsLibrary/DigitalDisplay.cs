@@ -18,12 +18,17 @@ namespace UwpControlsLibrary
     {
         /// <summary>
         /// First dimension: NumberOfDigits display positions.
-        /// Second dimention: 10 digits (0 - 9) plus optional 10 digits with decimals (0. - 9.).
+        /// Second dimention: 10 digit images (0 - 9), 
+        /// one minus image (10, may be null), 
+        /// one dot image (11, may be null too) of the same size,
+        /// and a background image (12, may also be null).
         /// </summary>
-        public Image[][] Digits; 
+        public Image[][] Digits;
         public int NumberOfDigits;
         public int NumberOfDecimals;
         public Double ImageWidth;
+        public Point DigitsRelativeOffset;
+        public Size DigitRelativeSize;
 
         public DigitalDisplay(Controls controls, int Id, Grid gridControls, Image[] imageList, Point Position, int NumberOfDigits, int NumberOfDecimals)
         {
@@ -32,13 +37,12 @@ namespace UwpControlsLibrary
             this.NumberOfDigits = NumberOfDigits;
             this.NumberOfDecimals = NumberOfDecimals;
             Double height;
-            this.HitTarget = HitTarget;
 
             if (imageList != null)
             {
-                if ((imageList.Length == 10 && NumberOfDecimals == 0) || imageList.Length == 20)
+                if (imageList.Length == 13)
                 {
-                    for (int i = 1; i < imageList.Length; i++)
+                    for (int i = 1; i < imageList.Length - 2; i++)
                     {
                         if (imageList[i - 1].ActualWidth != imageList[i].ActualWidth
                             || imageList[i - 1].ActualWidth != imageList[i].ActualWidth)
@@ -49,7 +53,7 @@ namespace UwpControlsLibrary
                 }
                 else
                 {
-                    throw new Exception("A DigitalDisplay must have a list of images of the same size.");
+                    throw new Exception("A DigitalDisplay must have a list of 10 digit images, one minus image (may be null), one dot image (may be null) of the same size, and a background image (may be null).");
                 }
                 ImageWidth = imageList[0].ActualWidth;
                 height = imageList[0].ActualHeight;
@@ -59,50 +63,70 @@ namespace UwpControlsLibrary
                 throw new Exception("A DigitalDisplay must have a list of images of the same size.");
             }
 
-            HitArea = new Rect(Position.X, Position.Y, ImageWidth * NumberOfDigits, height);
-
-            Digits = new Image[NumberOfDigits][];
-            ImageCopy imageCopy;
-            for (int position = 0; position < NumberOfDigits; position++)
+            CopyImages(imageList);
+            if (ImageList[12] != null)
             {
-                Digits[position] = new Image[10];
-                for (int digit = 0; digit < 10; digit++)
+                // We have a background image, add it to gridControls:
+                gridControls.Children.Add(ImageList[12]);
+            }
+            int numberOfPositions = NumberOfDigits + NumberOfDecimals;
+            int numberOfImages = 11;
+            if (ImageList[11] != null)
+            {
+                // Minus sign present, make room for that:
+                numberOfPositions++;
+                numberOfImages++;
+            }
+            Digits = new Image[numberOfPositions][];
+            for (int position = 0; position < numberOfPositions; position++)
+            {
+                Digits[position] = new Image[numberOfImages];
+                for (int digit = 0; digit < numberOfImages; digit++)
                 {
-                    imageCopy = new ImageCopy(imageList[digit]);
-                    Digits[position][digit] = imageCopy.Image;
-                    if (position == NumberOfDigits - NumberOfDecimals - 1)
-                    {
-                        imageCopy = new ImageCopy(imageList[digit + 10]);
-                    }
-                    else
-                    {
-                        imageCopy = new ImageCopy(imageList[digit]);
-                    }
+                    ImageCopy imageCopy = new ImageCopy(ImageList[digit]);
                     Digits[position][digit] = imageCopy.Image;
                     gridControls.Children.Add(Digits[position][digit]);
                     Digits[position][digit].Visibility = Visibility.Collapsed;
                 }
             }
 
-            // Initially show 0.00:
-            Digits[4][0].Visibility = Visibility.Visible;
-            Digits[5][0].Visibility = Visibility.Visible;
-            Digits[6][0].Visibility = Visibility.Visible;
+            if (imageList[12] != null)
+            {
+                HitArea = new Rect(Position.X, Position.Y, imageList[12].ActualWidth, imageList[12].ActualHeight);
+                DigitsRelativeOffset = new Point(
+                    Position.X + HitArea.Width / 2 - imageList[0].ActualWidth / 2,
+                    Position.Y + HitArea.Height / 2 - imageList[0].ActualWidth / 2);
+                DigitsRelativeOffset = new Point(DigitsRelativeOffset.X / controls.OriginalWidth, DigitsRelativeOffset.Y / controls.OriginalHeight);
+            }
+            else
+            {
+                HitArea = new Rect(Position.X, Position.Y, ImageWidth * NumberOfDigits, height);
+                DigitsRelativeOffset = new Point(0, 0);
+            }
+
+            DigitRelativeSize =
+                new Size(imageList[0].ActualWidth / GridControls.ActualWidth,
+                imageList[0].ActualHeight / GridControls.ActualHeight);
+
+            //// Initially show 0.00:
+            //Digits[Digits.Length - 3][0].Visibility = Visibility.Visible;
+            //Digits[Digits.Length - 2][0].Visibility = Visibility.Visible;
+            //Digits[Digits.Length - 1][0].Visibility = Visibility.Visible;
 
 
 
             //for (int digit = 0; digit < NumberOfDigits; digit++)
             //{
-            //    Digits[digit] = new Image[imageList.Length];
+            //    Digits[digit] = new Image[ImageList.Length];
             //    for (int i = 0; i < 10; i++)
             //    {
             //        if (digit > NumberOfDigits - NumberOfDecimals)
             //        {
-            //            imageCopy = new ImageCopy(imageList[digit]);
+            //            imageCopy = new ImageCopy(ImageList[digit]);
             //        }
             //        else
             //        {
-            //            imageCopy = new ImageCopy(imageList[digit + 10]);
+            //            imageCopy = new ImageCopy(ImageList[digit + 10]);
             //        }
             //        Digits[digit][i] = imageCopy.Image;
             //    }
@@ -113,31 +137,60 @@ namespace UwpControlsLibrary
 
         public void DisplayValue(Double value)
         {
-            int digit;
-            int temp = (int)(value * 100);
-            Boolean zeroesNeeded = false;
+            // Isolate the sign in the calculations:
+            int sign = value < 0 ? -1 : 1;
+            value *= sign;
 
-            for (int i = 0; i < NumberOfDigits; i++)
+            // Round up to desired number of fraction digits:
+            value = Math.Pow(10 , -(double)NumberOfDecimals) * (Math.Round(value * Math.Pow(10, (double)NumberOfDecimals)));
+
+            // Split into whole and fraction parts:
+            int temp = (int)(value * 100);
+            double wholeValue = Math.Truncate(value);
+            double fractionValue = Math.Round(Math.Pow(10, (double)NumberOfDecimals) * (value - wholeValue), NumberOfDecimals);
+
+            // Turn off all images:
+            for (int i = 0; i < Digits.Length; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < Digits[i].Length; j++)
                 {
                     Digits[i][j].Visibility = Visibility.Collapsed;
                 }
             }
 
-            for (int i = NumberOfDigits - 1; i > -1; i--)
+            // Turn on those decimals needed (the index pos works from right to left):
+            int pos = Digits.Length - 1;
+            if (NumberOfDecimals > 0)
             {
-                if (temp >= Math.Pow(10, i))
+                for (int i = NumberOfDecimals - 1; i > -1; i--)
                 {
-                    digit = temp / (int)Math.Pow(10, i);
-                    Digits[NumberOfDigits - i - 1][digit].Visibility = Visibility.Visible;
-                    temp = temp % (int)Math.Pow(10, i);
-                    zeroesNeeded = true;
+                    fractionValue /= 10;
+                    Digits[pos--][((int)Math.Round(10 * (fractionValue - Math.Truncate(fractionValue)), 1))].Visibility = Visibility.Visible;
+                    fractionValue = Math.Truncate(fractionValue);
                 }
-                else if(zeroesNeeded || i < NumberOfDecimals + 1)
+
+                // Turn on the dot at the current pos:
+                Digits[pos][11].Visibility = Visibility.Visible;
+            }
+
+
+            // Turn on whole numbers needed:
+            int done = 1;
+            for (int i = NumberOfDigits - 1; i > -1 && done > 0; i--)
+            {
+                wholeValue /= 10;
+                Digits[pos--][((int)Math.Round(10 * (wholeValue - Math.Truncate(wholeValue)), 1))].Visibility = Visibility.Visible;
+                wholeValue = Math.Truncate(wholeValue);
+                if (wholeValue == 0)
                 {
-                    Digits[NumberOfDigits - i - 1][0].Visibility = Visibility.Visible;
+                    done--;
                 }
+            }
+
+            // Turon on minus sign if needed:
+            if (sign < 0)
+            {
+                Digits[pos--][10].Visibility = Visibility.Visible;
             }
         }
     }

@@ -10,12 +10,30 @@
 
     <Grid x:Name="gridMain">
 	    <!-- Insert images here -->
-        <Image x:Name="imgStaticImage"                      Source="ms-appx:///Images/StaticImage.png"                  Stretch="None" />
+        <Image x:Name="img0"                                Source="ms-appx:///Images/Digit0.png"                       Stretch="None" />
+        <Image x:Name="img1"                                Source="ms-appx:///Images/Digit1.png"                       Stretch="None" />
+        <Image x:Name="img2"                                Source="ms-appx:///Images/Digit2.png"                       Stretch="None" />
+        <Image x:Name="img3"                                Source="ms-appx:///Images/Digit3.png"                       Stretch="None" />
+        <Image x:Name="img4"                                Source="ms-appx:///Images/Digit4.png"                       Stretch="None" />
+        <Image x:Name="img5"                                Source="ms-appx:///Images/Digit5.png"                       Stretch="None" />
+        <Image x:Name="img6"                                Source="ms-appx:///Images/Digit6.png"                       Stretch="None" />
+        <Image x:Name="img7"                                Source="ms-appx:///Images/Digit7.png"                       Stretch="None" />
+        <Image x:Name="img8"                                Source="ms-appx:///Images/Digit8.png"                       Stretch="None" />
+        <Image x:Name="img9"                                Source="ms-appx:///Images/Digit9.png"                       Stretch="None" />
+        <Image x:Name="imgDot"                              Source="ms-appx:///Images/Dot.png"                          Stretch="None" />
+        <Image x:Name="imgMinus"                            Source="ms-appx:///Images/Minus.png"                        Stretch="None" />
+        <Image x:Name="imgGraphBackground"                  Source="ms-appx:///Images/GraphBackground.png"              Stretch="None" />
         <Image x:Name="imgIndicatorOn"                      Source="ms-appx:///Images/IndicatorOn.png"                  Stretch="None" />
         <Image x:Name="imgIndicatorOff"                     Source="ms-appx:///Images/IndicatorOff.png"                 Stretch="None" />
         <Image x:Name="imgKnob"                             Source="ms-appx:///Images/Knob.png"                         Stretch="None" />
         <Image x:Name="imgMomentaryButtonUp"                Source="ms-appx:///Images/MomentaryButtonUp.png"            Stretch="None" />
         <Image x:Name="imgMomentaryButtonDown"              Source="ms-appx:///Images/MomentaryButtonDown.png"          Stretch="None" />
+        <Image x:Name="imgMrMartin"                         Source="ms-appx:///Images/MrMartin.png"                     Stretch="None" />
+        <Image x:Name="imgImageButtonUpOff"                 Source="ms-appx:///Images/ImageButtonUpOff.png"             Stretch="None" />
+        <Image x:Name="imgImageButtonDownOff"               Source="ms-appx:///Images/ImageButtonDownOff.png"           Stretch="None" />
+        <Image x:Name="imgImageButtonUpOn"                  Source="ms-appx:///Images/ImageButtonUpOn.png"              Stretch="None" />
+        <Image x:Name="imgImageButtonDownOn"                Source="ms-appx:///Images/ImageButtonDownOn.png"            Stretch="None" />
+        <Image x:Name="imgImageButtonHover"                 Source="ms-appx:///Images/ImageButtonHover.png"             Stretch="None" />
         <Image x:Name="imgVerticalSliderHandle"             Source="ms-appx:///Images/VerticalSliderHandle.png"         Stretch="None" />
         <Image x:Name="imgVerticalSliderBackground"         Source="ms-appx:///Images/VerticalSliderBackground.png"     Stretch="None" />
         <Image x:Name="imgHorizontalSliderHandle"           Source="ms-appx:///Images/HorizontalSliderHandle.png"       Stretch="None" />
@@ -26,15 +44,18 @@
         <Image x:Name="imgStick3"                           Source="ms-appx:///Images/Stick3.png"                       Stretch="None" />
         <Image x:Name="imgJoystickHandle"                   Source="ms-appx:///Images/JoystickHandle.png"               Stretch="None" />
         <Image x:Name="imgJoystickBackground"               Source="ms-appx:///Images/JoystickBackground.png"           Stretch="None" />
-        <Image x:Name="imgSelection0"                       Source="ms-appx:///Images/Selection0.png"                   Stretch="None" />
-        <Image x:Name="imgSelection1"                       Source="ms-appx:///Images/Selection1.png"                   Stretch="None" />
-        <Image x:Name="imgSelection2"                       Source="ms-appx:///Images/Selection2.png"                   Stretch="None" />
-        <Image x:Name="imgSelection3"                       Source="ms-appx:///Images/Selection3.png"                   Stretch="None" />
+        <Image x:Name="imgSineWave"                         Source="ms-appx:///Images/SineWave.png"                     Stretch="None" />
+        <Image x:Name="imgSawtoothWave"                     Source="ms-appx:///Images/SawtoothWave.png"                 Stretch="None" />
+        <Image x:Name="imgSquareWave"                       Source="ms-appx:///Images/SquareWave.png"                   Stretch="None" />
+        <Image x:Name="imgNoise"                            Source="ms-appx:///Images/Noise.png"                        Stretch="None" />
         <Image x:Name="imgWhiteKey"                         Source="ms-appx:///Images/WhiteKey.png"                     Stretch="None" />
         <Image x:Name="imgBlackKey"                         Source="ms-appx:///Images/BlackKey.png"                     Stretch="None" />
-	    <Image                                              Source="ms-appx:///Images/Filler.png"                 Stretch="Fill" />
+        <Image x:Name="imgWhiteKeyDown"                     Source="ms-appx:///Images/WhiteKeyDown.png"                 Stretch="None" />
+        <Image x:Name="imgBlackKeyDown"                     Source="ms-appx:///Images/BlackKeyDown.png"                 Stretch="None" />
+        <Image x:Name="imgPopupMenuButtonBackground"        Source="ms-appx:///Images/PopupMenuButtonBackground.png"    Stretch="None" />
+        <Image x:Name="imgFiller"                           Source="ms-appx:///Images/Filler.png"                       Stretch="Fill" />
         <Image x:Name="imgBackground"                       Source="ms-appx:///Images/Background.png"                   Stretch="Uniform" />
-            <Grid x:Name="gridControls"                     SizeChanged="gridControls_SizeChanged" />
+        <Grid x:Name="gridControls"                         SizeChanged="gridControls_SizeChanged" />
         <Image x:Name="imgClickArea"                        Source="ms-appx:///Images/Background.png"                   Stretch="None" Opacity="0"
             Tapped="imgClickArea_Tapped" 
             PointerMoved="imgClickArea_PointerMoved" 

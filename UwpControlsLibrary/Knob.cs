@@ -23,18 +23,15 @@ namespace UwpControlsLibrary
         public int AngleEnd;   // Values range from lowest at AngleStart and highest at AngleEnd.
         public int Value { get { return value; } set { this.value = value; SetRotationFromValue(); } }
         public Double StepSize;
-        public Boolean HighPrecision;
-
         private int value;
         private double doubleValue;
         private double startPosition;
         private Double PreviousPosition;
 
         public Knob(Controls controls, int Id, Grid gridMain, Image[] imageList, Point CenterPoint, 
-            Boolean HighPrecision = true, int MinValue = 0, int MaxValue = 127,
+            int MinValue = 0, int MaxValue = 127,
             int AngleStart = 45, int AngleEnd = 315, Double StepSize = 1)
         {
-            this.HighPrecision = HighPrecision;
             this.AngleStart = AngleStart;
             this.AngleEnd = AngleEnd;
             this.MinValue = MinValue;
@@ -49,14 +46,6 @@ namespace UwpControlsLibrary
                 CenterPoint.X - imageList[0].ActualWidth / 2,
                 CenterPoint.Y - imageList[0].ActualHeight / 2,
                 imageList[0].ActualWidth, imageList[0].ActualHeight);
-
-            if (HighPrecision && HitArea.Height < (MaxValue - MinValue + 1))
-            {
-                Double topCorrection = ((MaxValue - MinValue + 1) - HitArea.Height) / 2;
-                HitArea = new Rect(new Point(HitArea.Left, HitArea.Top - topCorrection),
-                    new Size(HitArea.Width, (MaxValue - MinValue + 1)));
-            }
-
             CopyImages(imageList);
             ControlSizing = new ControlSizing(controls, this);
             SetRotationFromValue();
@@ -69,9 +58,7 @@ namespace UwpControlsLibrary
             this.Id = knob.Id;
             this.ControlSizing = knob.ControlSizing;
             this.GridControls = knob.GridControls;
-            this.HighPrecision = knob.HighPrecision;
             this.HitArea = new Rect(knob.HitArea.Left, knob.HitArea.Top, knob.HitArea.Width, knob.HitArea.Height);
-            this.HitTarget = knob.HitTarget;
             CopyImages(knob.ImageList);
             this.ImageList = null;
             this.MaxValue = knob.MaxValue;
@@ -81,24 +68,24 @@ namespace UwpControlsLibrary
             this.value = knob.value;
         }
 
-        public int PointerMoved(Point mousePosition)
-        {
-            SetValue(mousePosition);
-            return value;
-        }
+        //public int PointerMoved(Point mousePosition)
+        //{
+        //    SetValue(mousePosition);
+        //    return value;
+        //}
 
-        public void PointerPressed(Point mousePosition)
-        {
-            Double top = ControlSizing.HitArea.Top;
-            Double bottom = ControlSizing.HitArea.Bottom;
-            //startPosition = (1 - ((mousePosition.Y - top) / (bottom - top))) * (MaxValue - MinValue + 1);
-            startPosition = mousePosition.Y;
-        }
+        //public void PointerPressed(Point mousePosition)
+        //{
+        //    Double top = ControlSizing.HitArea.Top;
+        //    Double bottom = ControlSizing.HitArea.Bottom;
+        //    //startPosition = (1 - ((mousePosition.Y - top) / (bottom - top))) * (MaxValue - MinValue + 1);
+        //    startPosition = mousePosition.Y;
+        //}
 
-        public void PointerReleased(PointerRoutedEventArgs e)
-        {
+        //public void PointerReleased(PointerRoutedEventArgs e)
+        //{
 
-        }
+        //}
 
         public int SetValue(Point position)
         {
@@ -130,15 +117,15 @@ namespace UwpControlsLibrary
             return value;
         }
 
-        public int PointerWheelChanged(int delta)
-        {
-            value += (int)(delta * StepSize);
-            value = value > MaxValue ? MaxValue : value;
-            value = value < MinValue ? MinValue : value;
-            doubleValue = value;
-            SetRotationFromValue();
-            return value;
-        }
+        //public int PointerWheelChanged(int delta)
+        //{
+        //    value += (int)(delta * StepSize);
+        //    value = value > MaxValue ? MaxValue : value;
+        //    value = value < MinValue ? MinValue : value;
+        //    doubleValue = value;
+        //    SetRotationFromValue();
+        //    return value;
+        //}
 
         public void SetRotationFromValue()
         {
@@ -151,6 +138,82 @@ namespace UwpControlsLibrary
                 ControlSizing.ImageList[0].RenderTransformOrigin = new Point(0.5, 0.5);
                 ControlSizing.ImageList[0].RenderTransform = compositeTransform;
             }
+        }
+
+        public void SetDeSelected()
+        {
+        }
+
+        public void HandleEvent(Point pointerPosition, EventType eventType, List<PointerButton> pointerButtons, int delta = 0)
+        {
+            switch (eventType)
+            {
+                case EventType.POINTER_MOVED:
+                    HandlePointerMovedEvent(pointerPosition, pointerButtons);
+                    break;
+                case EventType.POINTER_PRESSED:
+                    HandlePointerPressedEvent(pointerPosition, pointerButtons);
+                    break;
+                case EventType.POINTER_RELEASED:
+                    HandlePointerReleasedEvent(pointerPosition, pointerButtons);
+                    break;
+                case EventType.POINTER_WHEEL_CHANGED:
+                    HandlePointerWheelChangedEvent(pointerButtons, delta);
+                    break;
+                case EventType.POINTER_TAPPED:
+                    HandlePointerTappedEvent(pointerPosition, pointerButtons);
+                    break;
+                case EventType.POINTER_RIGHT_TAPPED:
+                    HandlePointerRightTappedEvent(pointerPosition, pointerButtons);
+                    break;
+            }
+        }
+
+        public int HandlePointerMovedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
+        {
+            if (pointerButtonStates != null && pointerButtonStates.Contains(PointerButton.LEFT))
+            {
+                SetValue(pointerPosition);
+            }
+            return value;
+        }
+
+        public void HandlePointerPressedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
+        {
+            if (pointerButtonStates != null && pointerButtonStates.Contains(PointerButton.LEFT))
+            {
+                startPosition = pointerPosition.Y;
+            }
+        }
+
+        public void HandlePointerReleasedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
+        {
+        }
+
+        public void HandlePointerWheelChangedEvent(List<PointerButton> pointerButtonStates, int delta)
+        {
+            if (pointerButtonStates.Contains(PointerButton.LEFT))
+            {
+                delta *= 4;
+            }
+            if (pointerButtonStates.Contains(PointerButton.RIGHT))
+            {
+                delta *= 8;
+            }
+            value += delta;
+            value = value > MaxValue ? MaxValue : value;
+            value = value < MinValue ? MinValue : value;
+            doubleValue = value;
+            SetRotationFromValue();
+            //return value;
+        }
+
+        public void HandlePointerTappedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
+        {
+        }
+
+        public void HandlePointerRightTappedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
+        {
         }
     }
 }

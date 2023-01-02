@@ -1,0 +1,42 @@
+﻿Previous version:
+
+MainPage.xaml.cs Events 
+	pointer point detection
+	control type selection ----------------------> (ControlBase)Controls.ControlsList[currentControl]).Event
+
+
+New version:
+MainPage.xaml.cs Events    
+                           ----------------------> Controls.Event
+                           <----------------------
+
+Example:
+private void imgClickArea_PointerMoved(object sender, PointerRoutedEventArgs e)
+    Controls.PointerMoved(sender, e);
+        ----------------------> public void PointerMoved(object sender, PointerRoutedEventArgs e)
+                                    GetPointerButtonStates(e);
+                                    CallEvent(sender, e, ControlBase.EventType.POINTER_MOVED);
+                                        ----------------------> public void CallEvent(object sender, PointerRoutedEventArgs e, ControlBase.EventType eventType)
+                                                                    ((Knob)control).HandleEvent(pp.Position, eventType, PointerButtonStates);
+                                                                        ----------------------> public void HandleEvent(Point pointerPosition, EventType eventType, List<PointerButton> pointerButtons)
+                                                                                                    {
+                                                                                                        switch (eventType)
+                                                                                                        {
+                                                                                                            case EventType.POINTER_MOVED:
+public int HandlePointerMovedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates) <----------- HandlePointerMovedEvent(pointerPosition, pointerButtons);
+    // Control specific handling                                                                                break;
+                                                                                                            case EventType.POINTER_PRESSED:
+                                                                                                                HandlePointerPressedEvent(pointerPosition, pointerButtons);
+                                                                                                                break;
+                                                                                                            case EventType.POINTER_RELEASED:
+                                                                                                                HandlePointerReleasedEvent(pointerPosition, pointerButtons);
+                                                                                                                break;
+                                                                                                            case EventType.POINTER_TAPPED:
+                                                                                                                HandlePointerWheelChangedEvent(pointerPosition, pointerButtons);
+                                                                                                                break;
+                                                                                                        }
+                                                                                                    }
+
+
+
+

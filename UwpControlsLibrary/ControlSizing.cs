@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 
 namespace UwpControlsLibrary
@@ -68,7 +70,7 @@ namespace UwpControlsLibrary
         /// This is used to resize the image the same amount
         /// as the imgClickArea is resezed when user changes app size.
         /// </summary>
-        public Rect RelativeHitAreaSize;               // Original size of HitArea expressed as part of imgClickArea (values are within 0 to 1)
+        public Rect RelativeHitArea;               // Original size of HitArea expressed as part of imgClickArea (values are within 0 to 1)
         public Double RelativeFontsize;
         public Point Position;
         public PositionType PositionType;
@@ -102,7 +104,7 @@ namespace UwpControlsLibrary
         /// <param name="X"></param>
         /// <param name="Y"></param>
         /// <param name="Octaves"></param>
-        public ControlSizing(Controls controls, Object Owner, int Id, Image WhiteKey, Image BlackKey, Double X, Double Y, Octave[] Octaves)
+        public ControlSizing(Controls controls, Object Owner, int Id, Image[] imageList, Double X, Double Y, Octave[] Octaves)
         {
             Controls = controls;
             this.Octaves = Octaves;
@@ -114,12 +116,23 @@ namespace UwpControlsLibrary
             this.Owner = Owner;
             this.ImgClickArea = Controls.imgClickArea;
 
-            if (imageList != null && Owner.GetType() != typeof(DigitalDisplay))
+            // DigitalDisplay adds its images before initializing its ControlSizing
+            // since background is optional.
+            if (imageList != null)
             {
-                this.ImageList = imageList;
-                foreach (Image img in ImageList)
+                if (Owner.GetType() != typeof(DigitalDisplay))
+                //{
+                //    ((DigitalDisplay)Owner).DigitRelativeSize =
+                //        new Size(((DigitalDisplay)Owner).ImageList[0].ActualWidth / ((ControlBase)Owner).GridControls.ActualWidth,
+                //        ((DigitalDisplay)Owner).ImageList[0].ActualHeight / ((ControlBase)Owner).GridControls.ActualHeight);
+                //}
+                //else
                 {
-                    ((ControlBase)Owner).GridControls.Children.Add(img);
+                    this.ImageList = imageList;
+                    foreach (Image img in ImageList)
+                    {
+                        ((ControlBase)Owner).GridControls.Children.Add(img);
+                    }
                 }
             }
 
@@ -129,17 +142,8 @@ namespace UwpControlsLibrary
                 RelativeFontsize = ((ControlBase)Owner).OriginalFontSize / ((ControlBase)Owner).GridControls.ActualHeight;
                 ((ControlBase)Owner).GridControls.Children.Add(textBlock);
             }
-            
-            //if (Owner.GetType() == typeof(Graph))
-            //{
-            //    ((Graph)Owner).Canvas = new Canvas();
-            //    ((Graph)Owner).Canvas.Margin = new Thickness(Position.X, Position.Y,
-            //        ((Graph)Owner).GridControls.ActualWidth - Position.X - image.ActualWidth,
-            //        ((Graph)Owner).GridControls.ActualHeight - Position.Y - image.ActualHeight);
-            //    ((Graph)Owner).GridControls.Children.Add(((Graph)Owner).Canvas);
-            //}
 
-            RelativeHitAreaSize = new Rect(
+            RelativeHitArea = new Rect(
                 hitArea.Left / Controls.OriginalWidth,
                 hitArea.Top / Controls.OriginalHeight,
                 hitArea.Width / Controls.OriginalWidth,
@@ -162,7 +166,7 @@ namespace UwpControlsLibrary
                 Double width = (((Keyboard)Owner).Octaves.Length * 7 + 1) * ((Keyboard)Owner).WhiteKeySize.Width;
                 HitArea = new Rect(X, Y, width, ((Keyboard)Owner).WhiteKeySize.Height);
 
-            RelativeHitAreaSize = new Rect(
+            RelativeHitArea = new Rect(
                 HitArea.Left / Controls.OriginalWidth,
                 HitArea.Top / Controls.OriginalHeight,
                 HitArea.Width / Controls.OriginalWidth,
@@ -174,14 +178,20 @@ namespace UwpControlsLibrary
                 {
                     if (((Keyboard)Owner).Octaves[octave].Keys[key].GetType() == typeof(WhiteKey))
                     {
-                        ((Keyboard)Owner).GridControls.Children.Add(((Keyboard)Owner).Octaves[octave].Keys[key].Image);
+                        for (int i = 0; i < ((Keyboard)Owner).Octaves[octave].Keys[key].Images.Length; i++)
+                        {
+                            ((Keyboard)Owner).GridControls.Children.Add(((Keyboard)Owner).Octaves[octave].Keys[key].Images[i]);
+                        }
                     }
                 }
                 for (int key = 0; key < ((Keyboard)Owner).Octaves[octave].Keys.Length; key++)
                 {
                     if (((Keyboard)Owner).Octaves[octave].Keys[key].GetType() == typeof(BlackKey))
                     {
-                        ((Keyboard)Owner).GridControls.Children.Add(((Keyboard)Owner).Octaves[octave].Keys[key].Image);
+                        for (int i = 0; i < ((Keyboard)Owner).Octaves[octave].Keys[key].Images.Length; i++)
+                        {
+                            ((Keyboard)Owner).GridControls.Children.Add(((Keyboard)Owner).Octaves[octave].Keys[key].Images[i]);
+                        }
                     }
                 }
             }
@@ -190,25 +200,18 @@ namespace UwpControlsLibrary
         public void UpdatePositions()
         {
             HitArea = new Rect(
-                RelativeHitAreaSize.Left * ImgClickArea.ActualWidth,
-                RelativeHitAreaSize.Top * ImgClickArea.ActualHeight,
-                RelativeHitAreaSize.Width * ImgClickArea.ActualWidth,
-                RelativeHitAreaSize.Height * ImgClickArea.ActualHeight);
+                RelativeHitArea.Left * ImgClickArea.ActualWidth,
+                RelativeHitArea.Top * ImgClickArea.ActualHeight,
+                RelativeHitArea.Width * ImgClickArea.ActualWidth,
+                RelativeHitArea.Height * ImgClickArea.ActualHeight);
 
+            // Margins from window borders (app window might have other ratio thus leaveing extra space).
             Double left = Controls.ExtraMarginX + HitArea.Left;
             Double top = Controls.ExtraMarginY + HitArea.Top;
             Double right = Controls.ExtraMarginX + ImgClickArea.ActualWidth - HitArea.Right;
             Double bottom = Controls.ExtraMarginY + ImgClickArea.ActualHeight - HitArea.Bottom;
 
-            if (Owner.GetType() == typeof(AreaButton))
-            {
-                HitArea = new Rect(
-                    Controls.ExtraMarginX + RelativeHitAreaSize.Left * ImgClickArea.ActualWidth,
-                    Controls.ExtraMarginY + RelativeHitAreaSize.Top * ImgClickArea.ActualHeight,
-                    Controls.ExtraMarginX + RelativeHitAreaSize.Width * ImgClickArea.ActualWidth,
-                    Controls.ExtraMarginY + RelativeHitAreaSize.Height * ImgClickArea.ActualHeight);
-            }
-            else if (Owner.GetType() == typeof(HorizontalSlider))
+            if (Owner.GetType() == typeof(HorizontalSlider))
             {
                 // Set the background:
                 if (((HorizontalSlider)Owner).ImageList[0] != null)
@@ -219,7 +222,7 @@ namespace UwpControlsLibrary
                 // See VerticalSlider for explanation.
                 Double sizeFactor = ImgClickArea.ActualWidth / Controls.OriginalWidth;
                 Double ResizedImageWidth = ((HorizontalSlider)Owner).OriginalImageWidth * sizeFactor;
-                Double handleSideMargin = (RelativeHitAreaSize.Height * ImgClickArea.ActualHeight - 
+                Double handleSideMargin = (RelativeHitArea.Height * ImgClickArea.ActualHeight - 
                     ((HorizontalSlider)Owner).ImageSize.Y * sizeFactor) / 2;
                 Double leftOffset = (HitArea.Width - ResizedImageWidth) * (((HorizontalSlider)Owner).RelativeValue);
                 Double rightOffset = (HitArea.Width - ResizedImageWidth) * (1 - ((HorizontalSlider)Owner).RelativeValue);
@@ -249,7 +252,7 @@ namespace UwpControlsLibrary
 
                 // Calculate the margin between the handle side and the HitArea left and right margins
                 // (shared betwee left and right side):
-                Double handleSideMargin = (RelativeHitAreaSize.Width * ImgClickArea.ActualWidth -
+                Double handleSideMargin = (RelativeHitArea.Width * ImgClickArea.ActualWidth -
                     ((VerticalSlider)Owner).ImageSize.X * sizeFactor) / 2;
 
                 // Calculate top and bottom offset for the handle within the HitArea depending on slider value:
@@ -300,14 +303,28 @@ namespace UwpControlsLibrary
             }
             else if (Owner.GetType() == typeof(Indicator))
             {
-                if (((Indicator)Owner).ImageList != null && ((Indicator)Owner).ImageList.Length == 2)
+                if (((Indicator)Owner).ImageList != null && ((Indicator)Owner).ImageList.Length > 0)
                 {
-                    ((Indicator)Owner).ImageList[0].Margin = new Thickness(left, top, right, bottom);
-                    ((Indicator)Owner).ImageList[1].Margin = new Thickness(left, top, right, bottom);
+                    foreach (Image image in ((Indicator)Owner).ImageList)
+                    {
+                        image.Margin = new Thickness(left, top, right, bottom);
+                    }
                 }
-                else if (((Indicator)Owner).ImageList != null && ((Indicator)Owner).ImageList.Length == 1)
+            }
+            else if (Owner.GetType() == typeof(PopupMenuButton))
+            {
+                foreach (Image image in ((PopupMenuButton)Owner).ImageList)
                 {
-                    ((Indicator)Owner).ImageList[0].Margin = new Thickness(left, top, right, bottom);
+                    image.Margin = new Thickness(left, top, right, bottom);
+                }
+                if (((PopupMenuButton)Owner).TextBlock != null)
+                {
+                    ((PopupMenuButton)Owner).TextBlock.Margin = new Thickness(left, top, right, bottom);
+                    ((PopupMenuButton)Owner).TextBlock.FontSize = RelativeFontsize * ImgClickArea.ActualHeight;
+                    if (((PopupMenuButton)Owner).TextAlignment == ControlBase.ControlTextAlignment.LEFT)
+                    {
+                        ((PopupMenuButton)Owner).TextBlock.Padding = new Thickness(RelativeFontsize * ImgClickArea.ActualHeight, 0, 0, 0);
+                    }
                 }
             }
             else if (Owner.GetType() == typeof(CompoundControl))
@@ -323,8 +340,8 @@ namespace UwpControlsLibrary
             }
             else if (Owner.GetType() == typeof(Graph))
             {
-                double relativeWidth = Controls.imgClickArea.ActualWidth / Controls.OriginalWidth;
-                double relativeHeight = Controls.imgClickArea.ActualHeight / Controls.OriginalHeight;
+                //double relativeWidth = Controls.imgClickArea.ActualWidth / Controls.OriginalWidth;
+                //double relativeHeight = Controls.imgClickArea.ActualHeight / Controls.OriginalHeight;
 
                 ((Graph)Owner).Canvas.Margin = new Thickness(
                     left + ((Graph)Owner).LineWidth,
@@ -336,30 +353,41 @@ namespace UwpControlsLibrary
                     ((ControlBase)Owner).ImageList[ImageList.Length - 1].Margin = new Thickness(left, top, right, bottom);
                 }
                 ((Graph)Owner).Draw();
-                //if (((Graph)Owner).Points != null)
-                //{
-                //    for (int i = 0; i < ((Graph)Owner).Points.Count; i++)
-                //    {
-                //        ((Graph)Owner).Points[i] = new Point(
-                //            ((Graph)Owner).Points[i].X * relativeWidth,
-                //            ((Graph)Owner).Points[i].Y * relativeHeight);
-                //    }
-                //}
             }
             else if (Owner.GetType() == typeof(DigitalDisplay))
             {
-                double width = ((DigitalDisplay)Owner).ImageWidth * Controls.imgClickArea.ActualWidth / Controls.OriginalWidth;
-                for (int position = 0; position < ((DigitalDisplay)Owner).NumberOfDigits; position++)
+                if (((ControlBase)Owner).ImageList[12] != null)
                 {
-                    for (int digit = 0; digit < 10; digit++)
+                    ((DigitalDisplay)Owner).ImageList[12].Margin =
+                            new Thickness(left, top, right, bottom);
+                }
+
+                double width = ((DigitalDisplay)Owner).ImageWidth * Controls.imgClickArea.ActualWidth / Controls.OriginalWidth;
+
+                // Make hitarea for one digit:
+                Rect hitArea = new Rect(0, ((DigitalDisplay)Owner).DigitsRelativeOffset.Y * Controls.imgClickArea.ActualHeight,
+                    ((DigitalDisplay)Owner).DigitRelativeSize.Width * ImgClickArea.ActualWidth,
+                    ((DigitalDisplay)Owner).DigitRelativeSize.Height * ImgClickArea.ActualHeight);
+
+                // Make margin for all digits:
+                Double digitLeft = Controls.ExtraMarginX + hitArea.Left;
+                Double digitTop = Controls.ExtraMarginY + hitArea.Top;
+                Double digitRight = Controls.ExtraMarginX + ImgClickArea.ActualWidth - hitArea.Right * ((DigitalDisplay)Owner).NumberOfDigits;
+                Double digitBottom = Controls.ExtraMarginY + ImgClickArea.ActualHeight - hitArea.Bottom;
+
+                // Loop all positions:
+                for (int position = 0; position < ((DigitalDisplay)Owner).Digits.Length; position++)
+                {
+                    // Loop all digits, the minus and the dot:
+                    for (int digit = 0; digit < 12; digit++)
                     {
                         ((DigitalDisplay)Owner).Digits[position][digit].Margin =
                                 new Thickness(
-                                    left + width * position, 
-                                    top, 
-                                    right - width * position
+                                    digitLeft + width * position,
+                                    digitTop,
+                                    digitRight - width * position
                                         + (((DigitalDisplay)Owner).NumberOfDigits - 1) * width,
-                                    bottom);
+                                    digitBottom);
                     }
                 }
             }
@@ -388,39 +416,40 @@ namespace UwpControlsLibrary
                     {
                         if (((Keyboard)Owner).Octaves[octave].Keys[key].GetType() == typeof(WhiteKey))
                         {
-                            left = Controls.ExtraMarginX + RelativeHitAreaSize.Left * ImgClickArea.ActualWidth +
+                            left = Controls.ExtraMarginX + RelativeHitArea.Left * ImgClickArea.ActualWidth +
                                 whiteKeyWidth * whiteKeysDrawn++;
-                            top = Controls.ExtraMarginY + RelativeHitAreaSize.Top * ImgClickArea.ActualHeight;
+                            top = Controls.ExtraMarginY + RelativeHitArea.Top * ImgClickArea.ActualHeight;
                             right = Controls.ExtraMarginX + ImgClickArea.ActualWidth - HitArea.Right +
                                     numberOfWhiteKeysToTheRight * whiteKeyWidth;
-                            bottom = Controls.ExtraMarginY + ImgClickArea.ActualHeight - RelativeHitAreaSize.Bottom * ImgClickArea.ActualHeight;
-                            ((Keyboard)Owner).Octaves[octave].Keys[key].Image.Margin = new Thickness(left, top, right, bottom);
+                            bottom = Controls.ExtraMarginY + ImgClickArea.ActualHeight - RelativeHitArea.Bottom * ImgClickArea.ActualHeight;
+                            for (int i = 0; i < ((Keyboard)Owner).Octaves[octave].Keys[key].Images.Length; i++)
+                            {
+                                ((Keyboard)Owner).Octaves[octave].Keys[key].Images[i].Margin = new Thickness(left, top, right, bottom);
+                            }
                             numberOfWhiteKeysToTheRight--;
                         }
                         else
                         {
                             Double keyOffset = ((Keyboard)Owner).Octaves[octave].Keys[key].RelativeOffset * octaveWidth + octave * (octaveWidth * 7 / 8);
-                            left = RelativeHitAreaSize.Left * ImgClickArea.ActualWidth + keyOffset;
-                            top = RelativeHitAreaSize.Top * ImgClickArea.ActualHeight;
+                            left = RelativeHitArea.Left * ImgClickArea.ActualWidth + keyOffset;
+                            top = RelativeHitArea.Top * ImgClickArea.ActualHeight;
                             right = ImgClickArea.ActualWidth - left - blackKeyWidth;
                             bottom = ImgClickArea.ActualHeight - top - blackKeyHeight;
-                            ((Keyboard)Owner).Octaves[octave].Keys[key].Image.Margin = new Thickness(left, top, right, bottom);
+                            for (int i = 0; i < ((Keyboard)Owner).Octaves[octave].Keys[key].Images.Length; i++)
+                            {
+                                ((Keyboard)Owner).Octaves[octave].Keys[key].Images[i].Margin = new Thickness(left, top, right, bottom);
+                            }
                         }
                     }
                 }
             }
-            else
+            else // All other control types:
             {
-                if (((ControlBase)Owner).ImageList != null && ((ControlBase)Owner).ImageList[ImageList.Length - 1] != null)
+                if (((ControlBase)Owner).ImageList != null && ((ControlBase)Owner).ImageList.Length > 0)
                 {
-                    ((ControlBase)Owner).ImageList[ImageList.Length - 1].Margin = new Thickness(left, top, right, bottom);
-                }
-
-                if (((ControlBase)Owner).GetType() != typeof(Graph) && ((ControlBase)Owner).ImageList != null)
-                {
-                    for (int i = 0; i < ImageList.Length; i++)
+                    foreach (Image image in ((ControlBase)Owner).ImageList)
                     {
-                        ((ControlBase)Owner).ImageList[i].Margin = new Thickness(left, top, right, bottom);
+                        image.Margin = new Thickness(left, top, right, bottom);
                     }
                 }
 
@@ -435,14 +464,20 @@ namespace UwpControlsLibrary
         public void SetPosition(Point position)
         {
             HitArea = new Rect(position.X, position.Y, HitArea.Width, HitArea.Height);
-            RelativeHitAreaSize = new Rect(
-                HitArea.Left / Controls.OriginalWidth,
-                HitArea.Top / Controls.OriginalHeight,
-                HitArea.Width / Controls.OriginalWidth,
-                HitArea.Height / Controls.OriginalHeight);
+            RelativeHitArea = new Rect(
+            HitArea.Left / Controls.OriginalWidth,
+            HitArea.Top / Controls.OriginalHeight,
+            HitArea.Width / ImgClickArea.ActualWidth,
+            HitArea.Height / ImgClickArea.ActualHeight);
             UpdatePositions();
         }
 
+        /// <summary>
+        /// Checks for Point relative to imgClickArea is within
+        /// boundaries of HitArea.
+        /// </summary>
+        /// <param name="Point"></param>
+        /// <returns></returns>
         public Boolean IsHit(Point Point)
         {
             Boolean isHit = false;

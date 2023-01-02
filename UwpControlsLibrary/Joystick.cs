@@ -8,6 +8,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using static UwpControlsLibrary.ControlBase;
 
 namespace UwpControlsLibrary
 {
@@ -25,11 +26,6 @@ namespace UwpControlsLibrary
         public Int32 MaxValueY { get; set; }
         public Int32 ValueX { get { return valueX; } set { this.valueX = value; SetPositionFromValues(); } }
         public Int32 ValueY { get { return valueY; } set { this.valueY = value; SetPositionFromValues(); } }
-        //public Double KnobRelativeSize { get; set; }
-        public Boolean HighPrecision { get; set; }
-        //public Point ImageSize { get; set; }
-        //public SliderOrientation Orientation { get; set; }
-        //public Image[] ImageList { get; set; }
         public Double[] StickRelativeSize { get; set; }
 
         private Int32 valueX;
@@ -37,10 +33,21 @@ namespace UwpControlsLibrary
         public Double RelativeValueX;
         public Double RelativeValueY;
 
+        /// <summary>
+        /// ImageList must be: Background, shaft parts (any order) and last the knob.
+        /// </summary>
+        /// <param name="controls"></param>
+        /// <param name="Id"></param>
+        /// <param name="gridMain"></param>
+        /// <param name="imageList"></param>
+        /// <param name="hitArea"></param>
+        /// <param name="MinValueX"></param>
+        /// <param name="MaxValueX"></param>
+        /// <param name="MinValueY"></param>
+        /// <param name="MaxValueY"></param>
         public Joystick(Controls controls, Int32 Id, Grid gridMain, Image[] imageList, Rect hitArea,
-            Int32 MinValueX = 0, Int32 MaxValueX = 127, Int32 MinValueY = 0, Int32 MaxValueY = 127, Boolean HighPrecision = false)
+            Int32 MinValueX = 0, Int32 MaxValueX = 127, Int32 MinValueY = 0, Int32 MaxValueY = 127)
         {
-            this.HighPrecision = HighPrecision;
             this.MinValueX = MinValueX;
             this.MaxValueX = MaxValueX;
             this.MinValueY = MinValueY;
@@ -51,7 +58,6 @@ namespace UwpControlsLibrary
             GridControls = gridMain;
             Double width = hitArea.Width;
             Double height = hitArea.Height;
-            this.HitTarget = HitTarget;
             HitArea = new Rect(hitArea.Left, hitArea.Top, width, height);
             CopyImages(imageList);
             ControlSizing = new ControlSizing(controls, this);
@@ -67,26 +73,7 @@ namespace UwpControlsLibrary
 
             Int32 left = (Int32)ControlSizing.HitArea.Left;
             Int32 right = (Int32)ControlSizing.HitArea.Right;
-            if (HighPrecision)
-            {
-                if (right - left < (MaxValueX - MinValueX))
-                {
-                    Int32 correction = ((MaxValueX - MinValueX) - (right - left)) / 2;
-                    right += correction;
-                    left -= correction;
-                }
-            }
             ValueX = MaxValueX - (Int32)(((float)right - (float)position.X) / ((float)right - (float)left) * (1.0 + (float)MaxValueX - (float)MinValueX + 1));
-
-            if (HighPrecision)
-            {
-                if (bottom - top < (MaxValueY - MinValueY))
-                {
-                    Int32 correction = ((MaxValueY - MinValueY) - (bottom - top)) / 2;
-                    bottom += correction;
-                    top -= correction;
-                }
-            }
             ValueY = MaxValueY - (Int32)(((float)position.Y - (float)top) / ((float)bottom - (float)top) * (1.0 + (float)MaxValueY - (float)MinValueY + 1));
 
             ValueX = ValueX > MaxValueX ? MaxValueX : ValueX;
@@ -101,33 +88,37 @@ namespace UwpControlsLibrary
             return value;
         }
 
-        public Int32 Handle(EventType eventType, PointerRoutedEventArgs e)
+        public int[] HandleEvent(PointerRoutedEventArgs e, EventType eventType, Point pointerPosition, List<PointerButton> pointerButtonStates)
         {
             switch (eventType)
             {
                 case EventType.POINTER_MOVED:
-                    return PointerMoved(e);
-                case EventType.POINTER_PRESSED:
-                    PointerPressed(e);
+                    if (pointerButtonStates.Contains(PointerButton.LEFT))
+                    {
+                        return SetValue(pointerPosition);
+                    }
                     break;
-                case EventType.POINTER_RELEASED:
-                    PointerReleased(e);
-                    break;
+                //case EventType.POINTER_PRESSED:
+                //    HandlePointerPressed(e);
+                //    break;
+                //case EventType.POINTER_RELEASED:
+                //    HandlePointerReleased(e);
+                //    break;
             }
-            return -1;
+            return null;
         }
 
-        private Int32 PointerMoved(PointerRoutedEventArgs e)
+        private Int32 HandlePointerMoved(Point pointerPosition, List<PointerButton> pointerButtonStates)
         {
             return -1;
         }
 
-        public void PointerPressed(PointerRoutedEventArgs e)
+        public void HandlePointerPressed(PointerRoutedEventArgs e)
         {
 
         }
 
-        public void PointerReleased(PointerRoutedEventArgs e)
+        public void HandlePointerReleased(PointerRoutedEventArgs e)
         {
 
         }
@@ -136,7 +127,7 @@ namespace UwpControlsLibrary
         {
             RelativeValueX = ((Double)valueX - (Double)MinValueX) / ((Double)MaxValueX - (Double)MinValueX);
             RelativeValueY = (1 - ((Double)valueY - (Double)MinValueY) / ((Double)MaxValueY - (Double)MinValueY));
-            ControlSizing.Controls.CalculateExtraMargins(ControlSizing.Controls.AppSize);
+            ControlSizing.Controls.CalculateExtraMargins(Controls.AppSize);
             ControlSizing.UpdatePositions();
             SetRotationFromValue();
         }
@@ -148,10 +139,21 @@ namespace UwpControlsLibrary
                 Double length = Math.Sqrt(
                     Math.Pow(valueX / ((Double)MaxValueX - (Double)MinValueX), 2) + 
                     Math.Pow(valueY / ((Double)MaxValueY - (Double)MinValueY), 2));
-                ImageList[3].Visibility = length > ControlSizing.RelativeHitAreaSize.Height * 2 ? 
-                    Visibility.Visible : Visibility.Collapsed;
-                ImageList[2].Visibility = length > ControlSizing.RelativeHitAreaSize.Height ? 
-                    Visibility.Visible : Visibility.Collapsed;
+                if (ImageList.Length > 4)
+                {
+                    ImageList[3].Visibility = length > ControlSizing.RelativeHitArea.Height * 2 ?
+                        Visibility.Visible : Visibility.Collapsed;
+                }
+                if (ImageList.Length > 3)
+                {
+                    ImageList[2].Visibility = length > ControlSizing.RelativeHitArea.Height ?
+                        Visibility.Visible : Visibility.Collapsed;
+                }
+                if (ImageList.Length > 2)
+                {
+                    ImageList[1].Visibility = length > ControlSizing.RelativeHitArea.Height / 2 ?
+                        Visibility.Visible : Visibility.Collapsed;
+                }
 
                 Double radians = Math.Atan2(valueX, valueY);
                 Int32 angle = (Int32)(radians * 360 / (2 * Math.PI));
@@ -164,6 +166,53 @@ namespace UwpControlsLibrary
                     ImageList[i].RenderTransform = compositeTransform;
                 }
             }
+        }
+
+        public void SetDeSelected()
+        {
+        }
+
+        public void HandleEvent(PointerRoutedEventArgs e, EventType eventType)
+        {
+            switch (eventType)
+            {
+                case EventType.POINTER_MOVED:
+                    HandlePointerMovedEvent(e);
+                    break;
+                case EventType.POINTER_PRESSED:
+                    HandlePointerPressedEvent(e);
+                    break;
+                case EventType.POINTER_RELEASED:
+                    HandlePointerReleasedEvent(e);
+                    break;
+                case EventType.POINTER_TAPPED:
+                    HandlePointerWheelChangedEvent(e);
+                    break;
+            }
+        }
+
+        public void HandlePointerMovedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerReleasedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerWheelChangedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerTapped(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
+        {
         }
     }
 }

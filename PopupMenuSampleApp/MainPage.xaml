@@ -1,0 +1,55 @@
+﻿<Page
+    x:Class="PopupMenuSampleApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PopupMenuSampleApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="DarkGray">
+
+    <Grid x:Name = "gridMain">
+        <Image x:Name = "imgTransparentEffectOffBackground" Source = "ms-appx:///Images/TransparentEffectOffBackground.png" Stretch = "None" />
+        <Image x:Name = "imgButtonBackground" Source = "ms-appx:///Images/ButtonBackground.png" Stretch = "None" />
+        <Image x:Name = "imgEffectButtonBackground" Source = "ms-appx:///Images/EffectButtonBackground.png" Stretch = "None" />
+        <Image x:Name = "imgEffectButtonHover" Source = "ms-appx:///Images/EffectButtonHover.png" Stretch = "None" />
+        <Image x:Name = "imgButtons" Source = "ms-appx:///Images/Buttons.png" Stretch = "None" />
+        <Image x:Name = "imgBypassOn" Source = "ms-appx:///Images/BypassOn.png" Stretch = "None" />
+        <Image x:Name = "imgEightOn" Source = "ms-appx:///Images/EightOn.png" Stretch = "None" />
+        <Image x:Name = "imgFiveOn" Source = "ms-appx:///Images/FiveOn.png" Stretch = "None" />
+        <Image x:Name = "imgFourOn" Source = "ms-appx:///Images/FourOn.png" Stretch = "None" />
+        <Image x:Name = "imgHarmonyOn" Source = "ms-appx:///Images/HarmonyOn.png" Stretch = "None" />
+        <Image x:Name = "imgLargeKnob" Source = "ms-appx:///Images/LargeKnob.png" Stretch = "None" />
+        <Image x:Name = "imgManualOn" Source = "ms-appx:///Images/ManualOn.png" Stretch = "None" />
+        <Image x:Name = "imgMegaphoneOn" Source = "ms-appx:///Images/MegaphoneOn.png" Stretch = "None" />
+        <Image x:Name = "imgMenuBackground" Source = "ms-appx:///Images/MenuBackground.png" Stretch = "None" />
+        <Image x:Name = "imgMenuItemSliderHandle" Source = "ms-appx:///Images/MenuItemSliderHandle.png" Stretch = "None" />
+        <Image x:Name = "imgOneOn" Source = "ms-appx:///Images/OneOn.png" Stretch = "None" />
+        <Image x:Name = "imgReverbOn" Source = "ms-appx:///Images/ReverbOn.png" Stretch = "None" />
+        <Image x:Name = "imgRobotOn" Source = "ms-appx:///Images/RobotOn.png" Stretch = "None" />
+        <Image x:Name = "imgRobotHover" Source = "ms-appx:///Images/RobotHover.png" Stretch = "None" />
+        <Image x:Name = "imgRolandLogo" Source = "ms-appx:///Images/RolandLogo.png" Stretch = "None" />
+        <Image x:Name = "imgSevenOn" Source = "ms-appx:///Images/SevenOn.png" Stretch = "None" />
+        <Image x:Name = "imgSixOn" Source = "ms-appx:///Images/SixOn.png" Stretch = "None" />
+        <Image x:Name = "imgSliderHandle" Source = "ms-appx:///Images/SliderHandle.png" Stretch = "None" />
+        <Image x:Name = "imgSmallKnob" Source = "ms-appx:///Images/SmallKnob.png" Stretch = "None" />
+        <Image x:Name = "imgThreeOn" Source = "ms-appx:///Images/ThreeOn.png" Stretch = "None" />
+        <Image x:Name = "imgTwoOn" Source = "ms-appx:///Images/TwoOn.png" Stretch = "None" />
+        <Image x:Name = "imgVocoderOn" Source = "ms-appx:///Images/VocoderOn.png" Stretch = "None" />
+        <Image x:Name = "imgFiller" Source="ms-appx:///Images/Filler.png" Stretch="Fill" />
+        <Image x:Name = "imgBackground" Source = "ms-appx:///Images/Background.png" Stretch = "Uniform" />
+        <Grid x:Name = "gridControls" SizeChanged = "gridMain_SizeChanged" />
+        <TextBlock Text="Exempeltext" FontSize="14" FontWeight="Bold" FontStretch="Condensed" Foreground="AliceBlue" />
+        <Grid x:Name="gridToolTip" Background="LightYellow" Visibility="Collapsed" />
+        <Image x:Name = "imgClickArea" Source = "ms-appx:///Images/Background.png" Stretch = "None" Opacity = "0"
+				PointerMoved = "imgClickArea_PointerMoved"
+				ImageOpened = "imgClickArea_ImageOpened"
+				PointerWheelChanged = "imgClickArea_PointerWheelChanged"
+				PointerReleased = "imgClickArea_PointerReleased"
+				PointerPressed = "imgClickArea_PointerPressed"
+				Tapped = "imgClickArea_Tapped"
+                RightTapped = "imgClickArea_RightTapped" />
+    </Grid >
+</Page>
+
+    

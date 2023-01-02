@@ -25,7 +25,6 @@ namespace UwpControlsLibrary
             GridControls = gridMain;
             Double width;
             Double height;
-            this.HitTarget = HitTarget;
 
             if (imageList != null && imageList.Length > 0)
             {

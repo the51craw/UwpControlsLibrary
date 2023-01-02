@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{48074272-B3BB-4ECB-9CD6-8DAF7E06D381}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ListViewAndStackPanelExample</RootNamespace>
+    <AssemblyName>ListViewAndStackPanelExample</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.20348.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
+    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
+    <OutputPath>bin\ARM64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreateControls.cs" />
+    <Compile Include="Display.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\AdsrBackground.png" />
+    <Content Include="Images\ADSRGraphBackground.png" />
+    <Content Include="Images\AdsrModA.png" />
+    <Content Include="Images\AdsrModD.png" />
+    <Content Include="Images\AdsrModOff.png" />
+    <Content Include="Images\AdsrModR.png" />
+    <Content Include="Images\AdsrModS.png" />
+    <Content Include="Images\AM1.png" />
+    <Content Include="Images\AM2.png" />
+    <Content Include="Images\AMUp2.png" />
+    <Content Include="Images\AMUp2Left1.png" />
+    <Content Include="Images\Arrowknob_75.png" />
+    <Content Include="Images\Background.png" />
+    <Content Include="Images\BackgroundLower.png" />
+    <Content Include="Images\BackgroundUpper.png" />
+    <Content Include="Images\BlackKey.png" />
+    <Content Include="Images\CommonAdsr.png" />
+    <Content Include="Images\ControlPanelBackground.png" />
+    <Content Include="Images\Digit0.png" />
+    <Content Include="Images\Digit0Dot.png" />
+    <Content Include="Images\Digit1.png" />
+    <Content Include="Images\Digit1Dot.png" />
+    <Content Include="Images\Digit2.png" />
+    <Content Include="Images\Digit2Dot.png" />
+    <Content Include="Images\Digit3.png" />
+    <Content Include="Images\Digit3Dot.png" />
+    <Content Include="Images\Digit4.png" />
+    <Content Include="Images\Digit4Dot.png" />
+    <Content Include="Images\Digit5.png" />
+    <Content Include="Images\Digit5Dot.png" />
+    <Content Include="Images\Digit6.png" />
+    <Content Include="Images\Digit6Dot.png" />
+    <Content Include="Images\Digit7.png" />
+    <Content Include="Images\Digit7Dot.png" />
+    <Content Include="Images\Digit8.png" />
+    <Content Include="Images\Digit8Dot.png" />
+    <Content Include="Images\Digit9.png" />
+    <Content Include="Images\Digit9Dot.png" />
+    <Content Include="Images\DisplayBackground.png" />
+    <Content Include="Images\Filler.png" />
+    <Content Include="Images\FilterAdsrNegative.png" />
+    <Content Include="Images\FilterAdsrPositive.png" />
+    <Content Include="Images\FilterAmModulator.png" />
+    <Content Include="Images\FilterBackground.png" />
+    <Content Include="Images\FilterButtonBackground.png" />
+    <Content Include="Images\FilterFixed.png" />
+    <Content Include="Images\FilterFmModulator.png" />
+    <Content Include="Images\FilterOff.png" />
+    <Content Include="Images\FilterPmModulator.png" />
+    <Content Include="Images\FM1.png" />
+    <Content Include="Images\FM2.png" />
+    <Content Include="Images\FMUp2.png" />
+    <Content Include="Images\FMUp2Left1.png" />
+    <Content Include="Images\GraphDisplayBackground.png" />
+    <Content Include="Images\HangingWire.png" />
+    <Content Include="Images\ImageSelector.png" />
+    <Content Include="Images\imgControlPanelBackground.jpg" />
+    <Content Include="Images\Layout12.png" />
+    <Content Include="Images\Layout4.png" />
+    <Content Include="Images\Layout6.png" />
+    <Content Include="Images\Layout8.png" />
+    <Content Include="Images\LedOff.png" />
+    <Content Include="Images\LedOn.png" />
+    <Content Include="Images\LoadFromFile.png" />
+    <Content Include="Images\LoadFromLibrary.png" />
+    <Content Include="Images\Logotype.png" />
+    <Content Include="Images\LongButton.png" />
+    <Content Include="Images\ModAll.png" />
+    <Content Include="Images\ModAM.png" />
+    <Content Include="Images\ModFilterButtonBackground.png" />
+    <Content Include="Images\ModFilterDepth.png" />
+    <Content Include="Images\ModFilterFreq.png" />
+    <Content Include="Images\ModFilterKeyFollow.png" />
+    <Content Include="Images\ModFilterOff.png" />
+    <Content Include="Images\ModFilterQ.png" />
+    <Content Include="Images\ModFM.png" />
+    <Content Include="Images\ModPM.png" />
+    <Content Include="Images\ModulatorHandle.png" />
+    <Content Include="Images\Oscillator.png" />
+    <Content Include="Images\OscillatorBackground.png" />
+    <Content Include="Images\PedalDown.png" />
+    <Content Include="Images\PedalUp.png" />
+    <Content Include="Images\PM1.png" />
+    <Content Include="Images\PM2.png" />
+    <Content Include="Images\PMUp2.png" />
+    <Content Include="Images\PMUp2Left1.png" />
+    <Content Include="Images\SaveToFile.png" />
+    <Content Include="Images\Screenshot.png" />
+    <Content Include="Images\SelectADSR.png" />
+    <Content Include="Images\SelectFixFreq.png" />
+    <Content Include="Images\SelectKeyboard.png" />
+    <Content Include="Images\SelectNoise.png" />
+    <Content Include="Images\SelectorAdsrFm.png" />
+    <Content Include="Images\SelectorViewOff.png" />
+    <Content Include="Images\SelectorViewOn.png" />
+    <Content Include="Images\SelectPedalDown.png" />
+    <Content Include="Images\SelectPedalUp.png" />
+    <Content Include="Images\SelectPulse.png" />
+    <Content Include="Images\SelectRandom.png" />
+    <Content Include="Images\SelectSawDwn.png" />
+    <Content Include="Images\SelectSawUp.png" />
+    <Content Include="Images\SelectSine.png" />
+    <Content Include="Images\SelectSoundOff.png" />
+    <Content Include="Images\SelectSoundOn.png" />
+    <Content Include="Images\SelectSquare.png" />
+    <Content Include="Images\SelectTriangle.png" />
+    <Content Include="Images\SeparateAdsr.png" />
+    <Content Include="Images\UsingGraphicsCardOff.png" />
+    <Content Include="Images\UsingGraphicsCardOn.png" />
+    <Content Include="Images\WhiteKey.png" />
+    <Content Include="Images\Wood.jpg" />
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>6.2.12</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UwpControlsLibrary">
+      <HintPath>..\UwpControlsLibrary\bin\x64\Debug\UwpControlsLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

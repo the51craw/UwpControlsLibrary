@@ -51,14 +51,14 @@ namespace ContentDialogExample
 
             // Create the controls object:
             Controls = new Controls(new Rect(20, 20, imgClickArea.ActualWidth, imgClickArea.ActualHeight), imgClickArea);
-            Controls.InitControls(gridControls);
+            Controls.Init(gridControls);
             guis = new CompoundControl[12];
 
             // Create all controls:
             int spaceX = 200;
             int spaceY = 150;
 
-            Button button = new Button();
+            Windows.UI.Xaml.Controls.Button button = new Windows.UI.Xaml.Controls.Button();
             button.Content = "Buttoncontent";
             gridControls.Children.Add(button);
             //Controls.AddRotator(0, gridControls, new Image[] { imgMidiSettingBackground, imgMidiSettingBackground }, new Point(14, 14));
@@ -78,7 +78,7 @@ namespace ContentDialogExample
             //}
 
             // Make sure all controls has the correct size and position:
-            Controls.HideOriginalControls();
+            //Controls.HideOriginalControls();
             Controls.ResizeControls(gridControls, Window.Current.Bounds);
             Controls.SetControlsUniform(gridControls);
             UpdateLayout();

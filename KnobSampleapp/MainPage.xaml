@@ -8,17 +8,18 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid x:Name="gridMain">
-        <Image x:Name="imgKnob" Source="ms-appx:///Images/Arrowknob_75.png" Stretch="None" />
-        <Grid x:Name="gridControls" SizeChanged="gridMain_SizeChanged" >
-            <Image x:Name="imgBackground" Source="ms-appx:///Images/Background.png" Stretch="Uniform" />
-        </Grid>
-        <Image x:Name="imgClickArea" Source="ms-appx:///Images/Background.png" Stretch="None" Opacity="0"
-            PointerMoved="imgClickArea_PointerMoved" 
-            ImageOpened="imgClickArea_ImageOpened" 
-            PointerWheelChanged="imgClickArea_PointerWheelChanged"
-            PointerReleased="imgClickArea_PointerReleased"
-            PointerPressed="imgClickArea_PointerPressed"
-            Tapped="imgClickArea_Tapped" />
-    </Grid>
+    <Grid x:Name = "gridMain" >
+        <Image x:Name = "imgArrowknob_75" Source = "ms-appx:///Images/Arrowknob_75.png" Stretch = "None" />
+        <Image x:Name = "imgMrMartin" Source = "ms-appx:///Images/MrMartin.png" Stretch = "None" />
+        <Image x:Name = "imgBackground" Source = "ms-appx:///Images/Background.png" Stretch = "Uniform" />
+        <Grid x:Name = "gridControls" SizeChanged = "gridControls_SizeChanged" />
+        <Image x:Name = "imgClickArea" Source = "ms-appx:///Images/Background.png" Stretch = "None" Opacity = "0"
+				PointerMoved = "imgClickArea_PointerMoved"
+				ImageOpened = "imgClickArea_ImageOpened"
+				PointerWheelChanged = "imgClickArea_PointerWheelChanged"
+				PointerReleased = "imgClickArea_PointerReleased"
+				PointerPressed = "imgClickArea_PointerPressed"
+				Tapped = "imgClickArea_Tapped"
+				RightTapped = "imgClickArea_RightTapped" />
+    </Grid >
 </Page>

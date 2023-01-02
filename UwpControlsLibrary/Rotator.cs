@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 
 namespace UwpControlsLibrary
 {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Rotator class.
+    /// Rotator class.The Rotator uses a number of images of the same size each representing a value
+    /// from zero to number of images minus one. Tapping advances one up, restarting at zero after last value.
+    /// Mouse wheel scrolls up and down but does not restart at end or zero, but is limited at both ends.
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public class Rotator : ControlBase
@@ -23,23 +25,53 @@ namespace UwpControlsLibrary
             {
                 selection = value;
                 ShowSelection();
-                //for (int i = 0; i < ImageList.Length; i++)
-                //{
-                //    ImageList[i].Visibility = Visibility.Collapsed;
-                //}
-                //ImageList[selection].Visibility = Visibility.Visible;
+            }
+        }
+        private int selection;
+
+        public Brush Foreground
+        {
+            get
+            {
+                return foreground;
+            }
+            set
+            {
+                if (!string.IsNullOrEmpty(Text))
+                {
+                    TextBlock.Foreground = value;
+                    foreground = value;
+                }
+            }
+        }
+        private Brush foreground;
+
+        public string Text
+        {
+            get
+            {
+                return TextBlock.Text;
+            }
+            set
+            {
+                TextBlock.Text = value;
             }
         }
 
-        private int selection;
-
-        public Rotator(Controls controls, int Id, Grid gridMain, Image[] imageList, Point Position)
+        public List<string> Texts;		
+        int fontSize;
+        public ControlTextWeight TextWeight;
+        public TextAlignment TextAlignment;
+        public Rotator(Controls controls, int Id, Grid gridMain, Image[] imageList, Point Position,
+            string text = "", Int32 fontSize = 8, TextAlignment textAlignment = TextAlignment.Center,
+            ControlTextWeight textWeight = ControlTextWeight.NORMAL,
+            TextWrapping textWrapping = TextWrapping.NoWrap, Brush foreground = null)
         {
             this.Id = Id;
             GridControls = gridMain;
+            this.fontSize = fontSize;
             Double width;
             Double height;
-            this.HitTarget = HitTarget;
             if (VerifyImageList(imageList))
             {
                 ImageList = imageList;
@@ -52,7 +84,7 @@ namespace UwpControlsLibrary
                     for (int i = 1; i < imageList.Length; i++)
                     {
                         if (imageList[i - 1].ActualWidth != imageList[i].ActualWidth
-                            || imageList[i - 1].ActualWidth != imageList[i].ActualWidth)
+                            || imageList[i - 1].ActualHeight != imageList[i].ActualHeight)
                         {
                             throw new Exception("A Rotator must have a list of images of the same size.");
                         }
@@ -63,105 +95,42 @@ namespace UwpControlsLibrary
             }
             else
             {
-                throw new Exception("A Rotator must have a list of images of the same size.");
+                throw new Exception("A Rotator must have a list of one or more images of the same size.");
             }
 
             HitArea = new Rect(Position.X, Position.Y, width, height);
             CopyImages(imageList);
-            ControlSizing = new ControlSizing(controls, this);
-            Selection = 0;
-        }
 
-        public int Handle(EventType eventType, PointerRoutedEventArgs e)
-        {
-            switch (eventType)
+            Texts = new List<string>();
+            if (!string.IsNullOrEmpty(text))
             {
-                case EventType.POINTER_MOVED:
-                    return PointerMoved(e);
-                case EventType.POINTER_PRESSED:
-                    PointerPressed(e);
-                    break;
-                case EventType.POINTER_RELEASED:
-                    PointerReleased(e);
-                    break;
+                Texts.Add(text);
             }
-            return -1;
-        }
 
-        private int PointerMoved(PointerRoutedEventArgs e)
-        {
-            return -1;
-        }
+            TextBlock = new TextBlock();
+            TextBlock.Text = text;
+            TextBlock.VerticalAlignment = VerticalAlignment.Center;
+            OriginalFontSize = fontSize;
+            TextBlock.FontSize = OriginalFontSize;
 
-        public void PointerPressed(PointerRoutedEventArgs e)
-        {
-            Selection = selection + 1 >= ImageList.Length ? 0 : selection + 1;
-        }
-
-        public void PointerReleased(PointerRoutedEventArgs e)
-        {
-
-        }
-
-        public Rotator(Rotator selector)
-        {
-            Id = selector.Id;
-            ControlSizing = selector.ControlSizing;
-            GridControls = selector.GridControls;
-            HitArea = new Rect(selector.HitArea.Left, selector.HitArea.Top, selector.HitArea.Width, selector.HitArea.Height);
-            HitTarget = selector.HitTarget;
-            CopyImages(selector.ImageList);
-            MaxValue = selector.MaxValue;
-            MinValue = selector.MinValue;
-            selection = selector.Selection;
-            Tag = selector.Tag;
-            TextBlock = null;
-        }
-
-        public void Tapped()
-        {
-            Selection = selection + 1 >= ImageList.Length ? 0 : selection + 1;
-            ShowSelection();
-        }
-
-        public void RightTapped()
-        {
-            Selection = selection - 1 < 0 ? ImageList.Length - 1 : selection - 1;
-            ShowSelection();
-        }
-
-        public int PointerWheelChanged(int delta)
-        {
-            if (delta > 0)
+            if (foreground != null)
             {
-                return IncrementValue(delta);
+                TextBlock.Foreground = foreground;
             }
             else
             {
-                return DecrementValue(-delta);
+                TextBlock.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             }
-        }
 
-        public int DecrementValue(int delta)
-        {
-            if (selection < ImageList.Length - 1)
+            if (TextWeight == ControlTextWeight.BOLD)
             {
-                selection += delta;
-                Selection = selection > ImageList.Length - 1 ? ImageList.Length - 1 : selection;
-                return selection;
+                TextBlock.FontWeight = Windows.UI.Text.FontWeights.Bold;
             }
-            return ImageList.Length - 1;
-        }
 
-        public int IncrementValue(int delta)
-        {
-            if (selection > 0)
-            {
-                selection -= delta;
-                Selection = selection < 0 ? 0 : selection;
-                return selection;
-            }
-            return 0;
+            TextBlock.TextAlignment = textAlignment;
+
+            ControlSizing = new ControlSizing(controls, this);
+            Selection = 0;
         }
 
         public void ShowSelection()
@@ -182,7 +151,84 @@ namespace UwpControlsLibrary
                         }
                     }
                 }
+                else
+                {
+                    if (selection < Texts.Count && selection > -1)
+                    {
+                        Text = Texts[selection];
+                    }
+                }
             }
+        }
+
+        public void SetDeSelected()
+        {
+        }
+
+        public void HandleEvent(List<PointerButton> pointerButtonStates, int delta = 0)
+        {
+            if (pointerButtonStates.Contains(PointerButton.LEFT))
+            {
+                if (ImageList.Length > 1)
+                {
+                    Selection = selection + 1 >= ImageList.Length ? 0 : selection + 1;
+                }
+                else if (Texts.Count > 1)
+                {
+                    Selection = selection + 1 >= Texts.Count ? 0 : selection + 1;
+                }
+                ShowSelection();
+            }
+            else if (pointerButtonStates.Contains(PointerButton.RIGHT))
+            {
+                if (ImageList.Length > 1)
+                {
+                    Selection = selection - 1 < 0 ? ImageList.Length - 1 : selection - 1;
+                }
+                else if (Texts.Count > 1)
+                {
+                    Selection = selection - 1 < 0 ? Texts.Count - 1 : selection - 1;
+                }
+                ShowSelection();
+            }
+            else if (delta != 0)
+            {
+                selection += delta;
+                if (ImageList.Length > 1)
+                {
+                    Selection = selection > ImageList.Length - 1 ? ImageList.Length - 1 : selection;
+                }
+                else if (Texts.Count > 1)
+                {
+                    Selection = selection > Texts.Count - 1 ? Texts.Count - 1 : selection;
+                }
+                Selection = selection < 0 ? 0 : selection;
+                ShowSelection();
+            }
+        }
+
+        public void HandlePointerMovedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerReleasedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerWheelChangedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerTapped(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
+        {
         }
     }
 }

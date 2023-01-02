@@ -130,6 +130,58 @@ namespace CompositeExample
             }
         }
 
+        // Tapped event, handlers for controls that are supposed to be tapped:
+        private void imgClickArea_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            if (currentControlItem > -1)
+            {
+                Controls.RightTapped(sender, e);
+
+                //switch (currentControlItem)
+                //{
+                //    case (Int32)_controlId.SELECT_LAYOUT:
+                //        layout = ((UwpControlsLibrary.Rotator)Controls.ControlsList[0]).Selection;
+                //        Controls.ControlsList.RemoveRange(1, Controls.ControlsList.Count - 1);
+                //        CreateControls();
+                //        break;
+                //    case 5:
+                //        foreach (object control in Controls.ControlsHit.CompoundControls)
+                //        {
+                //            switch ((Int32)((Controls.CompoundControlsUnderPointer)control).SubType)
+                //            {
+                //                case (int)type.OSCILLATOR:
+                //                    break;
+                //                case (int)type.FILTER:
+                //                    break;
+                //                case (int)type.ADSR:
+                //                    ((Graph)adsrs[0].SubControls.ControlsList[(int)AdsrControls.ADSR_GRAPH]).Draw();
+                //                    break;
+                //                case (int)type.DISPLAY:
+                //                    break;
+                //            }
+                //            foreach (object subControl in ((Controls.CompoundControlsUnderPointer)control).Controls)
+                //            {
+                //                //txt += " SubControl " + ((Int32)subControl).ToString();
+                //            }
+                //        }
+                //        break;
+                //}
+
+                ////switch ((Int32)((Controls.CompoundControlsUnderPointer)control).SubType)
+                ////{
+                ////    case (int)type.OSCILLATOR:
+                ////        break;
+                ////    case (int)type.FILTER:
+                ////        break;
+                ////    case (int)type.ADSR:
+                ////        break;
+                ////    case (int)type.DISPLAY:
+                ////        break;
+                ////        case (int)type.
+                ////}
+            }
+        }
+
         private void imgClickArea_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             if (Controls.controlsHit.CompoundControls.Count > 0)

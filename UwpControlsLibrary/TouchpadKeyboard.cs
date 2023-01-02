@@ -91,8 +91,6 @@ namespace UwpControlsLibrary
 
             Point upperLeftCorner = new Point(Position.X - width / 2f, Position.Y - height / 2f);
 
-            this.HitTarget = HitTarget;
-
             HitArea = new Rect(upperLeftCorner, new Size(width, height));
 
             WhiteKeyList = new ControlBase[numberOfWhiteKeys];
@@ -221,7 +219,7 @@ namespace UwpControlsLibrary
                 touchpadKeyboard.ControlSizing.HitArea.Width,
                 touchpadKeyboard.ControlSizing.HitArea.Height
                 );
-            touchpadKeyboard.ControlSizing.RelativeHitAreaSize = new Rect(
+            touchpadKeyboard.ControlSizing.RelativeHitArea = new Rect(
                 touchpadKeyboard.ControlSizing.HitArea.Left / clickareaSize.X,
                 touchpadKeyboard.ControlSizing.HitArea.Top / clickareaSize.Y,
                 touchpadKeyboard.ControlSizing.HitArea.Width / clickareaSize.X,
@@ -237,7 +235,7 @@ namespace UwpControlsLibrary
                     whiteKey.ControlSizing.HitArea.Width,
                     whiteKey.ControlSizing.HitArea.Height
                     );
-                whiteKey.ControlSizing.RelativeHitAreaSize = new Rect(
+                whiteKey.ControlSizing.RelativeHitArea = new Rect(
                     whiteKey.ControlSizing.HitArea.Left / clickareaSize.X,
                     whiteKey.ControlSizing.HitArea.Top / clickareaSize.Y,
                     whiteKey.ControlSizing.HitArea.Width / clickareaSize.X,
@@ -254,7 +252,7 @@ namespace UwpControlsLibrary
                     blackKey.ControlSizing.HitArea.Width,
                     blackKey.ControlSizing.HitArea.Height
                     );
-                blackKey.ControlSizing.RelativeHitAreaSize = new Rect(
+                blackKey.ControlSizing.RelativeHitArea = new Rect(
                     blackKey.ControlSizing.HitArea.Left / clickareaSize.X,
                     blackKey.ControlSizing.HitArea.Top / clickareaSize.Y,
                     blackKey.ControlSizing.HitArea.Width / clickareaSize.X,

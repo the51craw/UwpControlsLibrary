@@ -11,7 +11,7 @@
     <AssemblyName>UwpControlsLibrary</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.20348.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -120,7 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AreaButton.cs" />
+    <Compile Include="ImageButton.cs" />
     <Compile Include="CompoundControl.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="ControlSizing.cs" />
@@ -128,6 +128,9 @@
     <Compile Include="EventHandlers.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="MIDI.cs" />
+    <Compile Include="PopupMenuButton.cs" />
+    <Compile Include="ToolTips.cs" />
     <Compile Include="TouchpadKeyboard.cs" />
     <Compile Include="HorizontalSlider.cs" />
     <Compile Include="ImageCopy.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Label.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rotator.cs" />
+    <Compile Include="TreeViewBase.cs" />
     <Compile Include="VerticalSlider.cs" />
     <Compile Include="StaticImage.cs" />
     <Compile Include="MomentaryButton.cs" />
@@ -150,7 +154,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Event routing.txt" />
+    <Content Include="GraphBackground.png" />
     <Content Include="ReadMe.txt" />
+    <Content Include="Sizing.txt" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

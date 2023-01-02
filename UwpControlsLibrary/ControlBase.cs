@@ -18,13 +18,61 @@ namespace UwpControlsLibrary
 
     public class ControlBase
     {
+        public enum ImageButtonFunction
+        {
+            TOGGLE,
+            MOMENTARY,
+        }
+
+        /// <summary>
+        /// POPUP is used to open menus when you do not want any initial item visible.
+        /// BUTTON is used when you want a button to toggle on/off and to open menus.
+        /// MENU is used 
+        /// </summary>
+        public enum PopupMenuButtonStyle
+        {
+            POPUP,  // No button, click a listed pointer button anywhere, where there is no control, to open a menu.
+            BUTTON, // A button. Act as a button on first listed pointer button. All other pointer button opens menus.
+            MENU,   // A button. All listed pointer buttons may be used to open different menus.
+            SLIDER, // A button with a slider on it.
+        }
+
+        public enum PopupMenuPosition
+        {
+            RIGHT,
+            LEFT,
+        }
+
+        public enum ControlTextAlignment
+        {
+            LEFT,
+            CENTER,
+        }
+
+        public enum ControlTextWeight
+        {
+            NORMAL,
+            BOLD,
+        }
+
         public enum EventType
         {
             POINTER_MOVED,
             POINTER_PRESSED,
             POINTER_RELEASED,
-            TAPPED,
-            MOUSE_WHEEL,
+            POINTER_WHEEL_CHANGED,
+            POINTER_TAPPED,
+            POINTER_RIGHT_TAPPED,
+        }
+
+        public enum PointerButton
+        {
+            LEFT,
+            RIGHT,
+            MIDDLE,
+            EXTRA1,
+            EXTRA2,
+            OTHER,
         }
 
         /// <summary>
@@ -78,7 +126,7 @@ namespace UwpControlsLibrary
 
         /// <summary>
         /// Images used in a control, if any.
-        /// Since they are inserted in oreder of appearence they need to be in
+        /// Since they are inserted in order of appearence they need to be in
         /// Z-order from bottom upwards.
         /// If there is a background image, it is the first image.
         /// The topmost image, if any, is always the last image.
@@ -108,13 +156,6 @@ namespace UwpControlsLibrary
         /// Tag any way necessary.
         /// </summary>
         public Object Tag;
-
-        /// <summary>
-        /// HitTarget must be set to true for the control to accepts mouse events.
-        /// Some controls, e.g. Indicator, does not handle events, so HitTarget 
-        /// is set to false.
-        /// </summary>
-        public Boolean HitTarget;
 
         /// <summary>
         /// Whenever a mouse button is pressed, all controls under the mouse
@@ -202,59 +243,71 @@ namespace UwpControlsLibrary
                 {
                     ImageCopy = new ImageCopy(imageList[i]);
                     ImageList[i] = ImageCopy.Image;
+                    imageList[i].Visibility = Visibility.Collapsed;
                 }
             }
         }
 
-        public Object Moved(Point position)
-        {
-            if (this.GetType() == typeof(Knob))
-            {
-                return ((Knob)this).SetValue(position);
-            }
-            else if (this.GetType() == typeof(HorizontalSlider))
-            {
-                return ((HorizontalSlider)this).SetValue(position);
-            }
-            else if (this.GetType() == typeof(VerticalSlider))
-            {
-                return ((VerticalSlider)this).SetValue(position);
-            }
-            else if (this.GetType() == typeof(Joystick))
-            {
-                return ((Joystick)this).SetValue(position);
-            }
-            else if (this.GetType() == typeof(Keyboard))
-            {
-                return ((Keyboard)this).SetValue(position);
-            }
-            return null;
-        }
+        //public void PointerPressed(Point point)
+        //{
+        //    PointerX = point.X;
+        //    PointerY = point.Y;
+        //}
 
-        public Boolean Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (GetType() == typeof(Rotator))
-            {
-                ((Rotator)this).Tapped();
-            }
-            else if (GetType() == typeof(StaticImage))
-            {
-                ((StaticImage)this).Tapped(null, null);
-            }
-            return false;
-        }
+        //public void PointerReleased(PointerRoutedEventArgs e)
+        //{
 
-        public Boolean RightTapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (GetType() == typeof(Rotator))
-            {
-                ((Rotator)this).RightTapped();
-            }
-            else if (GetType() == typeof(StaticImage))
-            {
-                ((StaticImage)this).RightTapped(null, null);
-            }
-            return false;
-        }
+        //}
+
+        //public Object Moved(Point position)
+        //{
+        //    if (this.GetType() == typeof(Knob))
+        //    {
+        //        return ((Knob)this).SetValue(position);
+        //    }
+        //    else if (this.GetType() == typeof(HorizontalSlider))
+        //    {
+        //        return ((HorizontalSlider)this).SetValue(position);
+        //    }
+        //    else if (this.GetType() == typeof(VerticalSlider))
+        //    {
+        //        return ((VerticalSlider)this).SetValue(position);
+        //    }
+        //    else if (this.GetType() == typeof(Joystick))
+        //    {
+        //        return ((Joystick)this).SetValue(position);
+        //    }
+        //    else if (this.GetType() == typeof(Keyboard))
+        //    {
+        //        return ((Keyboard)this).SetValue(position);
+        //    }
+        //    return null;
+        //}
+
+        //public Boolean Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    if (GetType() == typeof(Rotator))
+        //    {
+        //        ((Rotator)this).Tapped();
+        //    }
+        //    else if (GetType() == typeof(StaticImage))
+        //    {
+        //        ((StaticImage)this).Tapped(null, null);
+        //    }
+        //    return false;
+        //}
+
+        //public Boolean RightTapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    if (GetType() == typeof(Rotator))
+        //    {
+        //        ((Rotator)this).RightTapped();
+        //    }
+        //    else if (GetType() == typeof(StaticImage))
+        //    {
+        //        ((StaticImage)this).RightTapped(null, null);
+        //    }
+        //    return false;
+        //}
     }
 }

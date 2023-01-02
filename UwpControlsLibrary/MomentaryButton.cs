@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
 
 namespace UwpControlsLibrary
 {
@@ -34,32 +30,36 @@ namespace UwpControlsLibrary
 
         public MomentaryButton(Controls controls, Int32 Id, Grid gridMain, Image[] imageList, Point Position)
         {
-            isOn = false;
             this.Id = Id;
             GridControls = gridMain;
             Double width;
             Double height;
-            this.HitTarget = HitTarget;
 
-            if (imageList == null || imageList.Length != 2
-                || imageList[0].ActualWidth != imageList[1].ActualWidth
-                || imageList[0].ActualHeight != imageList[1].ActualHeight)
+            if (VerifyImageList(imageList))
             {
-                throw new Exception("A MomentaryButton must have two images of the same size!");
+                ImageList = imageList;
             }
-            else
+
+            if (imageList != null)
             {
-                width = imageList[0].ActualWidth;
-                height = imageList[0].ActualHeight;
+                if (imageList.Length != 2 || imageList[0].ActualWidth != imageList[1].ActualWidth
+                    || imageList[0].ActualHeight != imageList[1].ActualHeight)
+                {
+                    throw new Exception("A MomentaryButton must have a list of two images of the same size.");
+                }
             }
+
+            width = imageList[0].ActualWidth;
+            height = imageList[0].ActualHeight;
 
             HitArea = new Rect(Position.X, Position.Y, width, height);
             CopyImages(imageList);
             ControlSizing = new ControlSizing(controls, this);
+            isOn = false;
             ImageList[1].Visibility = Visibility.Collapsed;
         }
 
-        public Int32 Handle(EventType eventType, PointerRoutedEventArgs e)
+        public int Handle(EventType eventType, PointerRoutedEventArgs e)
         {
             switch (eventType)
             {
@@ -75,7 +75,7 @@ namespace UwpControlsLibrary
             return -1;
         }
 
-        private Int32 PointerMoved(PointerRoutedEventArgs e)
+        private int PointerMoved(PointerRoutedEventArgs e)
         {
             return -1;
         }
@@ -104,6 +104,53 @@ namespace UwpControlsLibrary
         {
             ControlSizing.ImageList[0].Visibility = Visibility.Visible;
             ControlSizing.ImageList[1].Visibility = Visibility.Collapsed;
+        }
+
+        public void SetDeSelected()
+        {
+        }
+
+        public void HandleEvent(PointerRoutedEventArgs e, EventType eventType)
+        {
+            switch (eventType)
+            {
+                case EventType.POINTER_MOVED:
+                    HandlePointerMovedEvent(e);
+                    break;
+                case EventType.POINTER_PRESSED:
+                    HandlePointerPressedEvent(e);
+                    break;
+                case EventType.POINTER_RELEASED:
+                    HandlePointerReleasedEvent(e);
+                    break;
+                case EventType.POINTER_TAPPED:
+                    HandlePointerWheelChangedEvent(e);
+                    break;
+            }
+        }
+
+        public void HandlePointerMovedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerReleasedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerWheelChangedEvent(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerTapped(PointerRoutedEventArgs e)
+        {
+        }
+
+        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
+        {
         }
     }
 }

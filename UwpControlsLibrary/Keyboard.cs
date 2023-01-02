@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -14,6 +15,16 @@ namespace UwpControlsLibrary
 
     public class Keyboard : ControlBase
     {
+        public enum KeyEvent
+        {
+            KEY_ON,
+            KEY_OFF,
+        }
+
+        public Key Key { get; set; }
+        public int Velocity { get; set; }
+        public KeyEvent Event { get; set; }
+
         public Octave[] Octaves { get; set; }
         //public Grid GridMain { get; set; }
         public Size WhiteKeySize { get; set; }
@@ -21,9 +32,16 @@ namespace UwpControlsLibrary
 
         private int lowKey;
         private int highKey;
+        public List<Image> ImagesToResize;
 
-        public Keyboard(Controls controls, int Id, Grid gridMain, Image whiteKey, Image blackKey, Point position, int lowKey, int highKey, Boolean evenKeySpread = false)
+        public Keyboard(Controls controls, int Id, Grid gridMain, Image[] imageList, Point position, int lowKey, int highKey, Boolean evenKeySpread = false)
         {
+            if (imageList.Length != 2 && imageList.Length != 4)
+            {
+                throw new ArgumentException("You can only use either a list containing one white\nkey and one black key, in that order, or a white\nkey, a black key, a depressed white\nkey and a depressed black key.");
+            }
+
+            ImagesToResize = new List<Image>();
             this.Id = Id;
             this.GridControls = gridMain;
             this.lowKey = lowKey;
@@ -35,55 +53,76 @@ namespace UwpControlsLibrary
             {
                 if (i < numberOfOctaves - 1)
                 {
-                    Octaves[i] = new Octave(lowKey + 12 * i, whiteKey, blackKey);
+                    Octaves[i] = new Octave(lowKey + 12 * i, imageList);
                 }
                 else
                 {
-                    Octaves[i] = new Octave(lowKey + 12 * i, whiteKey, blackKey, true);
+                    Octaves[i] = new Octave(lowKey + 12 * i, imageList, true);
+                }
+                for (int key = 0; key < Octaves[i].Keys.Length; key++)
+                {
+                    for (int img = 0; img < Octaves[i].Keys[key].Images.Length; img++)
+                    {
+                        ImagesToResize.Add(Octaves[i].Keys[key].Images[img]);
+                    }
                 }
             }
-            WhiteKeySize = new Size(whiteKey.ActualWidth, whiteKey.ActualHeight);
-            BlackKeySize = new Size(blackKey.ActualWidth, blackKey.ActualHeight);
-            whiteKey.Visibility = Visibility.Collapsed;
-            blackKey.Visibility = Visibility.Collapsed;
-            ControlSizing = new ControlSizing(controls, this, Id, whiteKey, blackKey, position.X, position.Y, Octaves);
+
+            WhiteKeySize = new Size(imageList[0].ActualWidth, imageList[0].ActualHeight);
+            BlackKeySize = new Size(imageList[1].ActualWidth, imageList[1].ActualHeight);
+            //imageList[0].Visibility = Visibility.Collapsed;
+            //imageList[1].Visibility = Visibility.Collapsed;
+            ControlSizing = new ControlSizing(controls, this, Id, ImagesToResize.ToArray(), position.X, position.Y, Octaves);
         }
 
-        public int Handle(EventType eventType, PointerRoutedEventArgs e)
+        public int HandleEvent(object sender, PointerRoutedEventArgs e, EventType eventType, Point pointerPosition, List<PointerButton> pointerButtonStates, Key key)
         {
             switch (eventType)
             {
-                case EventType.POINTER_MOVED:
-                    return PointerMoved(e);
+                //case EventType.POINTER_MOVED:
+                //    return PointerMovedEvent(pointerPosition);
                 case EventType.POINTER_PRESSED:
-                    PointerPressed(e);
+                    PointerPressedEvent(sender, pointerPosition, pointerButtonStates, key);
                     break;
                 case EventType.POINTER_RELEASED:
-                    PointerReleased(e);
+                    PointerReleasedEvent(sender, pointerPosition, pointerButtonStates, key);
                     break;
             }
             return -1;
         }
 
-        private int PointerMoved(PointerRoutedEventArgs e)
+        //private int PointerMovedEvent(Point pointerPosition)
+        //{
+        //    return -1;
+        //}
+
+        public void PointerPressedEvent(object sender, Point pointerPosition, List<PointerButton> pointerButtonStates, Key key)
         {
-            return -1;
+            if (key.Images.Length > 1) // HBE
+            {
+                key.Images[1].Visibility = Visibility.Visible;
+                Key = key;
+                Key.Velocity = (Int32)(127 * ((pointerPosition.Y - key.Images[1].Margin.Top) / key.Images[0].ActualHeight / 0.8));
+                Key.Velocity = Key.Velocity > 127 ? 127 : Key.Velocity;
+            }
         }
 
-        public void PointerPressed(PointerRoutedEventArgs e)
+        public void PointerReleasedEvent(object sender, Point pointerPosition, List<PointerButton> pointerButtonStates, Key key)
         {
-
+            if (key.Images.Length > 1)
+            {
+                key.Images[1].Visibility = Visibility.Collapsed;
+                Key = key;
+                Velocity = (Int32)(127 * (pointerPosition.Y / ((Key)((Image)sender).Tag)
+                .Images[((Key)((Image)sender).Tag).Images.Length - 1].ActualHeight / 0.8));
+                Velocity = Velocity > 127 ? 127 : Velocity;
+            }
         }
 
-        public void PointerReleased(PointerRoutedEventArgs e)
-        {
-
-        }
-
-        public Object GetKey(Image image, Point position)
-        {
-            return image.Tag;
-        }
+        //public Object GetKey(Image image, Point position)
+        //{
+        //    return image.Tag;
+        //}
 
         private void LimitKeyRange()
         {
@@ -94,50 +133,50 @@ namespace UwpControlsLibrary
             highKey = highKey <= lowKey ? lowKey + 12 : highKey;
         }
 
-        public Key SetValue(Point position)
-        {
-            int[] value = new int[2];
-            int top = (int)ControlSizing.HitArea.Top;
-            int bottom = (int)ControlSizing.HitArea.Bottom;
+        //public Key SetValue(Point position)
+        //{
+        //    int[] value = new int[2];
+        //    int top = (int)ControlSizing.HitArea.Top;
+        //    int bottom = (int)ControlSizing.HitArea.Bottom;
 
-            int left = (int)ControlSizing.HitArea.Left;
-            int right = (int)ControlSizing.HitArea.Right;
-            if (this.IsSelected)
-            //if (Key != null)
-            {
-                for (int i = lowKey; i < highKey; i++)
-                {
-                    Key key = KeyFromRange(i);
-                    if (key.IsHit(position))
-                    {
-                        return key;
-                    }
-                }
-            }
-            return null;
-        }
+        //    int left = (int)ControlSizing.HitArea.Left;
+        //    int right = (int)ControlSizing.HitArea.Right;
+        //    if (this.IsSelected)
+        //    //if (Key != null)
+        //    {
+        //        for (int i = lowKey; i < highKey; i++)
+        //        {
+        //            Key key = KeyFromRange(i);
+        //            if (key.IsHit(position))
+        //            {
+        //                return key;
+        //            }
+        //        }
+        //    }
+        //    return null;
+        //}
 
-        public Key KeyFromRange(int keyNumber)
-        {
-            for (int octave = lowKey; octave < Octaves.Length; octave++)
-            {
-                for (int key = 0; key < Octaves[octave].Keys.Length; key++)
-                {
-                    if (Octaves[octave].Keys[key].KeyNumber == keyNumber)
-                    {
-                        return Octaves[octave].Keys[key];
-                    }
-                }
-            }
-            return null;
-        }
+        //public Key KeyFromRange(int keyNumber)
+        //{
+        //    for (int octave = lowKey; octave < Octaves.Length; octave++)
+        //    {
+        //        for (int key = 0; key < Octaves[octave].Keys.Length; key++)
+        //        {
+        //            if (Octaves[octave].Keys[key].KeyNumber == keyNumber)
+        //            {
+        //                return Octaves[octave].Keys[key];
+        //            }
+        //        }
+        //    }
+        //    return null;
+        //}
     }
 
     public class Octave
     {
         public Key[] Keys { get; set; }
 
-        public Octave(int BaseKey, Image WhiteKey, Image BlackKey, Boolean FullOctave = false)
+        public Octave(int BaseKey, Image[] imageList, Boolean FullOctave = false)
         {
             if (FullOctave)
             {
@@ -146,6 +185,16 @@ namespace UwpControlsLibrary
             else
             {
                 Keys = new Key[12];
+            }
+
+            Image[] WhiteKey = new Image[imageList.Length / 2];
+            Image[] BlackKey = new Image[imageList.Length / 2];
+            WhiteKey[0] = imageList[0];
+            BlackKey[0] = imageList[1];
+            if (imageList.Length == 4)
+            {
+                WhiteKey[1] = imageList[2];
+                BlackKey[1] = imageList[3];
             }
 
             for (int i = 0; i < 12; i++)
@@ -209,7 +258,12 @@ namespace UwpControlsLibrary
     public class Key
     {
         public int KeyNumber { get; set; }
-        public Image Image { get; set; }
+
+        /// <summary>
+        /// Generated in code, used as click area
+        /// </summary>
+        //public Image Image { get; set; } 
+        public Image[] Images { get; set; }
         public Double RelativeOffset { get; set; }
         public String KeyName { get; set; }
         public int Velocity { get; set; }
@@ -218,11 +272,11 @@ namespace UwpControlsLibrary
 
         public Boolean IsHit(Point Point)
         {
-            Boolean isHit = Point.X >= Image.ActualOffset.X && Point.X <= Image.ActualOffset.X
-                && Point.Y >= Image.ActualOffset.Y + Image.ActualWidth && Point.Y <= Image.ActualOffset.Y + Image.ActualHeight;
+            Boolean isHit = Point.X >= Images[Images.Length - 1].ActualOffset.X && Point.X <= Images[Images.Length - 1].ActualOffset.X
+                && Point.Y >= Images[Images.Length - 1].ActualOffset.Y + Images[Images.Length - 1].ActualWidth && Point.Y <= Images[Images.Length - 1].ActualOffset.Y + Images[Images.Length - 1].ActualHeight;
             if (isHit)
             {
-                Velocity = (int)(127 * (Point.Y - Image.ActualOffset.Y) / Image.ActualHeight);
+                Velocity = (int)(127 * (Point.Y - Images[Images.Length - 1].ActualOffset.Y) / Images[Images.Length - 1].ActualHeight);
             }
             return isHit;
         }
@@ -230,14 +284,46 @@ namespace UwpControlsLibrary
 
     public class WhiteKey : Key
     {
-        public WhiteKey(int KeyNumber, Image Image, Double RelativeOffset)
+        public WhiteKey(int KeyNumber, Image[] Images, Double RelativeOffset)
         {
             this.KeyNumber = KeyNumber;
-            this.Image = new Image();
-            this.Image.Source = Image.Source;
-            this.Image.Stretch = Stretch.None;
-            this.Image.Visibility = Visibility.Visible;
-            this.Image.Tag = this;
+
+            if (Images.Length == 1)
+            {
+                this.Images = new Image[2];
+                this.Images[0] = new Image();
+                this.Images[0].Source = Images[0].Source;
+                this.Images[0].Stretch = Stretch.None;
+                this.Images[0].Visibility = Visibility.Visible;
+                this.Images[0].Tag = this;
+                this.Images[1] = new Image();
+                this.Images[1].Source = Images[0].Source;
+                this.Images[1].Stretch = Stretch.None;
+                this.Images[1].Visibility = Visibility.Collapsed;
+                this.Images[1].Opacity = 0;
+                this.Images[1].Tag = this;
+            }
+            else
+            {
+                this.Images = new Image[3];
+                this.Images[0] = new Image();
+                this.Images[0].Source = Images[0].Source;
+                this.Images[0].Stretch = Stretch.None;
+                this.Images[0].Visibility = Visibility.Visible;
+                this.Images[0].Tag = this;
+                this.Images[1] = new Image();
+                this.Images[1].Source = Images[1].Source;
+                this.Images[1].Stretch = Stretch.None;
+                this.Images[1].Visibility = Visibility.Collapsed;
+                this.Images[1].Tag = this;
+                this.Images[2] = new Image();
+                this.Images[2].Source = Images[1].Source;
+                this.Images[2].Stretch = Stretch.None;
+                this.Images[2].Visibility = Visibility.Visible;
+                this.Images[2].Opacity = 0;
+                this.Images[2].Tag = this;
+            }
+
             this.KeyName = names[KeyNumber % 12] + (KeyNumber / 12).ToString();
             this.RelativeOffset = RelativeOffset;
         }
@@ -245,14 +331,46 @@ namespace UwpControlsLibrary
 
     public class BlackKey : Key
     {
-        public BlackKey(int KeyNumber, Image Image, Double RelativeOffset)
+        public BlackKey(int KeyNumber, Image[] Images, Double RelativeOffset)
         {
             this.KeyNumber = KeyNumber;
-            this.Image = new Image();
-            this.Image.Source = Image.Source;
-            this.Image.Stretch = Stretch.None;
-            this.Image.Visibility = Visibility.Visible;
-            this.Image.Tag = this;
+
+            if (Images.Length == 1)
+            {
+                this.Images = new Image[2];
+                this.Images[0] = new Image();
+                this.Images[0].Source = Images[0].Source;
+                this.Images[0].Stretch = Stretch.None;
+                this.Images[0].Visibility = Visibility.Visible;
+                this.Images[0].Tag = this;
+                this.Images[1] = new Image();
+                this.Images[1].Source = Images[0].Source;
+                this.Images[1].Stretch = Stretch.None;
+                this.Images[1].Visibility = Visibility.Collapsed;
+                this.Images[1].Opacity = 0;
+                this.Images[1].Tag = this;
+            }
+            else
+            {
+                this.Images = new Image[3];
+                this.Images[0] = new Image();
+                this.Images[0].Source = Images[0].Source;
+                this.Images[0].Stretch = Stretch.None;
+                this.Images[0].Visibility = Visibility.Visible;
+                this.Images[0].Tag = this;
+                this.Images[1] = new Image();
+                this.Images[1].Source = Images[1].Source;
+                this.Images[1].Stretch = Stretch.None;
+                this.Images[1].Visibility = Visibility.Collapsed;
+                this.Images[1].Tag = this;
+                this.Images[2] = new Image();
+                this.Images[2].Source = Images[1].Source;
+                this.Images[2].Stretch = Stretch.None;
+                this.Images[2].Visibility = Visibility.Visible;
+                this.Images[2].Opacity = 0;
+                this.Images[2].Tag = this;
+            }
+
             this.KeyName = names[KeyNumber % 12] + (KeyNumber / 12).ToString();
             this.RelativeOffset = RelativeOffset;
         }

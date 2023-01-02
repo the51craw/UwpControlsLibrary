@@ -1,0 +1,92 @@
+﻿All controls are based on one or more images.
+
+If you need a control that is just a hit area with no image, you will have
+to use some suitable control and supply a transparent image.
+
+Most controls that uses more than one image needs the images to be of the same size.
+Some controls, sliders and joystick, are excepted for that.
+Your application will get an error from UwpControlsLibrary when those rules are broken.
+
+Images are presented to UwpControlsLibrary as an array of images when creating controls.
+Each control has a HitArea property that is based on the first image in the array.
+
+Create all, or some, of your control images, and a background image. Call the background image
+'Background.png'.
+Use project MakeImageList to create the main Grid for your application. Run it,
+select your Image folder (with most or all images you need in it) and close the application.
+Open your applications MainPage.xaml file and replace the empty Grid code from your clipboard.
+
+The Z-order of images is as follows:
+
+First all your images. They will not be visible. UwpControlsLibrary makes copies of them when
+you create your controls.
+
+Then your background image. It will cover and hide all your control images.
+
+Then a Grid called gridControls. It will be used to put copies of your images on top of the 
+background image.
+
+On top of all there is a transparent copy of Background.png that is used to catch all mouse
+or pointer inputs. It is called imgClickArea.
+
+UwpControlsLibrary accepts inputs from imgClickArea and compares the pointer position with
+all control's HitArea in order to decide which controls to send the events to.
+
+Sizing:
+
+When the user changes the size of the application (and also when the application starts),
+all images keeps their width/height ration. This is a basic property of UwpControlsLibrary
+in order to keep knobs round. Oval knobs would look pretty silly, right?
+
+So, one thing is that we will get unused space either at the sides or at top and bottom
+of the window. Adding an extra backkground image that is set to stretch, or selecting 
+a suitable bacground color that harmonizes with your application background image will
+make those margins look better and not draw attention.
+
+The other thing is that the HitArea for each control will not be correct. Here is how
+UwpControlsLibrary handles this:
+
+At program start, after imgBackground is loaded, it's original height and width will be saved.
+
+When the size of imgBackground is changed, all controls gets a relative hit area calculated.
+Those are the relative values of the HitArea relative to the size of imgBackground versus
+the original size of imgBackground.
+
+The application area is also compared to the new size of imgBackground in order to calculate
+the extra margins, wether sides are padded or the top and bottom. Not both, either sides or
+top and bottom, even if a small residue from zero is produced because Windows uses a double
+for all window measures.
+
+The pointer position (stored in PointerPosition) is relative to the application Window and
+has to be adjusted for the extra margins when cetecting controls by compairing to the HitArea.
+
+The positioning and sizing of the control images also has to take in account the extra margins.
+
+The sizing calculations uses the ration between the original and the actual size of imgBackground
+to re-size and position all controls.
+
+Note that even if controls can be placed relative to imgBackground, all positioning is performed
+by setting the margins, and the margins always relates to the application window, thus involving
+the extra margins.
+
+Add calls to events in Controls in your events, e.g.
+
+private void imgClickArea_PointerPressed(object sender, PointerRoutedEventArgs e)
+{
+    if (Controls != null)
+    {
+        Controls.PointerPressed(sender, e);
+        ... 
+    }
+}
+
+Always add the pointer moved event because it will set or reset IsHit for all controls:
+
+private void imgClickArea_PointerMoved(object sender, PointerRoutedEventArgs e)
+{
+    if (Controls != null)
+    {
+        Controls.PointerMoved(sender, e);
+        ...
+    }
+}
