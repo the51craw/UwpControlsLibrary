@@ -10,6 +10,17 @@ using Windows.UI.Xaml.Input;
 
 namespace UwpControlsLibrary
 {
+    /// <summary>
+    /// A Digital display uses images to mimic some digital display.
+    /// Supply the mandatory equal sized png images showing the digits
+    /// against a transparent background. Transparent because the decimal
+    /// dot will overlay one of the digits, if used. Also mandatory are
+	/// the minus sign and the decimal point images of the same size.
+	/// An optional background image of a size enough to display the
+	/// number of images you are going to display.
+    /// in respect to its parent, gridControls or a CompoundControl.
+    /// </summary>
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// DigitalDisplay class.
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,30 +118,6 @@ namespace UwpControlsLibrary
             DigitRelativeSize =
                 new Size(imageList[0].ActualWidth / GridControls.ActualWidth,
                 imageList[0].ActualHeight / GridControls.ActualHeight);
-
-            //// Initially show 0.00:
-            //Digits[Digits.Length - 3][0].Visibility = Visibility.Visible;
-            //Digits[Digits.Length - 2][0].Visibility = Visibility.Visible;
-            //Digits[Digits.Length - 1][0].Visibility = Visibility.Visible;
-
-
-
-            //for (int digit = 0; digit < NumberOfDigits; digit++)
-            //{
-            //    Digits[digit] = new Image[ImageList.Length];
-            //    for (int i = 0; i < 10; i++)
-            //    {
-            //        if (digit > NumberOfDigits - NumberOfDecimals)
-            //        {
-            //            imageCopy = new ImageCopy(ImageList[digit]);
-            //        }
-            //        else
-            //        {
-            //            imageCopy = new ImageCopy(ImageList[digit + 10]);
-            //        }
-            //        Digits[digit][i] = imageCopy.Image;
-            //    }
-            //}
 
             ControlSizing = new ControlSizing(controls, this);
         }

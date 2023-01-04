@@ -167,6 +167,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Knob.png" />
+    <Content Include="Images\KnobBackground.png" />
     <Content Include="Images\LedOff.png" />
     <Content Include="Images\LedOn.png" />
     <Content Include="Images\Minus.png" />

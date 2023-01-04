@@ -12,12 +12,25 @@ using static UwpControlsLibrary.ControlBase;
 
 namespace UwpControlsLibrary
 {
+    /// <summary>
+    /// A Joystick uses a mandatory knob image, an optional background image
+    /// and an optional set of shaft part images to mimic a joystick.
+    /// The shaft part images should all be the same size and the shaft must
+    /// start at the center of the image. Thre rest of the image must be
+    /// transparent. The first shaft part must not be longer than that it would
+    /// be covered byt the knob when in zero position. The last shaft part
+    /// must not be shorter than to reach up under the knob when in full
+    /// X/Y position. Depending on your graphics you might have to supply
+    /// some intermediate shaft parts. The shaft parts will automatically
+    /// be set visible as needed, and rotated to follow the knob. See the
+    /// SampleApplication for implementation.
+    /// </summary>
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Joystick class.
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public class Joystick : ControlBase
     {
-        //public Double JoystickRelativeTop { get; set; }
-        //public Double JoystickRelativeBottom { get; set; }
-        //public Double JoystickRelativeLeft { get; set; }
-        //public Double JoystickRelativeRight { get; set; }
         public Double OriginalImageWidth { get; set; }
         public Double OriginalImageHeight { get; set; }
         public Int32 MinValueX { get; set; }
@@ -98,29 +111,8 @@ namespace UwpControlsLibrary
                         return SetValue(pointerPosition);
                     }
                     break;
-                //case EventType.POINTER_PRESSED:
-                //    HandlePointerPressed(e);
-                //    break;
-                //case EventType.POINTER_RELEASED:
-                //    HandlePointerReleased(e);
-                //    break;
             }
             return null;
-        }
-
-        private Int32 HandlePointerMoved(Point pointerPosition, List<PointerButton> pointerButtonStates)
-        {
-            return -1;
-        }
-
-        public void HandlePointerPressed(PointerRoutedEventArgs e)
-        {
-
-        }
-
-        public void HandlePointerReleased(PointerRoutedEventArgs e)
-        {
-
         }
 
         public void SetPositionFromValues()
@@ -166,53 +158,6 @@ namespace UwpControlsLibrary
                     ImageList[i].RenderTransform = compositeTransform;
                 }
             }
-        }
-
-        public void SetDeSelected()
-        {
-        }
-
-        public void HandleEvent(PointerRoutedEventArgs e, EventType eventType)
-        {
-            switch (eventType)
-            {
-                case EventType.POINTER_MOVED:
-                    HandlePointerMovedEvent(e);
-                    break;
-                case EventType.POINTER_PRESSED:
-                    HandlePointerPressedEvent(e);
-                    break;
-                case EventType.POINTER_RELEASED:
-                    HandlePointerReleasedEvent(e);
-                    break;
-                case EventType.POINTER_TAPPED:
-                    HandlePointerWheelChangedEvent(e);
-                    break;
-            }
-        }
-
-        public void HandlePointerMovedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerReleasedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerWheelChangedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerTapped(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
-        {
         }
     }
 }

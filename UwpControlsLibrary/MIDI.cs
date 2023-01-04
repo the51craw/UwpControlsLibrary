@@ -42,6 +42,7 @@ namespace UwpControlsLibrary
         public MIDI(TypedEventHandler<MidiInPort, MidiMessageReceivedEventArgs> inPort_MessageReceived)
         {
             IsInitiated = false;
+            IsConnected = true;
             Init(inPort_MessageReceived);
         }
 
@@ -140,16 +141,16 @@ namespace UwpControlsLibrary
             catch (Exception ex) { throw (ex); }
         }
 
-        public void SendControlChange(PortPair portPair, byte channel, byte controller, byte value)
+        public void SendControlChange(IMidiOutPort midiOutPort, byte channel, byte controller, byte value)
         {
             if (IsConnected)
             {
                 try
                 {
-                    if (portPair.OutPort != null)
+                    if (midiOutPort != null)
                     {
-                        IMidiMessage midiMessageToSend = new MidiControlChangeMessage(portPair.OutChannel, controller, value);
-                        portPair.OutPort.SendMessage(midiMessageToSend);
+                        IMidiMessage midiMessageToSend = new MidiControlChangeMessage(channel, controller, value);
+                        midiOutPort.SendMessage(midiMessageToSend);
                     }
                 }
                 catch
@@ -163,16 +164,16 @@ namespace UwpControlsLibrary
             }
         }
 
-        public void SendProgramChange(PortPair portPair, byte channel, byte value)
+        public void SendProgramChange(IMidiOutPort midiOutPort, byte channel, byte value)
         {
-            if (IsConnected)
+            //if (IsConnected)
             {
                 try
                 {
-                    if (portPair.OutPort != null)
+                    if (midiOutPort != null)
                     {
-                        IMidiMessage midiMessageToSend = new MidiProgramChangeMessage(portPair.OutChannel, value);
-                        portPair.OutPort.SendMessage(midiMessageToSend);
+                        IMidiMessage midiMessageToSend = new MidiProgramChangeMessage(channel, value);
+                        midiOutPort.SendMessage(midiMessageToSend);
                     }
                 }
                 catch
@@ -186,15 +187,15 @@ namespace UwpControlsLibrary
             }
         }
 
-        public async void SendPitchBender(PortPair portPair, byte channel, Int32 value)
+        public async void SendPitchBender(IMidiOutPort midiOutPort, byte channel, Int32 value)
         {
             try
             {
-                if (portPair.OutPort != null)
+                if (midiOutPort != null)
                 {
-                    //IMidiMessage midiMessageToSend = new MidiPitchBendChangeMessage(portPair.OutChannel, (UInt16)value);
+                    //IMidiMessage midiMessageToSend = new MidiPitchBendChangeMessage(channel, (UInt16)value);
                     byte[] msg = new byte[] { (byte)(0xe0 + channel), (byte)(value % 128), (byte)(value / 128) };
-                    portPair.OutPort.SendBuffer(msg.AsBuffer());
+                    midiOutPort.SendBuffer(msg.AsBuffer());
                 }
             }
             catch
@@ -206,14 +207,14 @@ namespace UwpControlsLibrary
             }
         }
 
-        //public async void SetVolume(PortPair portPair, byte currentChannel, byte volume)
+        //public async void SetVolume(IMidiOutPort midiOutPort, byte currentChannel, byte volume)
         //{
         //    try
         //    {
-        //        if (portPair.OutPort != null)
+        //        if (midiOutPort != null)
         //        {
-        //            IMidiMessage midiMessageToSend = new MidiControlChangeMessage(portPair.OutChannel, 0x07, volume);
-        //            portPair.OutPort.SendMessage(midiMessageToSend);
+        //            IMidiMessage midiMessageToSend = new MidiControlChangeMessage(channel, 0x07, volume);
+        //            midiOutPort.SendMessage(midiMessageToSend);
         //        }
         //    }
         //    catch
@@ -225,14 +226,14 @@ namespace UwpControlsLibrary
         //    }
         //}
 
-        //public async void AllNotesOff(PortPair portPair, byte currentChannel)
+        //public async void AllNotesOff(IMidiOutPort midiOutPort, byte currentChannel)
         //{
         //    try
         //    {
-        //        if (portPair.OutPort != null)
+        //        if (midiOutPort != null)
         //        {
-        //            IMidiMessage midiMessageToSend = new MidiControlChangeMessage(portPair.OutChannel, 0x78, 0);
-        //            portPair.OutPort.SendMessage(midiMessageToSend);
+        //            IMidiMessage midiMessageToSend = new MidiControlChangeMessage(channel, 0x78, 0);
+        //            midiOutPort.SendMessage(midiMessageToSend);
         //        }
         //    }
         //    catch
@@ -244,16 +245,16 @@ namespace UwpControlsLibrary
         //    }
         //}
 
-        //public async void ProgramChange(PortPair portPair, byte currentChannel, String smsb, String slsb, String spc)
+        //public async void ProgramChange(IMidiOutPort midiOutPort, byte currentChannel, String smsb, String slsb, String spc)
         //{
         //    try
         //    {
-        //        MidiControlChangeMessage controlChangeMsb = new MidiControlChangeMessage(portPair.OutChannel, 0x00, (byte)(UInt16.Parse(smsb)));
-        //        MidiControlChangeMessage controlChangeLsb = new MidiControlChangeMessage(portPair.OutChannel, 0x20, (byte)(UInt16.Parse(slsb)));
-        //        MidiProgramChangeMessage programChange = new MidiProgramChangeMessage(portPair.OutChannel, (byte)(UInt16.Parse(spc) - 1));
-        //        portPair.OutPort.SendMessage(controlChangeMsb);
-        //        portPair.OutPort.SendMessage(controlChangeLsb);
-        //        portPair.OutPort.SendMessage(programChange);
+        //        MidiControlChangeMessage controlChangeMsb = new MidiControlChangeMessage(channel, 0x00, (byte)(UInt16.Parse(smsb)));
+        //        MidiControlChangeMessage controlChangeLsb = new MidiControlChangeMessage(channel, 0x20, (byte)(UInt16.Parse(slsb)));
+        //        MidiProgramChangeMessage programChange = new MidiProgramChangeMessage(channel, (byte)(UInt16.Parse(spc) - 1));
+        //        midiOutPort.SendMessage(controlChangeMsb);
+        //        midiOutPort.SendMessage(controlChangeLsb);
+        //        midiOutPort.SendMessage(programChange);
         //    }
         //    catch
         //    {
@@ -264,16 +265,16 @@ namespace UwpControlsLibrary
         //    }
         //}
 
-        //public async void ProgramChange(PortPair portPair, byte currentChannel, byte msb, byte lsb, byte pc)
+        //public async void ProgramChange(IMidiOutPort midiOutPort, byte currentChannel, byte msb, byte lsb, byte pc)
         //{
         //    try
         //    {
-        //        MidiControlChangeMessage controlChangeMsb = new MidiControlChangeMessage(portPair.OutChannel, 0x00, msb);
-        //        MidiControlChangeMessage controlChangeLsb = new MidiControlChangeMessage(portPair.OutChannel, 0x20, lsb);
+        //        MidiControlChangeMessage controlChangeMsb = new MidiControlChangeMessage(channel, 0x00, msb);
+        //        MidiControlChangeMessage controlChangeLsb = new MidiControlChangeMessage(channel, 0x20, lsb);
         //        MidiProgramChangeMessage programChange = new MidiProgramChangeMessage(currentChannel, (byte)(pc - 1));
-        //        portPair.OutPort.SendMessage(controlChangeMsb);
-        //        portPair.OutPort.SendMessage(controlChangeLsb);
-        //        portPair.OutPort.SendMessage(programChange);
+        //        midiOutPort.SendMessage(controlChangeMsb);
+        //        midiOutPort.SendMessage(controlChangeLsb);
+        //        midiOutPort.SendMessage(programChange);
         //    }
         //    catch
         //    {
@@ -284,15 +285,15 @@ namespace UwpControlsLibrary
         //    }
         //}
 
-        //public async void SetInControl(PortPair portPair)
+        //public async void SetInControl(IMidiOutPort midiOutPort)
         //{
         //    try
         //    {
         //        //MidiNoteOnMessage InControlMesssage = new MidiNoteOnMessage(0x0f, 0x00, 0x7f);
-        //        //portPair.OutPort.SendMessage(InControlMesssage);
-        //        byte[] bytes = { 0x9f, (byte)(portPair.OutChannel + 0x0c), 0x7f };
+        //        //midiOutPort.SendMessage(InControlMesssage);
+        //        byte[] bytes = { 0x9f, (byte)(channel + 0x0c), 0x7f };
         //        IBuffer buffer = bytes.AsBuffer();
-        //        portPair.OutPort.SendBuffer(buffer);
+        //        midiOutPort.SendBuffer(buffer);
         //    }
         //    catch (Exception e)
         //    {
@@ -303,12 +304,12 @@ namespace UwpControlsLibrary
         //    }
         //}
 
-        //public async void ResetInControl(PortPair portPair)
+        //public async void ResetInControl(IMidiOutPort midiOutPort)
         //{
         //    try
         //    {
         //        MidiControlChangeMessage InControlMesssage = new MidiControlChangeMessage(0x9f, 0x00, 0x00);
-        //        portPair.OutPort.SendMessage(InControlMesssage);
+        //        midiOutPort.SendMessage(InControlMesssage);
         //    }
         //    catch
         //    {
@@ -319,14 +320,14 @@ namespace UwpControlsLibrary
         //    }
         //}
 
-        public void SendSystemExclusive(PortPair portPair, byte[] bytes)
+        public void SendSystemExclusive(IMidiOutPort midiOutPort, byte[] bytes)
         {
             if (IsConnected)
             {
                 try
                 {
                     IBuffer buffer = bytes.AsBuffer();
-                    portPair.OutPort.SendBuffer(buffer);
+                    midiOutPort.SendBuffer(buffer);
                 }
                 catch
                 {

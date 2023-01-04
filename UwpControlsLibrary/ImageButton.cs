@@ -170,9 +170,6 @@ namespace UwpControlsLibrary
                 case EventType.POINTER_RELEASED:
                     HandlePointerReleasedEvent(e);
                     break;
-                case EventType.POINTER_TAPPED:
-                    HandlePointerWheelChangedEvent(e);
-                    break;
             }
         }
 
@@ -193,18 +190,6 @@ namespace UwpControlsLibrary
         public void HandlePointerReleasedEvent(PointerRoutedEventArgs e)
         {
             ShowImage(false);
-        }
-
-        public void HandlePointerWheelChangedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerTapped(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
-        {
         }
     }
 }

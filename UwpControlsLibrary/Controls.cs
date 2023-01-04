@@ -86,13 +86,6 @@ namespace UwpControlsLibrary
             //AddControlsToHide(gridMain);
         }
 
-        public MomentaryButton AddMomentaryButton(int Id, Grid gridMain, Image[] imageList, Point position)
-        {
-            MomentaryButton momentaryButton = new MomentaryButton(this, Id, gridMain, imageList, position);
-            ControlsList.Add(momentaryButton);
-            return momentaryButton;
-        }
-
         public StaticImage AddStaticImage(int Id, Grid gridMain, Image[] imageList, Point position)
         {
             StaticImage staticImage = new StaticImage(this, Id, gridMain, imageList, position);

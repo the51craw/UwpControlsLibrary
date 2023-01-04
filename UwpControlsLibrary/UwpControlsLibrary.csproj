@@ -144,7 +144,6 @@
     <Compile Include="TreeViewBase.cs" />
     <Compile Include="VerticalSlider.cs" />
     <Compile Include="StaticImage.cs" />
-    <Compile Include="MomentaryButton.cs" />
     <Compile Include="ControlBase.cs" />
     <EmbeddedResource Include="Properties\UwpControlsLibrary.rd.xml" />
   </ItemGroup>
@@ -155,7 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Event routing.txt" />
-    <Content Include="GraphBackground.png" />
     <Content Include="ReadMe.txt" />
     <Content Include="Sizing.txt" />
   </ItemGroup>

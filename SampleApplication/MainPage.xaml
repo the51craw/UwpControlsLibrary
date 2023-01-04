@@ -26,6 +26,7 @@
         <Image x:Name="imgIndicatorOn"                      Source="ms-appx:///Images/IndicatorOn.png"                  Stretch="None" />
         <Image x:Name="imgIndicatorOff"                     Source="ms-appx:///Images/IndicatorOff.png"                 Stretch="None" />
         <Image x:Name="imgKnob"                             Source="ms-appx:///Images/Knob.png"                         Stretch="None" />
+        <Image x:Name="imgKnobBackground"                   Source="ms-appx:///Images/KnobBackground.png"               Stretch="None" />
         <Image x:Name="imgMomentaryButtonUp"                Source="ms-appx:///Images/MomentaryButtonUp.png"            Stretch="None" />
         <Image x:Name="imgMomentaryButtonDown"              Source="ms-appx:///Images/MomentaryButtonDown.png"          Stretch="None" />
         <Image x:Name="imgMrMartin"                         Source="ms-appx:///Images/MrMartin.png"                     Stretch="None" />

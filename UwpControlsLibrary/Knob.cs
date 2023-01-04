@@ -11,7 +11,14 @@ using Windows.UI.Xaml.Media.Imaging;
 namespace UwpControlsLibrary
 {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Knob classe.
+    /// Knob class.
+    /// <summary>
+    /// The Knob klass accepts one image of a knob. Area around the knob must be transparent. The knob indicator
+    /// must point down. When creating the knob object set position where the knob center should be and supply the
+    /// image in an image array of one. Also supply minimum and maximum value as well ass start and end angles.
+    /// If a second image is supplied it must be the same size, be transparent except for marikings and acts as
+    /// a background image rather than painting the markings on the application background image.
+    /// </summary>
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public class Knob : ControlBase
@@ -68,25 +75,6 @@ namespace UwpControlsLibrary
             this.value = knob.value;
         }
 
-        //public int PointerMoved(Point mousePosition)
-        //{
-        //    SetValue(mousePosition);
-        //    return value;
-        //}
-
-        //public void PointerPressed(Point mousePosition)
-        //{
-        //    Double top = ControlSizing.HitArea.Top;
-        //    Double bottom = ControlSizing.HitArea.Bottom;
-        //    //startPosition = (1 - ((mousePosition.Y - top) / (bottom - top))) * (MaxValue - MinValue + 1);
-        //    startPosition = mousePosition.Y;
-        //}
-
-        //public void PointerReleased(PointerRoutedEventArgs e)
-        //{
-
-        //}
-
         public int SetValue(Point position)
         {
             Double top = ControlSizing.HitArea.Top;
@@ -116,17 +104,7 @@ namespace UwpControlsLibrary
             SetRotationFromValue();
             return value;
         }
-
-        //public int PointerWheelChanged(int delta)
-        //{
-        //    value += (int)(delta * StepSize);
-        //    value = value > MaxValue ? MaxValue : value;
-        //    value = value < MinValue ? MinValue : value;
-        //    doubleValue = value;
-        //    SetRotationFromValue();
-        //    return value;
-        //}
-
+		
         public void SetRotationFromValue()
         {
             if (ControlSizing.ImageList[0] != null && ControlGraphicsFollowsValue)
@@ -140,10 +118,6 @@ namespace UwpControlsLibrary
             }
         }
 
-        public void SetDeSelected()
-        {
-        }
-
         public void HandleEvent(Point pointerPosition, EventType eventType, List<PointerButton> pointerButtons, int delta = 0)
         {
             switch (eventType)
@@ -154,17 +128,8 @@ namespace UwpControlsLibrary
                 case EventType.POINTER_PRESSED:
                     HandlePointerPressedEvent(pointerPosition, pointerButtons);
                     break;
-                case EventType.POINTER_RELEASED:
-                    HandlePointerReleasedEvent(pointerPosition, pointerButtons);
-                    break;
                 case EventType.POINTER_WHEEL_CHANGED:
                     HandlePointerWheelChangedEvent(pointerButtons, delta);
-                    break;
-                case EventType.POINTER_TAPPED:
-                    HandlePointerTappedEvent(pointerPosition, pointerButtons);
-                    break;
-                case EventType.POINTER_RIGHT_TAPPED:
-                    HandlePointerRightTappedEvent(pointerPosition, pointerButtons);
                     break;
             }
         }
@@ -186,10 +151,6 @@ namespace UwpControlsLibrary
             }
         }
 
-        public void HandlePointerReleasedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
-        {
-        }
-
         public void HandlePointerWheelChangedEvent(List<PointerButton> pointerButtonStates, int delta)
         {
             if (pointerButtonStates.Contains(PointerButton.LEFT))
@@ -206,14 +167,6 @@ namespace UwpControlsLibrary
             doubleValue = value;
             SetRotationFromValue();
             //return value;
-        }
-
-        public void HandlePointerTappedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
-        {
-        }
-
-        public void HandlePointerRightTappedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
-        {
         }
     }
 }

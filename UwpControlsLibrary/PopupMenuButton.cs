@@ -322,16 +322,16 @@ namespace UwpControlsLibrary
             }
         }
 
-        private void HideMenu(int menu)
-        {
-            if (menu < PopupMenus.Count)
-            {
-                foreach (PopupMenuButton menuItem in PopupMenus[menu])
-                {
-                    menuItem.Visibility = Visibility.Collapsed;
-                }
-            }
-        }
+        //private void HideMenu(int menu)
+        //{
+        //    if (menu < PopupMenus.Count)
+        //    {
+        //        foreach (PopupMenuButton menuItem in PopupMenus[menu])
+        //        {
+        //            menuItem.Visibility = Visibility.Collapsed;
+        //        }
+        //    }
+        //}
 
         private void ScrollMenu(int menu, double offset)
         {
@@ -359,16 +359,6 @@ namespace UwpControlsLibrary
                 }
             }
         }
-
-        //private double MenuItemsHiddenAtBottom(int menu)
-        //{
-        //    double menuHeight = PopupMenus[menu].Count * PopupMenus[menu][0].ImageList[0].ActualHeight;
-        //    double applicationHeight = Controls.AppSize.Height;
-        //    double availableSpaceDown = applicationHeight - PopupMenus[menu][0].ImageList[0].Margin.Top;
-        //    double availableSpaceUp = PopupMenus[menu][0].ImageList[0].Margin.Top;
-
-        //    return menuHeight - availableSpaceDown;
-        //}
 
         public void HideAllMenus()
         {
@@ -434,9 +424,6 @@ namespace UwpControlsLibrary
                 case EventType.POINTER_PRESSED:
                     HandlePointerPressedEvent(e, eventType, PointerButtonStates);
                     break;
-                case EventType.POINTER_RELEASED:
-                    HandlePointerReleasedEvent(e, eventType, PointerButtonStates);
-                    break;
                 case EventType.POINTER_WHEEL_CHANGED:
                     HandlePointerWheelChangedEvent(delta, menuNumber);
                     break;
@@ -482,6 +469,31 @@ namespace UwpControlsLibrary
                     {
                         if (buttonPressed == 0)
                         {
+                            // Turn off previous selection:
+                            foreach (List<PopupMenuButton> popupMenu in parent.PopupMenus)
+                            {
+                                if (popupMenu[0].visible == Visibility.Visible)
+                                {
+                                    foreach (PopupMenuButton popupMenuButton in popupMenu)
+                                    {
+                                        if (string.IsNullOrEmpty(popupMenuButton.Text))
+                                        {
+                                            popupMenuButton.ImageList[onImage].Visibility = Visibility.Collapsed;
+                                        }
+                                        else
+                                        {
+                                            popupMenuButton.TextBlock.Foreground = textOffColor;
+                                        }
+                                    }
+                                }
+                            }
+
+                            //// Turn off the selected PopupMenuButton:
+                            //if (((PopupMenuButton)Tag).SelectedIndex > -1)
+                            //{
+                            //    ImageList[((PopupMenuButton)Tag).SelectedIndex].Visibility = Visibility.Collapsed;
+                            //}
+                            
                             // First mouse button pressed, Set selected:
                             ((PopupMenuButton)Tag).SelectedIndex = Id;
                             if (string.IsNullOrEmpty(Text))
@@ -503,24 +515,9 @@ namespace UwpControlsLibrary
             }
         }
 
-        public void HandlePointerReleasedEvent(PointerRoutedEventArgs e, EventType eventType, List<ControlBase.PointerButton> PointerButtonStates)
-        {
-
-        }
-
         public void HandlePointerWheelChangedEvent(int delta, int menu)
         {
             ScrollMenu(menu, delta);
-        }
-
-        public void HandlePointerTapped(PointerRoutedEventArgs e, EventType eventType)
-        {
-
-        }
-
-        public void HandlePointerRightTapped(PointerRoutedEventArgs e, EventType eventType)
-        {
-
         }
     }
 }

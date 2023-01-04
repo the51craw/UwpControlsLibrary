@@ -32,6 +32,7 @@ namespace GenerateCode
         String images;
         string midiObject;
         string midiNew;
+        string midiAsync;
         string midiEvents;
         bool imagesFetched;
 
@@ -68,9 +69,38 @@ namespace GenerateCode
         {
             if (AddMidi.IsChecked == true)
             {
+                midiAsync = "async ";
                 midiObject = "\tMIDI midi;\n\n"
                     + "\tprivate byte[] MidiInBuffer;\r\n";
-                midiNew = "\t\tmidi = new MIDI(MidiInPort_MessageReceived);\n";
+                midiNew = "\t\tmidi = new MIDI(MidiInPort_MessageReceived);\n"
+                    + "while (!midi.IsInitiated)\n"
+                    + "{\n"
+                    + "    await Task.Delay(1);\n"
+                    + "}\n"
+                    + "\n"
+                    + "if (midi.MidiInPortNames.Count > 0)\n"
+                    + "{\n"
+                    + "    foreach (string midiInPortName in midi.MidiInPortNames)\n"
+                    + "    {\n"
+                    + "        // Fill out some way of selecting midi in port or find a specific port:\n"
+                    + "        if (midiInPortName.Contains(\"\"))\n"
+                    + "        {\n"
+                    + "\n"
+                    + "        }\n"
+                    + "    }\n"
+                    + "}\n"
+                    + "\n"
+                    + "if (midi.MidiOutPortNames.Count > 0)\n"
+                    + "{\n"
+                    + "    foreach (string midiOutPortName in midi.MidiOutPortNames)\n"
+                    + "    {\n"
+                    + "        // Fill out some way of selecting midi out port or find a specific port:\n"
+                    + "        if (midiOutPortName.Contains(\"\"))\n"
+                    + "        {\n"
+                    + "\n"
+                    + "        }\n"
+                    + "    }\n"
+                    + "}\n";
                 midiEvents = "\n\t\tprivate void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)\n"
                     + "\t\t{\n"
                     + "\t\t\tMidiInBuffer = args.Message.RawData.ToArray();\n"
@@ -153,6 +183,7 @@ namespace GenerateCode
                 midiObject = "";
                 midiNew = "";
                 midiEvents = "";
+                midiAsync = "";
             }
 
             codeTemplate = 
@@ -176,12 +207,11 @@ namespace GenerateCode
                 + "\t\tpublic MainPage()\n"
                 + "\t\t{\n"
                 + "\t\t\tthis.InitializeComponent();\n"
-                + midiNew
                 + "\t\t}\n"
                 + "\n"
                 + "\t\t// When imgClickArea is opened it has also got its size, so now\n"
                 + "\t\t// we can create the controls object:\n"
-                + "\t\tprivate void imgClickArea_ImageOpened(object sender, RoutedEventArgs e)\n"
+                + "\t\tprivate " + midiAsync + "void imgClickArea_ImageOpened(object sender, RoutedEventArgs e)\n"
                 + "\t\t{\n"
                 + "\t\t\t// Create and initiate the controls object:\n"
                 + "\t\t\tControls = new Controls(Window.Current.Bounds, imgClickArea);\n"
@@ -190,7 +220,7 @@ namespace GenerateCode
                 + "\t\t\t// Create all controls:\n"
                 + "\t\t\tControls.AddStaticImage((int)ControlId.STATICIMAGE, gridControls, new Image[] { imgMrMartin }, new Point(10, 560));\n"
                 + "\n"
-                + "\n"
+                + midiNew
                 + "\t\t\t// Make sure all controls has the correct size and position:\n"
                 + "\t\t\tControls.ResizeControls(gridControls, Window.Current.Bounds);\n"
                 + "\t\t\tControls.SetControlsUniform(gridControls);\n"

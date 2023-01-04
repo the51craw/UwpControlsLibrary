@@ -72,7 +72,7 @@ namespace UwpControlsLibrary
             }
         }
 
-        public void CallEvent(object sender, PointerRoutedEventArgs e, ControlBase.EventType eventType, int delta = 0)
+        public void CallEvent(object sender, PointerRoutedEventArgs e, EventType eventType, int delta)
         {
             PointerPoint pp = e.GetCurrentPoint(imgClickArea);
 
@@ -98,9 +98,14 @@ namespace UwpControlsLibrary
                     }
                 }
             }
+            SelectAndCall(this.ControlsList, pp, sender, e, eventType, delta);
+        }
 
+        private void SelectAndCall(List<object> controlsList, PointerPoint pp, object sender, PointerRoutedEventArgs e, EventType eventType, int delta)
+        {
             foreach (Object control in ControlsList)
             {
+                Current = ((ControlBase)control).Id;
                 if (control.GetType() == typeof(PopupMenuButton))
                 {
                     ((PopupMenuButton)control).ResetHovering();
@@ -116,29 +121,32 @@ namespace UwpControlsLibrary
                     if (control.GetType() == typeof(Knob))
                     {
                         ((Knob)control).HandleEvent(pp.Position, eventType, PointerButtonStates, delta);
+                        return;
                     }
                     else if (control.GetType() == typeof(ImageButton))
                     {
                         ((ImageButton)control).HandleEvent(e, eventType);
-                    }
-                    else if (control.GetType() == typeof(MomentaryButton))
-                    {
+                        return;
                     }
                     else if (control.GetType() == typeof(Rotator))
                     {
                         ((Rotator)control).HandleEvent(PointerButtonStates, delta);
+                        return;
                     }
                     else if (control.GetType() == typeof(VerticalSlider))
                     {
                         ((VerticalSlider)control).HandleEvent(e, eventType, pp.Position, PointerButtonStates, delta);
+                        return;
                     }
                     else if (control.GetType() == typeof(HorizontalSlider))
                     {
                         ((HorizontalSlider)control).HandleEvent(e, eventType, pp.Position, PointerButtonStates, delta);
+                        return;
                     }
                     else if (control.GetType() == typeof(Joystick))
                     {
                         ((Joystick)control).HandleEvent(e, eventType, pp.Position, PointerButtonStates);
+                        return;
                     }
                     else if (control.GetType() == typeof(PopupMenuButton)
                         && ((PopupMenuButton)control).Visibility == Visibility.Visible
@@ -151,42 +159,22 @@ namespace UwpControlsLibrary
                             menu = ((PopupMenuButton)((PopupMenuButton)control).Tag).Menu;
                         }
                         ((PopupMenuButton)control).HandleEvent(e, eventType, PointerButtonStates, delta, menu);
-                        //((PopupMenuButton)control).IsSelected = true;
-                        //if (((PopupMenuButton)control).ImageList != null)
-                        //{
-                        //    if (((PopupMenuButton)control).ImageList.Length == 1)
-                        //    {
-                        //        // Only one image, show on PointerPressed:
-                        //        ((PopupMenuButton)control).ImageList[0].Visibility = Visibility.Visible;
-                        //    }
-                        //    if (((PopupMenuButton)control).ImageList.Length > 1)
-                        //    {
-                        //        // Two images or three images, show second and hide first on PointerPressed:
-                        //        ((PopupMenuButton)control).ImageList[1].Visibility = Visibility.Visible;
-                        //        ((PopupMenuButton)control).ImageList[0].Visibility = Visibility.Collapsed;
-                        //    }
-                        //}
+                        return;
                     }
                     else if (control.GetType() == typeof(TouchpadKeyboard))
                     {
-                        //return ((TouchpadKeyboard)control).PointerPressed(pp.Position);
+                        return;
                     }
                     else if (control.GetType() == typeof(Keyboard))
                     {
                         Key key = (Key)((Image)sender).Tag;
                         ((Keyboard)control).HandleEvent(sender, e, eventType, pp.Position, PointerButtonStates, key);
-                        //if (key.Images.Length > 1)
-                        //{
-                        //    key.Images[1].Visibility = Visibility.Visible;
-                        //}
+                        return;
                     }
                     else if (control.GetType() == typeof(CompoundControl))
                     {
-                        //foreach (object subControl in ((CompoundControl)control).SubControls.ControlsList)
-                        //{
-                        //    ((ControlBase)subControl).IsSelected =
-                        //        ((ControlBase)subControl).ControlSizing.IsHit(pp.Position);
-                        //}
+                        SelectAndCall(((CompoundControl)control).SubControls.ControlsList, pp, sender, e, eventType, delta);
+                        return;
                     }
                 }
             }
@@ -293,8 +281,7 @@ namespace UwpControlsLibrary
 
         public Object PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            GetPointerButtonStatesAndWheelDelta(e);
-            CallEvent(sender, e, ControlBase.EventType.POINTER_PRESSED);
+            CallEvent(sender, e, ControlBase.EventType.POINTER_PRESSED, GetPointerButtonStatesAndWheelDelta(e));
 
             //PointerPoint pp = e.GetCurrentPoint(imgClickArea);
             //PointerPointProperties ppp = pp.Properties;
@@ -383,8 +370,7 @@ namespace UwpControlsLibrary
 
         public Object PointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            GetPointerButtonStatesAndWheelDelta(e);
-            CallEvent(sender, e, ControlBase.EventType.POINTER_RELEASED);
+            CallEvent(sender, e, ControlBase.EventType.POINTER_RELEASED, GetPointerButtonStatesAndWheelDelta(e));
 
             //PointerPoint pp = e.GetCurrentPoint(imgClickArea);
             //PointerPointProperties ppp = pp.Properties;

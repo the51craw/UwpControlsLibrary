@@ -10,7 +10,7 @@ namespace UwpControlsLibrary
     /// <summary>
     /// An indicator is an Image that can be turned on or off from code.
     /// This is useful e.g. an Image button needs to indicate that it has
-    /// been used to toggle a program state. A MomentaryButton can not be
+    /// been used to toggle a program state. An ImageButton can not be
     /// used in such a case since it only toggles its own image, but the
     /// Indicator can of course be toggled also via code trigged by
     /// a MomentaryButton, just like by any control.
@@ -78,45 +78,6 @@ namespace UwpControlsLibrary
         }
 
         public void HandleEvent(PointerRoutedEventArgs e, EventType eventType)
-        {
-            switch (eventType)
-            {
-                case EventType.POINTER_MOVED:
-                    HandlePointerMovedEvent(e);
-                    break;
-                case EventType.POINTER_PRESSED:
-                    HandlePointerPressedEvent(e);
-                    break;
-                case EventType.POINTER_RELEASED:
-                    HandlePointerReleasedEvent(e);
-                    break;
-                case EventType.POINTER_TAPPED:
-                    HandlePointerWheelChangedEvent(e);
-                    break;
-            }
-        }
-
-        public void HandlePointerMovedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerReleasedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerWheelChangedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerTapped(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
         {
         }
     }

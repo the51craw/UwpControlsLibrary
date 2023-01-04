@@ -39,7 +39,6 @@ namespace MIDI_SampleApp
         public MainPage()
         {
             this.InitializeComponent();
-            midi = new MIDI(MidiInPort_MessageReceived);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +70,7 @@ namespace MIDI_SampleApp
                 }
             }
 
+            midi = new MIDI(MidiInPort_MessageReceived);
             while (!midi.IsInitiated)
             {
                 await Task.Delay(1);
@@ -127,12 +127,18 @@ namespace MIDI_SampleApp
 
         private void imgClickArea_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            Controls.PointerReleased(sender, e);
+            if (initDone && Controls != null)
+            {
+                Controls.PointerReleased(sender, e);
+            }
         }
 
         private void imgClickArea_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
-            Controls.PointerWheelChanged(sender, e);
+            if (initDone && Controls != null)
+            {
+                Controls.PointerWheelChanged(sender, e);
+            }
         }
 
         // Tapped event, handlers for controls that are supposed to be tapped:

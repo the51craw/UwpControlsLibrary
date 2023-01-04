@@ -206,29 +206,5 @@ namespace UwpControlsLibrary
                 ShowSelection();
             }
         }
-
-        public void HandlePointerMovedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerReleasedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerWheelChangedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerTapped(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
-        {
-        }
     }
 }

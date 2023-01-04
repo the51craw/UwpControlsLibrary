@@ -9,6 +9,16 @@ using Windows.UI.Xaml.Media;
 
 namespace UwpControlsLibrary
 {
+    /// <summary>
+	/// A Slider uses an image of the slider handle to move.
+	/// The optional background will decide the sliders hit area if present,
+	/// otherwise the supplied hitarea will be used.
+	/// In other words, you can have the background image supplied with the
+	/// slider control, or you can have it painted on the application background image.
+	/// Note that if you supply a background image with the slider control and it is
+	/// wider than the handle image, the handle will be horizontally centered over
+	/// the background image, as would be expected.
+    /// </summary>
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Slider class.
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,8 +33,8 @@ namespace UwpControlsLibrary
         private int value;
         public Double RelativeValue;
 
-        public VerticalSlider(Controls controls, int Id, Grid gridMain, Image[] imageList, Rect HitArea,
-            int MinValue = 0, int MaxValue = 127)
+        public VerticalSlider(Controls controls, int Id, Grid gridMain, Image[] imageList, 
+			Rect HitArea, int MinValue = 0, int MaxValue = 127)
         {
             GridControls = gridMain;
             ImageSize = new Point(imageList[imageList.Length - 1].ActualWidth,
@@ -34,24 +44,6 @@ namespace UwpControlsLibrary
             this.MinValue = MinValue;
             this.MaxValue = MaxValue;
             this.Id = Id;
-            Double width = HitArea.Width;
-            Double height = HitArea.Height;
-
-            //if (width == 0)
-            //{
-            //    if (image != null)
-            //    {
-            //        width = image.ActualWidth;
-            //    }
-            //}
-
-            //if (height == 0)
-            //{
-            //    if (image != null)
-            //    {
-            //        height = image.ActualHeight;
-            //    }
-            //}
 
             if (imageList.Length == 1)
             {
@@ -67,37 +59,6 @@ namespace UwpControlsLibrary
             CopyImages(imageList);
             ControlSizing = new ControlSizing(controls, this);
         }
-
-        //public Int32 Handle(EventType eventType, PointerRoutedEventArgs e)
-        //{
-        //    switch (eventType)
-        //    {
-        //        case EventType.POINTER_MOVED:
-        //            return PointerMoved(e);
-        //        case EventType.POINTER_PRESSED:
-        //            PointerPressed(e);
-        //            break;
-        //        case EventType.POINTER_RELEASED:
-        //            PointerReleased(e);
-        //            break;
-        //    }
-        //    return -1;
-        //}
-
-        //private Int32 PointerMoved(PointerRoutedEventArgs e)
-        //{
-        //    return -1;
-        //}
-
-        //public void PointerPressed(PointerRoutedEventArgs e)
-        //{
-
-        //}
-
-        //public void PointerReleased(PointerRoutedEventArgs e)
-        //{
-
-        //}
 
         public int SetValue(Point position)
         {
@@ -130,10 +91,6 @@ namespace UwpControlsLibrary
             }
         }
 
-        public void SetDeSelected()
-        {
-        }
-
         public void HandleEvent(PointerRoutedEventArgs e, EventType eventType, Point pointerPosition, List<PointerButton> pointerButtonStates, int delta)
         {
             switch (eventType)
@@ -141,12 +98,6 @@ namespace UwpControlsLibrary
                 case EventType.POINTER_MOVED:
                     HandlePointerMovedEvent(pointerPosition, pointerButtonStates);
                     break;
-                //case EventType.POINTER_PRESSED:
-                //    HandlePointerPressedEvent(e);
-                //    break;
-                //case EventType.POINTER_RELEASED:
-                //    HandlePointerReleasedEvent(pointerPosition, pointerButtonStates);
-                //    break;
                 case EventType.POINTER_WHEEL_CHANGED:
                     HandlePointerWheelChangedEvent(pointerButtonStates, delta);
                     break;
@@ -160,14 +111,6 @@ namespace UwpControlsLibrary
                 int value = SetValue(pointerPosition);
                 SetPositionFromValue();
             }
-        }
-
-        public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerReleasedEvent(Point pointerPosition, List<PointerButton> pointerButtonStates)
-        {
         }
 
         public void HandlePointerWheelChangedEvent(List<PointerButton> pointerButtonStates, int delta)
@@ -185,15 +128,6 @@ namespace UwpControlsLibrary
             value = value < MinValue ? MinValue : value;
             double Value = value;
             SetPositionFromValue();
-            //return value;
-        }
-
-        public void HandlePointerTapped(PointerRoutedEventArgs e)
-        {
-        }
-
-        public void HandlePointerRightTapped(PointerRoutedEventArgs e)
-        {
         }
     }
 }

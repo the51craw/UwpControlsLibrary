@@ -97,7 +97,7 @@ namespace SampleApplication
 
             Controls.AddIndicator((int)ControlId.INDICATOR2, gridControls, new Image[] { imgIndicatorOff, imgIndicatorOn }, new Point(234, 28));
 
-            Controls.AddKnob((int)ControlId.KNOB, gridControls, new Image[] { imgKnob }, new Point(120, 320), 0, 127, 30, 330);
+            Controls.AddKnob((int)ControlId.KNOB, gridControls, new Image[] { imgKnob, imgKnobBackground }, new Point(120, 320), 0, 127, 30, 330);
 
             Controls.AddVerticalSlider((int)ControlId.VERTICAL_SLIDER, gridControls, new Image[] { imgVerticalSliderBackground, imgVerticalSliderHandle },
                 new Rect(270, 134, 121, 399));
@@ -105,7 +105,7 @@ namespace SampleApplication
             Controls.AddHorizontalSlider((int)ControlId.HORIZONTAL_SLIDER, gridControls, new Image[] { imgHorizontalSliderBackground, imgHorizontalSliderHandle },
                 new Rect(427, 424, 399, 121), 0, 127);
 
-            Controls.AddLabel((int)ControlId.LABEL, gridControls, new Rect(400, 80, 1500, 24), "text", 16);
+            Controls.AddLabel((int)ControlId.LABEL, gridControls, new Rect(274, 80, 1500, 24), "text", 16, TextAlignment.Left);
 
             Controls.AddJoystick((int)ControlId.JOYSTICK, gridControls,
                 new Image[] { imgJoystickBackground, imgStick1, imgStick2, imgStick3, imgJoystickHandle }, new Rect(495, 164, 199, 199), -64, 63, -64, 63);
@@ -280,6 +280,10 @@ namespace SampleApplication
         // object if and if so which control the pointer is over:
         private void imgClickArea_PointerMoved(object sender, PointerRoutedEventArgs e)
         {
+            if (initDone && Controls != null)
+            {
+                Controls.PointerMoved(sender, e);
+            }
             if (initDone)
             {
                 GetMousePosition(e);
@@ -357,27 +361,35 @@ namespace SampleApplication
 
         private void imgClickArea_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            if (Controls != null)
+            if (initDone && Controls != null)
             {
                 Controls.PointerPressed(sender, e);
-                ((Indicator)Controls.ControlsList[(int)ControlId.INDICATOR2]).IsOn =
-                    ((ImageButton)Controls.ControlsList[(int)ControlId.BUTTON]).IsOn;
-                if (((PopupMenuButton)Controls.ControlsList[(int)ControlId.POPUP_MENU]).IsSelected)
+            }
+
+            // Turn on indicator 2 to show mouse button is pressed:
+            ((Indicator)Controls.ControlsList[(int)ControlId.INDICATOR2]).IsOn =
+                ((ImageButton)Controls.ControlsList[(int)ControlId.BUTTON]).IsOn;
+
+            // If this is the popup menu button, toggle it:
+            if (Controls.Current == (int)ControlId.POPUP_MENU)
+            {
+                if (((PopupMenuButton)Controls.ControlsList[(int)ControlId.POPUP_MENU]).IsOn)
                 {
-                    if (((PopupMenuButton)Controls.ControlsList[(int)ControlId.POPUP_MENU]).IsOn)
-                    {
-                        ((PopupMenuButton)Controls.ControlsList[(int)ControlId.POPUP_MENU]).TextBlock.Text = "MIDI Thru";
-                    }
-                    else
-                    {
-                        ((PopupMenuButton)Controls.ControlsList[(int)ControlId.POPUP_MENU]).TextBlock.Text = "MIDI";
-                    }
+                    ((PopupMenuButton)Controls.ControlsList[(int)ControlId.POPUP_MENU]).TextBlock.Text = "MIDI Thru";
+                }
+                else
+                {
+                    ((PopupMenuButton)Controls.ControlsList[(int)ControlId.POPUP_MENU]).TextBlock.Text = "MIDI";
                 }
             }
         }
 
         private void imgClickArea_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
+            if (initDone && Controls != null)
+            {
+                Controls.PointerReleased(sender, e);
+            }
             GetMousePosition(e);
             GetMouseButtonPressed(e);
 
@@ -397,6 +409,14 @@ namespace SampleApplication
                 {
                     ((ControlBase)control).IsSelected = false;
                 }
+            }
+        }
+
+        private void imgClickArea_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+        {
+            if (initDone && Controls != null)
+            {
+                Controls.PointerWheelChanged(sender, e);
             }
         }
 
@@ -429,11 +449,6 @@ namespace SampleApplication
                     }
                 }
             }
-        }
-
-        private void imgClickArea_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
-        {
-            Controls.PointerWheelChanged(sender, e);
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -600,7 +615,7 @@ namespace SampleApplication
 
             ((Label)Controls.ControlsList[(Int32)ControlId.LABEL]).TextBlock.Text =
                 keyName + " off, velocity: " + velocity.ToString();
-            ((Indicator)Controls.ControlsList[(int)ControlId.INDICATOR1]).IsOn = true;
+            ((Indicator)Controls.ControlsList[(int)ControlId.INDICATOR1]).IsOn = false;
 
             if (((PopupMenuButton)Controls.ControlsList[(int)ControlId.POPUP_MENU]).IsOn)
             {
