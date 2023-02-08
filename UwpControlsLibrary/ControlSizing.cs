@@ -77,6 +77,7 @@ namespace UwpControlsLibrary
         public Point RelativeMousePosition;
         public Image[] ImageList;
         public TextBlock TextBlock;
+        public TextBox TextBox;
 
         public Octave[] Octaves;
 
@@ -90,7 +91,7 @@ namespace UwpControlsLibrary
         {
             Controls = controls;
             Init(Owner, ((ControlBase)Owner).HitArea,((ControlBase)Owner).ImageList, 
-                ((ControlBase)Owner).TextBlock);
+                ((ControlBase)Owner).TextBlock, ((ControlBase)Owner).TextBox);
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace UwpControlsLibrary
             InitKeyboard(Owner, X, Y);
         }
 
-        private void Init(Object Owner, Rect hitArea, Image[] imageList, TextBlock textBlock)
+        private void Init(Object Owner, Rect hitArea, Image[] imageList, TextBlock textBlock, TextBox textBox)
         {
             this.Owner = Owner;
             this.ImgClickArea = Controls.imgClickArea;
@@ -141,6 +142,13 @@ namespace UwpControlsLibrary
                 this.TextBlock = textBlock;
                 RelativeFontsize = ((ControlBase)Owner).OriginalFontSize / ((ControlBase)Owner).GridControls.ActualHeight;
                 ((ControlBase)Owner).GridControls.Children.Add(textBlock);
+            }
+
+            if (textBox != null)
+            {
+                this.TextBox = textBox;
+                RelativeFontsize = ((ControlBase)Owner).OriginalFontSize / ((ControlBase)Owner).GridControls.ActualHeight;
+                ((ControlBase)Owner).GridControls.Children.Add(textBox);
             }
 
             RelativeHitArea = new Rect(
@@ -326,6 +334,15 @@ namespace UwpControlsLibrary
                         ((PopupMenuButton)Owner).TextBlock.Padding = new Thickness(RelativeFontsize * ImgClickArea.ActualHeight, 0, 0, 0);
                     }
                 }
+                if (((PopupMenuButton)Owner).TextBox != null)
+                {
+                    ((PopupMenuButton)Owner).TextBox.Margin = new Thickness(left, top, right, bottom);
+                    ((PopupMenuButton)Owner).TextBox.FontSize = RelativeFontsize * ImgClickArea.ActualHeight;
+                    if (((PopupMenuButton)Owner).TextAlignment == ControlBase.ControlTextAlignment.LEFT)
+                    {
+                        ((PopupMenuButton)Owner).TextBox.Padding = new Thickness(RelativeFontsize * ImgClickArea.ActualHeight, 0, 0, 0);
+                    }
+                }
             }
             else if (Owner.GetType() == typeof(CompoundControl))
             {
@@ -356,7 +373,7 @@ namespace UwpControlsLibrary
             }
             else if (Owner.GetType() == typeof(DigitalDisplay))
             {
-                if (((ControlBase)Owner).ImageList[12] != null)
+                if (((ControlBase)Owner).ImageList.Length > 12 && ((ControlBase)Owner).ImageList[12] != null)
                 {
                     ((DigitalDisplay)Owner).ImageList[12].Margin =
                             new Thickness(left, top, right, bottom);
@@ -458,6 +475,12 @@ namespace UwpControlsLibrary
                     ((ControlBase)Owner).TextBlock.FontSize = RelativeFontsize * ImgClickArea.ActualHeight;
                     ((ControlBase)Owner).TextBlock.Margin = new Thickness(left, top, right, bottom);
                 }
+
+                if (((ControlBase)Owner).TextBox != null)
+                {
+                    ((ControlBase)Owner).TextBox.FontSize = RelativeFontsize * ImgClickArea.ActualHeight;
+                    ((ControlBase)Owner).TextBox.Margin = new Thickness(left, top, right, bottom);
+                }
             }
         }
 
@@ -475,13 +498,16 @@ namespace UwpControlsLibrary
         /// <summary>
         /// Checks for Point relative to imgClickArea is within
         /// boundaries of HitArea.
+        /// StatidImage and Indicator should never be hit.
+        /// PopupMenuButton should only be hit when visible.
         /// </summary>
         /// <param name="Point"></param>
         /// <returns></returns>
         public Boolean IsHit(Point Point)
         {
             Boolean isHit = false;
-            if (Owner.GetType() != typeof(StaticImage) && Owner.GetType() != typeof(Indicator))
+            if (Owner.GetType() != typeof(StaticImage) && Owner.GetType() != typeof(Indicator)
+                && !(Owner.GetType() == typeof(PopupMenuButton) && ((PopupMenuButton)Owner).Visibility== Visibility.Collapsed))
             {
                 isHit = Point.X >= HitArea.Left && Point.X <= HitArea.Right
                     && Point.Y >= HitArea.Top && Point.Y <= HitArea.Bottom;

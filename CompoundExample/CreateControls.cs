@@ -491,13 +491,12 @@ namespace CompositeExample
                         new Rect(0, 0, imgBackground.ActualWidth, imgBackground.ActualHeight),
                         imgClickArea, i, (Int32)type.DISPLAY, gridControls, new Image[] { imgControlPanelBackground },
                         AssembleHitarea(type.DISPLAY, x, y, 0, 0));
-                    displays[i].AddGraph((Int32)DisplayControls.FREQUENCY, gridControls, new Image[] { imgGraphDisplayBackground },
-                        new Point(displayDigitsBackgroundX, displayDigitsBackgroundY), color);
-                    displays[i].AddGraph((Int32)DisplayControls.OSCILLOGRAPH, gridControls, new Image[] { imgGraphDisplayBackground },
-                        new Point(displayOscilloscopeBackgroundX, displayOscilloscopeBackgroundY), color);
+                    //displays[i].AddGraph((Int32)DisplayControls.FREQUENCY, gridControls, new Image[] { imgGraphDisplayBackground },
+                    //    new Point(displayDigitsBackgroundX, displayDigitsBackgroundY), color);
+                    //displays[i].AddGraph((Int32)DisplayControls.OSCILLOGRAPH, gridControls, new Image[] { imgGraphDisplayBackground },
+                    //    new Point(displayOscilloscopeBackgroundX, displayOscilloscopeBackgroundY), color);
                     displays[i].AddDigitalDisplay((Int32)DisplayControls.DIGITS, gridControls,
-                        new Image[] { img0, img1, img2, img3, img4, img5, img6, img7, img8, img9, img0Dot,
-                            img1Dot, img2Dot, img3Dot, img4Dot, img5Dot, img6Dot, img7Dot, img8Dot, img9Dot },
+                        new Image[] { img0, img1, img2, img3, img4, img5, img6, img7, img8, img9, imgDot, imgMinus },
                         new Point(displayDigitsX, displayDigitsY), 7, 2);
                     i++;
                 }

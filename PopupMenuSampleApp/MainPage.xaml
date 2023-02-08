@@ -46,9 +46,7 @@
 				ImageOpened = "imgClickArea_ImageOpened"
 				PointerWheelChanged = "imgClickArea_PointerWheelChanged"
 				PointerReleased = "imgClickArea_PointerReleased"
-				PointerPressed = "imgClickArea_PointerPressed"
-				Tapped = "imgClickArea_Tapped"
-                RightTapped = "imgClickArea_RightTapped" />
+				PointerPressed = "imgClickArea_PointerPressed" />
     </Grid >
 </Page>
 

@@ -19,10 +19,10 @@ namespace UwpControlsLibrary
 
     public class StaticImage : ControlBase
     {
-        public StaticImage(Controls controls, Int32 Id, Grid gridMain, Image[] imageList, Point Position)
+        public StaticImage(Controls controls, Int32 Id, Grid gridControls, Image[] imageList, Point Position)
         {
             this.Id = Id;
-            GridControls = gridMain;
+            GridControls = gridControls;
             Double width;
             Double height;
 

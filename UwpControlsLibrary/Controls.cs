@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.UI;
-using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using static UwpControlsLibrary.ControlBase;
-using Windows.UI.Text;
-using static UwpControlsLibrary.ImageButton;
-using Windows.Devices.Midi;
 
 namespace UwpControlsLibrary
 {
@@ -78,51 +70,56 @@ namespace UwpControlsLibrary
             //textBlocksToHide = new List<TextBlock>();
         }
 
-        public void Init(Grid gridMain)
+        public void Init(Grid gridControls)
         {
             imgClickArea.Stretch = Stretch.Uniform;
             imgClickArea.UpdateLayout();
             CalculateExtraMargins(AppSize);
-            //AddControlsToHide(gridMain);
+            //AddControlsToHide(gridControls);
         }
 
-        public StaticImage AddStaticImage(int Id, Grid gridMain, Image[] imageList, Point position)
+        public StaticImage AddStaticImage(int Id, Grid gridControls, Image[] imageList, Point position)
         {
-            StaticImage staticImage = new StaticImage(this, Id, gridMain, imageList, position);
+            StaticImage staticImage = new StaticImage(this, Id, gridControls, imageList, position);
             //StaticImage staticImage = new StaticImage(this, Id, image, position);
             ControlsList.Add(staticImage);
             return staticImage;
         }
 
-        public Rotator AddRotator(int Id, Grid gridMain, Image[] imageList, Point position,
-            string text = "", Int32 fontSize = 8, TextAlignment textAlignment = TextAlignment.Center,
+        public Rotator AddRotator(int Id, Grid gridControls, Image[] imageList, Point position,
+            string text = null, Int32 fontSize = 16, TextAlignment textAlignment = TextAlignment.Center,
             ControlTextWeight textWeight = ControlTextWeight.NORMAL,
             TextWrapping textWrapping = TextWrapping.NoWrap, Brush foreground = null)
         {
-            Rotator rotator = new Rotator(this, Id, gridMain, imageList, position, text, fontSize,
+            Rotator rotator = new Rotator(this, Id, gridControls, imageList, position, text, fontSize,
                 textAlignment, textWeight, textWrapping, foreground);
             ControlsList.Add(rotator);
             return rotator;
         }
 
-        public ImageButton AddImageButton(int Id, Grid gridMain, Image[] imageList, Point position, ImageButton.ImageButtonFunction function = ImageButtonFunction.TOGGLE)
+        public ImageButton AddImageButton(int Id, Grid gridControls, Image[] imageList,
+            Point position, ImageButton.ImageButtonFunction function = ImageButtonFunction.TOGGLE,
+            bool hover = false, string text = null, int fontSize = 16,
+            TextAlignment textAlignment = TextAlignment.Center, ControlTextWeight textWeight = ControlTextWeight.NORMAL,
+            TextWrapping textWrapping = TextWrapping.NoWrap, Brush foreground = null)
         {
-            ImageButton button = new ImageButton(this, Id, gridMain, imageList, position, function);
+            ImageButton button = new ImageButton(this, Id, gridControls, imageList, position, function,
+                hover, text, fontSize, textAlignment, textWeight, textWrapping, foreground);
             ControlsList.Add(button);
             return button;
         }
 
-        public Indicator AddIndicator(int Id, Grid gridMain, Image[] imageList, Point position)
+        public Indicator AddIndicator(int Id, Grid gridControls, Image[] imageList, Point position)
         {
-            Indicator control = new Indicator(this, Id, gridMain, imageList, position);
+            Indicator control = new Indicator(this, Id, gridControls, imageList, position);
             ControlsList.Add(control);
             return control;
         }
 
-        public Knob AddKnob(int Id, Grid gridMain, Image[] imageList, Point position,
+        public Knob AddKnob(int Id, Grid gridControls, Image[] imageList, Point position,
             int MinValue = 0, int MaxValue = 127, int AngleStart = 45, int AngleEnd = 315, Double Sensitivity = 1)
         {
-            Knob control = new Knob(this, Id, gridMain, imageList, position, MinValue, MaxValue, AngleStart, AngleEnd, Sensitivity);
+            Knob control = new Knob(this, Id, gridControls, imageList, position, MinValue, MaxValue, AngleStart, AngleEnd, Sensitivity);
             ControlsList.Add(control);
             return control;
         }
@@ -134,43 +131,43 @@ namespace UwpControlsLibrary
             return digitalDisplay;
         }
 
-        public TouchpadKeyboard AddTouchpadKeyboard(int Id, Grid gridMain,
+        public TouchpadKeyboard AddTouchpadKeyboard(int Id, Grid gridControls,
             Image[] imageList, Point position, byte lowKey, byte highKey)
         {
-            TouchpadKeyboard control = new TouchpadKeyboard(this, Id, gridMain, imageList, position, lowKey, highKey);
+            TouchpadKeyboard control = new TouchpadKeyboard(this, Id, gridControls, imageList, position, lowKey, highKey);
             ControlsList.Add(control);
             return control;
         }
 
-        public VerticalSlider AddVerticalSlider(int Id, Grid gridMain, Image[] imageList, Rect HitArea,
+        public VerticalSlider AddVerticalSlider(int Id, Grid gridControls, Image[] imageList, Rect HitArea,
             int MinValue = 0, int MaxValue = 127)
         {
-            VerticalSlider control = new VerticalSlider(this, Id, gridMain, imageList, HitArea, MinValue, MaxValue);
+            VerticalSlider control = new VerticalSlider(this, Id, gridControls, imageList, HitArea, MinValue, MaxValue);
             ControlsList.Add(control);
             return control;
         }
 
-        public HorizontalSlider AddHorizontalSlider(int Id, Grid gridMain, Image[] imageList, Rect HitArea,
+        public HorizontalSlider AddHorizontalSlider(int Id, Grid gridControls, Image[] imageList, Rect HitArea,
             int MinValue = 0, int MaxValue = 127)
         {
-            HorizontalSlider control = new HorizontalSlider(this, Id, gridMain, imageList, HitArea, MinValue, MaxValue);
+            HorizontalSlider control = new HorizontalSlider(this, Id, gridControls, imageList, HitArea, MinValue, MaxValue);
             ControlsList.Add(control);
             return control;
         }
 
-        public Joystick AddJoystick(int Id, Grid gridMain, Image[] imageList, Rect hitArea,
+        public Joystick AddJoystick(int Id, Grid gridControls, Image[] imageList, Rect hitArea,
             int MinValueX = 0, int MaxValueX = 127, int MinValueY = 0, int MaxValueY = 127)
         {
-            Joystick control = new Joystick(this, Id, gridMain, imageList, hitArea, MinValueX, MaxValueX, MinValueY, MaxValueY);
+            Joystick control = new Joystick(this, Id, gridControls, imageList, hitArea, MinValueX, MaxValueX, MinValueY, MaxValueY);
             ControlsList.Add(control);
             return control;
         }
 
-        public Label AddLabel(int Id, Grid gridMain, Rect HitArea, string text, int fontSize = 8,
+        public Label AddLabel(int Id, Grid gridControls, Rect HitArea, string text, int fontSize = 16,
             TextAlignment textAlignment = TextAlignment.Center, ControlTextWeight textWeight = ControlTextWeight.NORMAL,
             TextWrapping textWrapping = TextWrapping.NoWrap, Brush foreground = null)
         {
-            Label control = new Label(this, Id, gridMain, HitArea, text, fontSize, textAlignment, textWeight, textWrapping, foreground);
+            Label control = new Label(this, Id, gridControls, HitArea, text, fontSize, textAlignment, textWeight, textWrapping, foreground);
             ControlsList.Add(control);
             return control;
         }
@@ -191,7 +188,7 @@ namespace UwpControlsLibrary
 
         public PopupMenuButton AddPopupMenuButton(int Id, Grid gridControls, Image[] imageList, Point position,
             PopupMenuButtonStyle style, PointerButton[] buttons = null, string text = null, 
-            int fontSize = 8, ControlTextWeight textWeight = ControlTextWeight.NORMAL,
+            int fontSize = 16, bool edit = false, ControlTextWeight textWeight = ControlTextWeight.NORMAL,
             ControlTextAlignment textAlignment = ControlTextAlignment.LEFT, Brush textOnColor = null, Brush textOffColor = null)
         {
             if (buttons == null)
@@ -200,7 +197,7 @@ namespace UwpControlsLibrary
             }
 
             PopupMenuButton control = new PopupMenuButton(this, Id, gridControls, imageList, position,
-                style, buttons, text, fontSize, textWeight, textAlignment, textOnColor, textOffColor);
+                style, buttons, text, fontSize, edit, textWeight, textAlignment, textOnColor, textOffColor);
             ControlsList.Add(control);
             return control;
         }
@@ -215,48 +212,74 @@ namespace UwpControlsLibrary
         }
 
 
-        public UwpControlsLibrary.CompoundControl AddCompoundControl(Rect AppSize, Image ClickArea, int Id, int SubType, Grid gridMain, Image[] imageList, Rect HitArea)
+        public CompoundControl AddCompoundControl(
+            Rect AppSize, Image ClickArea, int Id, int SubType, 
+            Grid gridControls, Image[] imageList, Rect HitArea)
         {
-            UwpControlsLibrary.CompoundControl control = new UwpControlsLibrary.CompoundControl(this, AppSize, ClickArea, Id, SubType, gridMain, imageList, HitArea);
+            CompoundControl control = new CompoundControl(
+                this, AppSize, ClickArea, Id, SubType, gridControls, imageList, HitArea);
             ControlsList.Add(control);
             return control;
         }
 
-        public Keyboard AddKeyBoard(int Id, Grid gridMain, Image[] imageList, Point Position, int lowKey, int highKey)
+        public Keyboard AddKeyBoard(int Id, Grid gridKeyboard, Image[] imageList, Point Position, int lowKey, int highKey)
         {
-            Keyboard control = new Keyboard(this, Id, gridMain, imageList, Position, lowKey, highKey);
+            Keyboard control = new Keyboard(this, Id, gridKeyboard, imageList, Position, lowKey, highKey);
             ControlsList.Add(control);
             return control;
         }
 
-        public Keyboard AddKeyBoard(int Id, Grid gridMain, Image whiteKey, Image blackKey, Point Position, int lowKey, int highKey)
+        public Keyboard AddKeyBoard(int Id, Grid gridControls, Image whiteKey, Image blackKey, Point Position, int lowKey, int highKey)
         {
-            Keyboard control = new Keyboard(this, Id, gridMain, new Image[] { whiteKey, blackKey }, Position, lowKey, highKey);
+            Keyboard control = new Keyboard(this, Id, gridControls, new Image[] { whiteKey, blackKey }, Position, lowKey, highKey);
             ControlsList.Add(control);
             return control;
         }
 
-        public void AddMIDI(int Id, TypedEventHandler<MidiInPort, MidiMessageReceivedEventArgs> inPort_MessageReceived)
+        /// <summary>
+        /// Remove removes a control with any sub controls and
+        /// all associated grid child objects.
+        /// </summary>
+        /// <param name="control"></param>
+        public void RemoveControl(object control)
         {
-            ControlsList.Add(new MIDI(inPort_MessageReceived));
+            if (control.GetType() == typeof(CompoundControl))
+            {
+                while (((CompoundControl)control).SubControls.ControlsList.Count > 0)
+                {
+                    RemoveControl(((CompoundControl)control).SubControls.ControlsList[0]);
+                    ((CompoundControl)control).SubControls.ControlsList.
+                        Remove(((CompoundControl)control).SubControls.ControlsList[0]);
+                }
+                if (((CompoundControl)control).ImageList != null)
+                {
+                    for (int img = 0; img < ((CompoundControl)control).ImageList.Length; img++)
+                    {
+                        ((CompoundControl)control).GridControls.Children.
+                            Remove(((CompoundControl)control).ImageList[img]);
+                    }
+                }
+            }
+            else
+            {
+                if (((ControlBase)control).ImageList != null)
+                {
+                    foreach (Image image in ((ControlBase)control).ImageList)
+                    {
+                        ((ControlBase)control).GridControls.Children.Remove(image);
+                    }
+                }
+                if (((ControlBase)control).TextBlock != null)
+                {
+                    ((ControlBase)control).GridControls.Children.Remove(((ControlBase)control).TextBlock);
+                }
+                if (((ControlBase)control).TextBox != null)
+                {
+                    ((ControlBase)control).GridControls.Children.Remove(((ControlBase)control).TextBox);
+                }
+            }
+            ControlsList.Remove(control);
         }
-
-        //public void AddControlsToHide(Grid gridControls)
-        //{
-        //    imagesToHide.Clear();
-        //    textBlocksToHide.Clear();
-        //    foreach (Object obj in gridControls.Children)
-        //    {
-        //        if (obj.GetType() == typeof(Image))
-        //        {
-        //            imagesToHide.Add((Image)obj);
-        //        }
-        //        else if (obj.GetType() == typeof(TextBlock))
-        //        {
-        //            textBlocksToHide.Add((TextBlock)obj);
-        //        }
-        //    }
-        //}
 
         public void ResizeControls(Grid mainGrid, Rect AppSize)
         {

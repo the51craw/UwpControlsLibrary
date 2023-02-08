@@ -1,0 +1,33 @@
+﻿<ContentDialog
+    x:Class="SynthesizerSampleapp.NewItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SynthesizerSampleapp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:uwpcontrolslibrary="using:UwpControlsLibrary"
+    mc:Ignorable="d"
+    Title="Title"
+    Foreground="#ffffffff"
+    Background="#ff728CAF"
+    MaxHeight="180">
+
+    <ContentDialog.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="MaxHeight" Value="40" />
+            <Setter Property="IsFocusEngaged" Value="True" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+    </ContentDialog.Resources>
+
+    <Grid MaxHeight="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="tbInput" Grid.Row="0" KeyDown="tbInput_KeyDown" 
+                 VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+    </Grid>
+</ContentDialog>

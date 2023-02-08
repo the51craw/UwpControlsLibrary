@@ -62,13 +62,13 @@ namespace UwpControlsLibrary
         int fontSize;
         public ControlTextWeight TextWeight;
         public TextAlignment TextAlignment;
-        public Rotator(Controls controls, int Id, Grid gridMain, Image[] imageList, Point Position,
-            string text = "", Int32 fontSize = 8, TextAlignment textAlignment = TextAlignment.Center,
+        public Rotator(Controls controls, int Id, Grid gridControls, Image[] imageList, Point Position,
+            string text = null, Int32 fontSize = 16, TextAlignment textAlignment = TextAlignment.Center,
             ControlTextWeight textWeight = ControlTextWeight.NORMAL,
             TextWrapping textWrapping = TextWrapping.NoWrap, Brush foreground = null)
         {
             this.Id = Id;
-            GridControls = gridMain;
+            GridControls = gridControls;
             this.fontSize = fontSize;
             Double width;
             Double height;
@@ -105,29 +105,32 @@ namespace UwpControlsLibrary
             if (!string.IsNullOrEmpty(text))
             {
                 Texts.Add(text);
-            }
+                TextBlock = new TextBlock();
+                TextBlock.Text = text;
+                TextBlock.VerticalAlignment = VerticalAlignment.Center;
+                if (textWeight == ControlTextWeight.BOLD)
+                {
+                    TextBlock.FontWeight = Windows.UI.Text.FontWeights.Bold;
+                }
+                OriginalFontSize = fontSize;
+                TextBlock.FontSize = OriginalFontSize;
 
-            TextBlock = new TextBlock();
-            TextBlock.Text = text;
-            TextBlock.VerticalAlignment = VerticalAlignment.Center;
-            OriginalFontSize = fontSize;
-            TextBlock.FontSize = OriginalFontSize;
+                if (foreground != null)
+                {
+                    TextBlock.Foreground = foreground;
+                }
+                else
+                {
+                    TextBlock.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+                }
 
-            if (foreground != null)
-            {
-                TextBlock.Foreground = foreground;
-            }
-            else
-            {
-                TextBlock.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-            }
+                if (TextWeight == ControlTextWeight.BOLD)
+                {
+                    TextBlock.FontWeight = Windows.UI.Text.FontWeights.Bold;
+                }
 
-            if (TextWeight == ControlTextWeight.BOLD)
-            {
-                TextBlock.FontWeight = Windows.UI.Text.FontWeights.Bold;
+                TextBlock.TextAlignment = textAlignment;
             }
-
-            TextBlock.TextAlignment = textAlignment;
 
             ControlSizing = new ControlSizing(controls, this);
             Selection = 0;

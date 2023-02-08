@@ -51,14 +51,14 @@ namespace UwpControlsLibrary
         /// </summary>
         /// <param name="controls"></param>
         /// <param name="Id"></param>
-        /// <param name="gridMain"></param>
+        /// <param name="gridControls"></param>
         /// <param name="imageList"></param>
         /// <param name="hitArea"></param>
         /// <param name="MinValueX"></param>
         /// <param name="MaxValueX"></param>
         /// <param name="MinValueY"></param>
         /// <param name="MaxValueY"></param>
-        public Joystick(Controls controls, Int32 Id, Grid gridMain, Image[] imageList, Rect hitArea,
+        public Joystick(Controls controls, Int32 Id, Grid gridControls, Image[] imageList, Rect hitArea,
             Int32 MinValueX = 0, Int32 MaxValueX = 127, Int32 MinValueY = 0, Int32 MaxValueY = 127)
         {
             this.MinValueX = MinValueX;
@@ -68,7 +68,7 @@ namespace UwpControlsLibrary
             OriginalImageWidth = imageList[imageList.Length - 1].ActualWidth;
             OriginalImageHeight = imageList[imageList.Length - 1].ActualHeight;
             this.Id = Id;
-            GridControls = gridMain;
+            GridControls = gridControls;
             Double width = hitArea.Width;
             Double height = hitArea.Height;
             HitArea = new Rect(hitArea.Left, hitArea.Top, width, height);

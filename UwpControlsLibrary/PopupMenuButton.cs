@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using Windows.Foundation;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
@@ -13,29 +15,32 @@ using Windows.UI.Xaml.Media;
 namespace UwpControlsLibrary
 {
     /// <summary>
-    /// PopupMenuButton is a container for PopupMenuItem objects.
-    /// PopupMenuButton can act as an on/off button or only as a button to show the menu.
-    /// PopupMenuButton can have up to five menus activated by different pointer buttons, four if it also acts as a button.
-    /// A PopupMenuButton without any images will act as a 'normal' popup menu and show up where the pointer is.
-    /// If a PopupMEnuButton has images, the last one is for hover effect. If you do not want hover effect, just supply a transparent image as last image.
+    /// PopupMenuButton is a container for PopupMenuButton objects.
+    /// PopupMenuButton can act as an on/off button or only as a button to show menu(s).
+    /// If a PopupMenuButton is based on a TextBlock rather than an image it can also be editable by adding a TextBox to it.
+    /// PopupMenuButton can have up to five menus activated by different pointer buttons, four if it also acts as a button
+    /// or can be edited, of three if it also acts as a butto _and_ can be edited.
+    /// A PopupMenuButton without any images will act as a 'normal' popup menu and show up where the pointer is clicked.
+    /// If a PopupMenuButton has images, the last one is for hover effect. If you do not want hover effect, just supply a 
+    /// transparent image as last image.
     /// Usage of pointer buttons can be remapped.
-    /// PopupMenuButton and PopupMenuItem can have an image for highlite on hover.
-    /// PopupMenuItems can have have PopupMenyItems as children thus enabling a herarchy of popup menus.
-    /// PopupMenuItem objects can have different styles:
+    /// PopupMenuItems are also object of type PopupMenuButton. The only thing that makes them PopupMenuItems is that
+    /// they are present in a list of PopupMenuButtons in a PopupMenuButton object. This is how the menu hierarchy is built.
+    /// PopupMenuButton objects can have different styles:
     /// Button: A simple button to call some function to perform a task.
     /// Slider: A compound style control with a horizontal slider.
-    /// PopupMenuItem objects has a background image that defines its size.
-    /// The background image hights defines the distance between PopupMenuItem
+    /// PopupMenuButton objects has a background image that defines its size.
+    /// The background image hights defines the distance between PopupMenuButton
     /// objects vertical position. PopupMenu stacks them with no spacing.
-    /// PopupMenuItem objects also has a label for a text, and the text
+    /// PopupMenuButton objects also has a label for a text, and the text
     /// can be changed to reflect a value.
-    /// PopupMenuItem objects also has a TextBox object that can be used
+    /// PopupMenuButton objects also has a TextBox object that can be used
     /// by the user to rename a menu item.
-    /// A left click on a Button style PopupMenuItem objects will call some function.
-    /// A left button down and drag will move the handle of a Slider style PopupMenuItem.
-    /// A Slider style PopupMenuItem also reacts to mousewheel events.
-    /// A right click on a PopupMenuItem objects opens the TextBox for editing the
-    /// PopupMenuItem text. Esc key cancels change, Enter key saves the change.
+    /// A left click on a Button style PopupMenuButton objects will call some function.
+    /// A left button down and drag will move the handle of a Slider style PopupMenuButton.
+    /// A Slider style PopupMenuButton also reacts to mousewheel events.
+    /// A right click on a PopupMenuButton objects opens the TextBox for editing the
+    /// PopupMenuButton text. Esc key cancels change, Enter key saves the change.
     /// </summary>
 
     public class PopupMenuButton : ControlBase
@@ -64,18 +69,22 @@ namespace UwpControlsLibrary
             set { Toggle(); }
         }
 
+        public bool IsEditing;
+
         public int SelectedIndex = -1;
 
-        public List<List<PopupMenuButton>> PopupMenus; // Popup menus, Popup menu items
+        public PopupMenuButton Parent { get; set; }
+
+        public List<List<PopupMenuButton>> Children; // Popup menus and/or Popup menu items
         Label label;
         bool isOn;
-        PointerButton[] buttons;
+        public PointerButton[] ButtonMap;
         string Text;
         int hoverImage = -1;
         int offImage = -1;
         int onImage = -1;
         Controls controls;
-        Grid gridMain;
+        Grid gridControls;
         int fontSize;
 
         public Brush TextOnColor
@@ -119,10 +128,12 @@ namespace UwpControlsLibrary
 
         public PopupMenuButtonStyle Style { get; set; }
 
+        private double xOffset, yOffset, ySpacing;
+
         /// <summary>
         /// <param name="controls">Reference to Controls in UwpControlsLibrary</param>
         /// <param name="Id">Unique Id that may be used to identify the control</param>
-        /// <param name="gridMain"></param>
+        /// <param name="gridControls"></param>
         /// <param name="imageList">List of images to use to display the control. 1 to 3 images: Off On Hover or Off Hover or, if text is not null, Background and hover (max two images)</param>
         /// <param name="position">Top-left corner where the control will be placed.</param>
         /// <param name="style">POPUP opens a menu when right clicking anywhere. BUTTON also acts as a button. MENU can only open menus. SLIDER also acts as a slider.</param>
@@ -135,28 +146,32 @@ namespace UwpControlsLibrary
         /// <param name="textOffColor">Color of text when acting as a button and the button is off.</param>
         /// <exception cref="Exception">Throws error if images are not present or not all the same size.</exception>
         /// </summary>
-        public PopupMenuButton(Controls controls, int Id, Grid gridMain, Image[] imageList, Point position,
+        public PopupMenuButton(Controls controls, int Id, Grid gridControls, Image[] imageList, Point position,
             PopupMenuButtonStyle style, PointerButton[] buttons = null, string text = null,
-            int fontSize = 8, ControlTextWeight textWeight = ControlTextWeight.NORMAL, ControlTextAlignment textAlignment = ControlTextAlignment.LEFT,
+            int fontSize = 16, bool edit = false, ControlTextWeight textWeight = ControlTextWeight.NORMAL, 
+            ControlTextAlignment textAlignment = ControlTextAlignment.LEFT,
             Brush textOnColor = null, Brush textOffColor = null)
         {
+            Parent = null;
             Style = style;
             Double width;
             Double height;
+            xOffset = yOffset = ySpacing = 0.0;
+            IsEditing = false;
 
             this.controls = controls;
-            this.gridMain = gridMain;
+            this.gridControls = gridControls;
             this.Id = Id;
             this.parent = null;
-            GridControls = gridMain;
+            GridControls = gridControls;
             this.fontSize = fontSize;
             if (buttons == null)
             {
-                this.buttons = new PointerButton[] { PointerButton.LEFT };
+                this.ButtonMap = new PointerButton[] { PointerButton.LEFT };
             }
             else
             {
-                this.buttons = buttons;
+                this.ButtonMap = buttons;
             }
 
             if (imageList != null && VerifyImageList(imageList))
@@ -211,14 +226,14 @@ namespace UwpControlsLibrary
 
             TextWeight = textWeight;
             TextAlignment = textAlignment;
-            PopupMenus = new List<List<PopupMenuButton>>();
+            Children = new List<List<PopupMenuButton>>();
             if (buttons != null)
             {
-                this.buttons = buttons;
+                this.ButtonMap = buttons;
             }
             else
             {
-                this.buttons = new PointerButton[] { PointerButton.LEFT, PointerButton.RIGHT, PointerButton.MIDDLE, PointerButton.EXTRA1, PointerButton.EXTRA2 };
+                this.ButtonMap = new PointerButton[] { PointerButton.LEFT, PointerButton.RIGHT, PointerButton.MIDDLE, PointerButton.EXTRA1, PointerButton.EXTRA2 };
             }
 
             Text = text;
@@ -259,93 +274,132 @@ namespace UwpControlsLibrary
                 {
                     TextBlock.FontWeight = Windows.UI.Text.FontWeights.Bold;
                 }
+                if (edit)
+                {
+                    TextBox = new TextBox();
+                    TextBox.VerticalAlignment = VerticalAlignment.Center;
+                    TextBox.Visibility = Visibility.Collapsed;
+                    TextBox.KeyDown += PopupMenu_KeyDown;
+                }
             }
 
             ControlSizing = new ControlSizing(controls, this);
             isOn = false;
         }
 
-        public int AddMenu()
+        public void PopupMenu_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            PopupMenus.Add(new List<PopupMenuButton>());
-            return PopupMenus.Count - 1;
+            if (e.Key == Windows.System.VirtualKey.Escape)
+            {
+                TextBox.Visibility = Visibility.Collapsed;
+                TextBlock.Visibility = Visibility.Visible;
+                IsEditing = false;
+            }
+            else if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                TextBlock.Text = TextBox.Text;
+                TextBox.Visibility = Visibility.Collapsed;
+                TextBlock.Visibility = Visibility.Visible;
+                IsEditing = false;
+            }
         }
 
-        public PopupMenuButton AddMenuItem(int menu, int item, PopupMenuButton parent, Image[] imageList, double xOffset, 
-            PopupMenuButtonStyle style, PointerButton[] buttons = null, string text = null, int fontSize = 8, 
-            ControlTextWeight textWeight = ControlTextWeight.NORMAL, ControlTextAlignment textAlignment = ControlTextAlignment.LEFT,
-            PopupMenuPosition position = PopupMenuPosition.RIGHT, Brush textOnColor = null, Brush textOffColor = null)
+        public int AddMenu()
         {
-            Menu = menu;
-            Point pos = new Point(HitArea.X + xOffset * HitArea.Width, HitArea.Y + item * HitArea.Height);
-            if (position == PopupMenuPosition.LEFT)
-            {
-                pos = new Point(HitArea.X - xOffset * imageList[0].ActualWidth, HitArea.Y + item * HitArea.Height);
-            }
-            PopupMenuButton control = new PopupMenuButton(controls, item, gridMain, imageList, 
-                pos, style, buttons, text, fontSize, textWeight, textAlignment, textOnColor, textOffColor);
-            control.Tag = parent;
+            Children.Add(new List<PopupMenuButton>());
+            return Children.Count - 1;
+        }
+
+        public PopupMenuButton AddMenuItem(int menuNumber, int itemNumber, Image[] imageList,
+            PopupMenuButtonStyle style, PointerButton[] buttons = null, string text = null, int fontSize = 16, bool edit = false, 
+            ControlTextWeight textWeight = ControlTextWeight.NORMAL, ControlTextAlignment textAlignment = ControlTextAlignment.LEFT,
+            double xOffset = -1.0, double yOffset = 0.0, double ySpacing = 0.0, Brush textOnColor = null, Brush textOffColor = null)
+        {
+            Menu = menuNumber;
+            Point pos = new Point(HitArea.X + xOffset * HitArea.Width, HitArea.Y + yOffset * HitArea.Height + itemNumber * (1.0 + ySpacing) * HitArea.Height);
+            PopupMenuButton control = new PopupMenuButton(controls, itemNumber, gridControls, imageList, 
+                pos, style, buttons, text, fontSize, edit, textWeight, textAlignment, textOnColor, textOffColor);
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
+            this.ySpacing = ySpacing;
             control.Visibility = Visibility.Collapsed;
             control.parent = this;
-            PopupMenus[menu].Add(control);
+            Children[menuNumber].Add(control);
             controls.ControlsList.Add(control);
             return control;
         }
 
-        private void ShowMenu(int menu)
+        private void ShowSubMenu(int menu)
         {
-            if (menu < PopupMenus.Count)
+            foreach (PopupMenuButton menuItem in Children[menu])
             {
-                if (Tag != null)
-                {
-                    // Hide all sibling menus:
-                    foreach (List<PopupMenuButton> popupMenu in ((PopupMenuButton)Tag).PopupMenus)
-                    {
-                        foreach (PopupMenuButton menuButton in popupMenu)
-                        {
-                            foreach (List<PopupMenuButton> menuItems in menuButton.PopupMenus)
-                            {
-                                foreach (PopupMenuButton menuItem in menuItems)
-                                {
-                                    menuItem.Visibility = Visibility.Collapsed;
-                                }
-                            }
-                        }
-                    }
-                }
+                menuItem.Visibility = Visibility.Visible;
+            }
+        }
 
-                // Show the menu asked for:
-                foreach (PopupMenuButton menuItem in PopupMenus[menu])
+        public void HideAllMenus()
+        {
+            foreach (List<PopupMenuButton> menuItems in Children)
+            {
+                foreach (PopupMenuButton menuItem in menuItems)
                 {
-                    menuItem.Visibility = Visibility.Visible;
+                    HideAllSubMenus(menuItem);
+                    menuItem.Visibility = Visibility.Collapsed;
                 }
             }
         }
 
-        //private void HideMenu(int menu)
-        //{
-        //    if (menu < PopupMenus.Count)
-        //    {
-        //        foreach (PopupMenuButton menuItem in PopupMenus[menu])
-        //        {
-        //            menuItem.Visibility = Visibility.Collapsed;
-        //        }
-        //    }
-        //}
+        public void HideAllSubMenus(PopupMenuButton popupMenuButton)
+        {
+            foreach (List<PopupMenuButton> menuItems in popupMenuButton.Children)
+            {
+                foreach (PopupMenuButton menuItem in menuItems)
+                {
+                    HideAllSubMenus(menuItem);
+                    menuItem.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
 
+        public void HideAllSiblingsSubMenus(PopupMenuButton popupMenuButton)
+        {
+            if (popupMenuButton.Parent != null)
+            {
+                foreach (List<PopupMenuButton> menuItems in popupMenuButton.Parent.Children)
+                {
+                    foreach (PopupMenuButton menuItem in menuItems)
+                    {
+                        HideAllSubMenus(menuItem);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Scrolls a menu up or down.
+        /// </summary>
+        /// <param name="menu">One of the menu items representing all the items to scroll.</param>
+        /// <param name="offset">1: scroll up one menu item height. -1: scroll down one menu item height.</param>
         private void ScrollMenu(int menu, double offset)
         {
             if (parent != null)
             {
-                if (menu < parent.PopupMenus.Count)
+                if (menu < parent.Children.Count)
                 {
                     // Last menu item top must not be less or equal to than parents top AND
-                    // first menu item top must be less than parent top
-                    if ((offset > 0 && parent.PopupMenus[menu][parent.PopupMenus[menu].Count - 1].HitArea.Top > parent.HitArea.Top)
-                        || (offset < 0 && parent.PopupMenus[menu][0].HitArea.Top < parent.HitArea.Top))
+                    // first menu item top must be less than parent top AND menu item must
+                    // fit in imgClickarea:
+                    if ((offset > 0 // Scrolling up
+                            && parent.Children[menu][parent.Children[menu].Count - 1].HitArea.Top > parent.HitArea.Top
+                            && parent.Children[menu][0].HitArea.Top > parent.Children[menu][0].HitArea.Height
+                            && parent.Children[menu][0].HitArea.Top > parent.Children[menu][0].HitArea.Height + 34)
+                      || offset < 0 // Scrolling down
+                            && parent.Children[menu][0].HitArea.Top < parent.HitArea.Top
+                            && parent.Children[menu][parent.Children[menu].Count - 1].HitArea.Bottom > parent.Children[menu][0].HitArea.Height)
                     {
                         offset *= parent.HitArea.Height;
-                        foreach (PopupMenuButton menuItem in parent.PopupMenus[menu])
+                        //Point pos = new Point(HitArea.X + xOffset * HitArea.Width, HitArea.Y + yOffset * HitArea.Height + itemNumber * (1.0 + ySpacing) * HitArea.Height);
+                        foreach (PopupMenuButton menuItem in parent.Children[menu])
                         {
                             menuItem.HitArea = new Rect(menuItem.HitArea.Left, menuItem.HitArea.Top - offset, menuItem.HitArea.Width, menuItem.HitArea.Height);
                             Thickness thickness = new Thickness(menuItem.HitArea.Left, menuItem.HitArea.Top,
@@ -354,19 +408,15 @@ namespace UwpControlsLibrary
                             menuItem.ImageList[0].Margin = thickness;
                             menuItem.TextBlock.Margin = thickness;
                             menuItem.ImageList[ImageList.Length - 1].Margin = thickness;
+
+                            menuItem.ControlSizing.RelativeHitArea = new Rect(
+                                menuItem.HitArea.Left / controls.OriginalWidth,
+                                menuItem.HitArea.Top / controls.OriginalHeight,
+                                menuItem.HitArea.Width / controls.OriginalWidth,
+                                menuItem.HitArea.Height / controls.OriginalHeight);
+                            menuItem.ControlSizing.UpdatePositions();
                         }
                     }
-                }
-            }
-        }
-
-        public void HideAllMenus()
-        {
-            foreach (List<PopupMenuButton> menuItems in PopupMenus)
-            {
-                foreach (PopupMenuButton menuItem in menuItems)
-                {
-                    menuItem.Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -440,75 +490,78 @@ namespace UwpControlsLibrary
 
         public void HandlePointerPressedEvent(PointerRoutedEventArgs e, EventType eventType, List<ControlBase.PointerButton> PointerButtonStates)
         {
+            bool closed = false;
+
             // Pointer mapping is in buttons.
             // Actual button pressed is in PointerButtonStates.
             // First button is for the button to be handle as a
             // button if style is BUTTON, else to open first menu.
+            // Last button is for edit text, if available.
             // Rest of buttons are for opening menus.
-            if (Style == PopupMenuButtonStyle.BUTTON)
+            if (TextBox != null && Text != null && PointerButtonStates.Contains(ButtonMap[ButtonMap.Length - 1]))
             {
-                for (int buttonPressed = 0; buttonPressed < PointerButtonStates.Count; buttonPressed++)
+                // Show edit text box:
+                TextBox.Visibility = Visibility.Visible;
+                TextBox.Focus(FocusState.Programmatic);
+                IsEditing = true;
+            }
+            else
+            {
+                // Get button pressed:
+                int buttonPressed = -1;
+                for (int button = 0; button < PointerButtonStates.Count; button++)
                 {
-                    if (PointerButtonStates.Count > 0 && PointerButtonStates[buttonPressed] == buttons[0])
+                    if (PointerButtonStates.Count > 0 && PointerButtonStates[button] == ButtonMap[0])
                     {
-                        // Toggle button:
-                        Toggle();
-                    }
-                    else
-                    {
-                        // Show menu:
-                        ShowMenu(buttonPressed);
+                        buttonPressed = button;
+                        break;
                     }
                 }
-            }
-            else if (Style == PopupMenuButtonStyle.MENU)
-            {
-                for (int buttonPressed = 0; buttonPressed < buttons.Length; buttonPressed++)
+
+                if (buttonPressed > -1)
                 {
-                    if (PointerButtonStates[0] == buttons[buttonPressed])
+                    if (Style == PopupMenuButtonStyle.BUTTON)
                     {
                         if (buttonPressed == 0)
                         {
-                            // Turn off previous selection:
-                            foreach (List<PopupMenuButton> popupMenu in parent.PopupMenus)
+
+                            // Toggle button:
+                            Toggle();
+                        }
+                        else
+                        {
+                            if (Children != null && Children.Count > 0)
                             {
-                                if (popupMenu[0].visible == Visibility.Visible)
+                                // If any of the items in the menu given is visible, then all of them are.
+                                closed = Children[buttonPressed - 1][0].Visibility == Visibility.Collapsed;
+
+                                // Hide any previously visible sub menus:
+                                HideAllSubMenus(this);
+
+                                if (closed)
                                 {
-                                    foreach (PopupMenuButton popupMenuButton in popupMenu)
-                                    {
-                                        if (string.IsNullOrEmpty(popupMenuButton.Text))
-                                        {
-                                            popupMenuButton.ImageList[onImage].Visibility = Visibility.Collapsed;
-                                        }
-                                        else
-                                        {
-                                            popupMenuButton.TextBlock.Foreground = textOffColor;
-                                        }
-                                    }
+                                    // Show menu:
+                                    ShowSubMenu(buttonPressed - 1);
                                 }
                             }
-
-                            //// Turn off the selected PopupMenuButton:
-                            //if (((PopupMenuButton)Tag).SelectedIndex > -1)
-                            //{
-                            //    ImageList[((PopupMenuButton)Tag).SelectedIndex].Visibility = Visibility.Collapsed;
-                            //}
-                            
-                            // First mouse button pressed, Set selected:
-                            ((PopupMenuButton)Tag).SelectedIndex = Id;
-                            if (string.IsNullOrEmpty(Text))
-                            {
-                                ImageList[onImage].Visibility = Visibility.Visible;
-                            }
-                            else
-                            {
-                                TextBlock.Foreground = TextOnColor;
-                            }
                         }
-                        else 
+                    }
+                    else if (Style == PopupMenuButtonStyle.MENU)
+                    {
+                        // If any of the items in the menu given is visible, then all of them are.
+                        if (Children != null && Children.Count > 0)
                         {
-                            // Show menu:
-                            ShowMenu(buttonPressed - 1);
+                            closed = Children[buttonPressed][0].Visibility == Visibility.Collapsed;
+
+                            // Hide any previously visible sub menus:
+                            HideAllSiblingsSubMenus(this);
+                            HideAllSubMenus(this);
+
+                            if (closed)
+                            {
+                                // Show menu:
+                                ShowSubMenu(buttonPressed);
+                            }
                         }
                     }
                 }

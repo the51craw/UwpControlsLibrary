@@ -2,9 +2,11 @@
 using System.Linq;
 using Windows.ApplicationModel.Preview.Holographic;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 
 namespace UwpControlsLibrary
 {
@@ -29,17 +31,24 @@ namespace UwpControlsLibrary
         public Boolean IsOn;
 
         private int stateCount;
+        private int state = 0;
         private int hoverImageCount;
         private bool hover;
+        private ImageButtonFunction function;
 
-        public ImageButton(Controls controls, int Id, Grid gridMain, Image[] imageList, Point Position, ImageButtonFunction function, bool hover = false)
+        public ImageButton(Controls controls, int Id, Grid gridControls, Image[] imageList,
+		Point Position, ImageButtonFunction function, bool hover = false,
+		    string text = null, int fontSize = 16, TextAlignment textAlignment = TextAlignment.Center,
+            ControlTextWeight textWeight = ControlTextWeight.NORMAL,
+            TextWrapping textWrapping = TextWrapping.NoWrap, Brush foreground = null)
         {
             Double width;
             Double height;
 
             this.Id = Id;
-            GridControls = gridMain;
+            GridControls = gridControls;
             this.hover = hover;
+            this.function = function;
 
             if (VerifyImageList(imageList))
             {
@@ -72,6 +81,29 @@ namespace UwpControlsLibrary
             width = imageList[0].ActualWidth;
             height = imageList[0].ActualHeight;
 
+            if (!string.IsNullOrEmpty(text))
+            {
+                TextBlock = new TextBlock();
+                TextBlock.Text = text;
+                TextBlock.FontSize = fontSize;
+                if (textWeight == ControlTextWeight.BOLD)
+                {
+                    TextBlock.FontWeight = Windows.UI.Text.FontWeights.Bold;
+                }
+                if (foreground != null)
+                {
+                    TextBlock.Foreground = foreground;
+                }
+                else
+                {
+                    TextBlock.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+                }
+                TextBlock.VerticalAlignment = VerticalAlignment.Center;
+                TextBlock.TextAlignment = textAlignment;
+                TextBlock.TextWrapping = textWrapping;
+                OriginalFontSize = fontSize;
+            }
+
             HitArea = new Rect(Position.X, Position.Y, width, height);
             CopyImages(imageList);
             ControlSizing = new ControlSizing(controls, this);
@@ -79,7 +111,7 @@ namespace UwpControlsLibrary
 
             ResetHovering();
             ImageList[1].Visibility = Visibility.Collapsed;
-            if (stateCount == 4)
+            if (stateCount > 3)
             {
                 ImageList[2].Visibility = Visibility.Collapsed;
                 ImageList[3].Visibility = Visibility.Collapsed;
@@ -94,14 +126,14 @@ namespace UwpControlsLibrary
             }
         }
 
-        private void ShowImage(bool down)
+        private void ShowImage(bool down) // down = pointer pressed, !down = pointer released
         {
             for (int i = 0; i < stateCount; i++)
             {
                 ImageList[i].Visibility= Visibility.Collapsed;
             }
 
-            if (down)
+            if (function == ImageButtonFunction.TOGGLE)
             {
                 if (IsOn)
                 {
@@ -111,45 +143,83 @@ namespace UwpControlsLibrary
                     }
                     else
                     {
-                        ControlSizing.ImageList[3].Visibility = Visibility.Visible;
+                        state++;
+                        state = state % 4;
+                        ControlSizing.ImageList[state].Visibility = Visibility.Visible;
                     }
                 }
                 else
                 {
                     if (stateCount == 2)
                     {
-                        ControlSizing.ImageList[1].Visibility = Visibility.Visible;
+                        ControlSizing.ImageList[0].Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        ControlSizing.ImageList[1].Visibility = Visibility.Visible;
+                        state++;
+                        state = state % 4;
+                        ControlSizing.ImageList[state].Visibility = Visibility.Visible; // down, on.
                     }
                 }
             }
             else
             {
-                if (IsOn)
+                if (down)
                 {
-                    if (stateCount == 2)
-                    {
-                        ControlSizing.ImageList[1].Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        ControlSizing.ImageList[2].Visibility = Visibility.Visible;
-                    }
+                    ControlSizing.ImageList[1].Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    if (stateCount == 2)
-                    {
-                        ControlSizing.ImageList[1].Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        ControlSizing.ImageList[0].Visibility = Visibility.Visible;
-                    }
+                    ControlSizing.ImageList[0].Visibility = Visibility.Visible;
                 }
+                //if (IsOn)
+                //    {
+                //        if (stateCount == 2)
+                //        {
+                //            ControlSizing.ImageList[1].Visibility = Visibility.Visible;
+                //        }
+                //        else
+                //        {
+                //            ControlSizing.ImageList[3].Visibility = Visibility.Visible;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (stateCount == 2)
+                //        {
+                //            ControlSizing.ImageList[0].Visibility = Visibility.Visible;
+                //        }
+                //        else
+                //        {
+                //            ControlSizing.ImageList[3].Visibility = Visibility.Visible;
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    if (IsOn)
+                //    {
+                //        if (stateCount == 2)
+                //        {
+                //            ControlSizing.ImageList[0].Visibility = Visibility.Visible;
+                //        }
+                //        else
+                //        {
+                //            ControlSizing.ImageList[2].Visibility = Visibility.Visible;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (stateCount == 2)
+                //        {
+                //            ControlSizing.ImageList[1].Visibility = Visibility.Visible;
+                //        }
+                //        else
+                //        {
+                //            ControlSizing.ImageList[0].Visibility = Visibility.Visible;
+                //        }
+                //    }
+                //}
             }
         }
 

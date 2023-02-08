@@ -74,8 +74,8 @@ namespace CompositeExample
             CreateControls();
 
             // Test the display:
-            ((DigitalDisplay)displays[0].SubControls.ControlsList[2]).DisplayValue(12345.67);
-            ((DigitalDisplay)displays[1].SubControls.ControlsList[2]).DisplayValue(440f);
+            ((DigitalDisplay)displays[0].SubControls.ControlsList[0]).DisplayValue(12345.67);
+            ((DigitalDisplay)displays[1].SubControls.ControlsList[0]).DisplayValue(440f);
         }
 
         private void CreateFixedControls()

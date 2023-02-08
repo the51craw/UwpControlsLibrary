@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="AddRemoveAddControls.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AddRemoveAddControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Image x:Name = "imgFiller" Source = "ms-appx:///Images/Filler.png" Stretch = "UniformToFill" />
+        <Image x:Name = "imgLedOff" Source = "ms-appx:///Images/LedOff.png" Stretch = "None" />
+        <Image x:Name = "imgLedOn" Source = "ms-appx:///Images/LedOn.png" Stretch = "None" />
+        <Image x:Name = "imgSelectorViewOff" Source = "ms-appx:///Images/SelectorViewOff.png" Stretch = "None" />
+        <Image x:Name = "imgSelectorViewOn" Source = "ms-appx:///Images/SelectorViewOn.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSawDwn" Source = "ms-appx:///Images/SelectSawDwn.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSawUp" Source = "ms-appx:///Images/SelectSawUp.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSine" Source = "ms-appx:///Images/SelectSine.png" Stretch = "None" />
+        <Image x:Name = "imgSelectSquare" Source = "ms-appx:///Images/SelectSquare.png" Stretch = "None" />
+        <Image x:Name = "imgSelectTriangle" Source = "ms-appx:///Images/SelectTriangle.png" Stretch = "None" />
+        <Image x:Name = "imgControlPanelBackground" Source = "ms-appx:///Images/ControlPanelBackground.png" Stretch = "None" />
+        <Image x:Name = "imgBackground" Source = "ms-appx:///Images/Filler.png" Stretch = "Uniform" />
+        <Grid x:Name="gridMain">
+            <Image x:Name = "imgClickArea" Source = "ms-appx:///Images/Filler.png" Stretch = "None" Opacity = "0"
+				    PointerMoved = "imgClickArea_PointerMoved"
+				    ImageOpened = "imgClickArea_ImageOpened"
+				    PointerWheelChanged = "imgClickArea_PointerWheelChanged"
+				    PointerReleased = "imgClickArea_PointerReleased"
+				    PointerPressed = "imgClickArea_PointerPressed"
+				    Tapped = "imgClickArea_Tapped"
+				    RightTapped = "imgClickArea_RightTapped" 
+                    IsHitTestVisible="False" />
+        </Grid>
+        <Grid x:Name = "gridOther" Visibility="Collapsed" >
+            <Grid x:Name = "gridControls" SizeChanged = "gridControls_SizeChanged" PointerMoved="imgClickArea_PointerMoved" PointerPressed="imgClickArea_PointerPressed" PointerReleased="imgClickArea_PointerReleased" />
+        </Grid>
+    </Grid>
+</Page>

@@ -47,8 +47,8 @@ data needed.
 All events are collected via imgClickArea, which belongs to MainPage. All events
 must therefore be collected in MainPage.
 
-When recieving the event gridMain_SizeChanged, call 
-Controls.ResizeControls(gridMain, Window.Current.Bounds)
+When recieving the event gridControls_SizeChanged, call 
+Controls.ResizeControls(gridControls, Window.Current.Bounds)
 
 When recieveing pointer events, call event handlers in Controls object to make
 the controls 'live'.

@@ -11,7 +11,8 @@ Images are presented to UwpControlsLibrary as an array of images when creating c
 Each control has a HitArea property that is based on the first image in the array.
 
 Create all, or some, of your control images, and a background image. Call the background image
-'Background.png'.
+'Background.png'. (If you must change background image during execution, use a reference
+called 'Background.png' and change what it points at.)
 Use project MakeImageList to create the main Grid for your application. Run it,
 select your Image folder (with most or all images you need in it) and close the application.
 Open your applications MainPage.xaml file and replace the empty Grid code from your clipboard.

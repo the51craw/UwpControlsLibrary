@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace UwpControlsLibrary
 {
@@ -32,15 +25,9 @@ namespace UwpControlsLibrary
         public enum PopupMenuButtonStyle
         {
             POPUP,  // No button, click a listed pointer button anywhere, where there is no control, to open a menu.
-            BUTTON, // A button. Act as a button on first listed pointer button. All other pointer button opens menus.
-            MENU,   // A button. All listed pointer buttons may be used to open different menus.
-            SLIDER, // A button with a slider on it.
-        }
-
-        public enum PopupMenuPosition
-        {
-            RIGHT,
-            LEFT,
+            BUTTON, // A button. Act as a button on first listed pointer button. All other pointer button opens different menus.
+            MENU,   // A menu. All listed pointer buttons may be used to open different menus.
+            SLIDER, // A menu with a slider on it.
         }
 
         public enum ControlTextAlignment
@@ -72,6 +59,7 @@ namespace UwpControlsLibrary
             MIDDLE,
             EXTRA1,
             EXTRA2,
+            BARREL,
             OTHER,
         }
 
@@ -83,6 +71,38 @@ namespace UwpControlsLibrary
         public Boolean Enabled { get { return enabled; } set { Enable(value); } }
         private Boolean enabled = true;
 
+
+        public Visibility Visibility
+        {
+            get
+            {
+                return visibility;
+            }
+            set
+            {
+                visibility = value;
+                if (ImageList != null)
+                {
+                    foreach (Image image in ImageList)
+                    {
+                        if (image != null)
+                        {
+                            image.Visibility = visibility;
+                        }
+                    }
+                }
+
+                if (this.GetType() == typeof(CompoundControl))
+                {
+                    foreach (var control in ((CompoundControl)this).SubControls.ControlsList)
+                    {
+                        ((ControlBase)control).Visibility = visibility;
+                    }
+                }
+            }
+        }
+        private Visibility visibility = Visibility.Visible;
+
         /// <summary>
         /// Id can be used in mouse event handlers to identify the control sending the event.
         /// Other mechanisms can be used if required. In its simplest form all controls are
@@ -93,7 +113,7 @@ namespace UwpControlsLibrary
         public int Id;
 
         /// <summary>
-        /// GridMain is referring to the grid that responds to the mouse events. Multiple
+        /// gridControls is referring to the grid that responds to the mouse events. Multiple
         /// Grid objects can be used if needed, but each one control can only belong to
         /// one Grid.
         /// </summary>
@@ -135,9 +155,14 @@ namespace UwpControlsLibrary
         public Image[] ImageList;
 
         /// <summary>
-        /// TextBlock is currently only used by class Label.
+        /// A TextBlock for displayint text.
         /// </summary>
         public TextBlock TextBlock;
+
+        /// <summary>
+        /// A TextBox for editing text.
+        /// </summary>
+        public TextBox TextBox;
 
         /// <summary>
         /// The original font size is used when the GUI is resized.
@@ -167,9 +192,7 @@ namespace UwpControlsLibrary
 
         public Boolean ControlGraphicsFollowsValue = true; 
 
-        private ImageCopy[] ImageCopyList;
         private ImageCopy ImageCopy;
-        private ImageCopy BackgroundImageCopy;
 
         private void Enable(Boolean enable)
         {
@@ -237,7 +260,6 @@ namespace UwpControlsLibrary
             if (imageList != null)
             {
                 ImageList = new Image[imageList.Length];
-                ImageCopyList = new ImageCopy[imageList.Length];
 
                 for (int i = 0; i < imageList.Length; i++)
                 {
@@ -245,6 +267,58 @@ namespace UwpControlsLibrary
                     ImageList[i] = ImageCopy.Image;
                     imageList[i].Visibility = Visibility.Collapsed;
                 }
+            }
+        }
+
+        public void MoveTo(Point point)
+        {
+            double left = point.X;
+            double top = point.Y;
+            foreach (Image image in ImageList)
+            {
+                double right = Window.Current.Bounds.Width - point.X - image.ActualWidth;
+                double bottom = Window.Current.Bounds.Height - point.Y - image.ActualHeight;
+                image.Margin = new Thickness(left, top, right, bottom);
+            }
+            if (TextBlock != null)
+            {
+                double right = Window.Current.Bounds.Width - point.X - TextBlock.ActualWidth;
+                double bottom = Window.Current.Bounds.Height - point.Y - TextBlock.ActualHeight;
+                TextBlock.Margin = new Thickness(left, top, right, bottom);
+            }
+            if (TextBox != null)
+            {
+                double right = Window.Current.Bounds.Width - point.X - TextBox.ActualWidth;
+                double bottom = Window.Current.Bounds.Height - point.Y - TextBox.ActualHeight;
+                TextBox.Margin = new Thickness(left, top, right, bottom);
+            }
+        }
+
+        public void MoveBy(Point point)
+        {
+            foreach (Image image in ImageList)
+            {
+                double left = image.Margin.Left + point.X;
+                double top = image.Margin.Top + point.Y;
+                double right = image.Margin.Right - point.X;
+                double bottom = image.Margin.Bottom - point.Y;
+                image.Margin = new Thickness(left, top, right, bottom);
+            }
+            if (TextBlock != null)
+            {
+                double left = TextBlock.Margin.Left + point.X;
+                double top = TextBlock.Margin.Top + point.Y;
+                double right = Window.Current.Bounds.Width - point.X - TextBlock.ActualWidth;
+                double bottom = Window.Current.Bounds.Height - point.Y - TextBlock.ActualHeight;
+                TextBlock.Margin = new Thickness(left, top, right, bottom);
+            }
+            if (TextBox != null)
+            {
+                double left = TextBox.Margin.Left + point.X;
+                double top = TextBox.Margin.Top + point.Y;
+                double right = Window.Current.Bounds.Width - point.X - TextBox.ActualWidth;
+                double bottom = Window.Current.Bounds.Height - point.Y - TextBox.ActualHeight;
+                TextBox.Margin = new Thickness(left, top, right, bottom);
             }
         }
 

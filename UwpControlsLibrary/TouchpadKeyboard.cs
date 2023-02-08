@@ -32,10 +32,10 @@ namespace UwpControlsLibrary
         public byte Octave { get; set; }
         public Keylayout keylayout { get; set; }
 
-        public TouchpadKeyboard(Controls controls, Int32 Id, Grid gridMain, Image[] imageList, Point Position, byte LowKey, byte HighKey)
+        public TouchpadKeyboard(Controls controls, Int32 Id, Grid gridControls, Image[] imageList, Point Position, byte LowKey, byte HighKey)
         {
             this.Id = Id;
-            GridControls = gridMain;
+            GridControls = gridControls;
             Double width;
             Double height;
             Octave = (byte)(LowKey / 12);
@@ -103,7 +103,7 @@ namespace UwpControlsLibrary
                 imageCopy = new ImageCopy(imageList[0]);
                 WhiteKeyList[i].ImageList[0] = imageCopy.Image;
                 WhiteKeyList[i].Id = Id;
-                WhiteKeyList[i].GridControls = gridMain;
+                WhiteKeyList[i].GridControls = gridControls;
                 WhiteKeyList[i].HitArea = CalcualteHitAreaWhite(i, upperLeftCorner,
                     imageList[0].ActualSize, imageList[1].ActualSize, (byte)((LowKey) % 12));
                 WhiteKeyList[i].ControlSizing = new ControlSizing(controls, WhiteKeyList[i]);
@@ -115,7 +115,7 @@ namespace UwpControlsLibrary
                 imageCopy = new ImageCopy(imageList[1]);
                 BlackKeyList[i].ImageList[1] = imageCopy.Image;
                 BlackKeyList[i].Id = Id;
-                BlackKeyList[i].GridControls = gridMain;
+                BlackKeyList[i].GridControls = gridControls;
                 BlackKeyList[i].HitArea = CalcualteHitAreaBlack(i, upperLeftCorner,
                     imageList[0].ActualSize, imageList[1].ActualSize, (byte)((LowKey) % 12));
                 BlackKeyList[i].ControlSizing = new ControlSizing(controls, BlackKeyList[i]);

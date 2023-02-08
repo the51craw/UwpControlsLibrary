@@ -1,0 +1,29 @@
+﻿<ContentDialog
+    x:Class="SynthesizerSampleapp.Confirm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SynthesizerSampleapp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:uwpcontrolslibrary="using:UwpControlsLibrary"
+    mc:Ignorable="d"
+    Title="Title"
+    Foreground="#ffffffff"
+    Background="#ff728CAF"
+    MaxHeight="180">
+
+    <Grid MaxHeight="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Button  x:Name="btnOk" Grid.Row="0" Grid.Column="0" Content="Ok" Foreground="#ffffffff"
+                 VerticalAlignment="Center" HorizontalAlignment="Stretch" Tapped="btnOk_Tapped"
+                 />
+        <Button  x:Name="btnCancel" Grid.Row="0" Grid.Column="1" Content="Cancel" Foreground="#ffffffff"
+                 VerticalAlignment="Center" HorizontalAlignment="Stretch" Tapped="btnCancel_Tapped"
+                 />
+    </Grid>
+</ContentDialog>

@@ -26,7 +26,7 @@ namespace UwpControlsLibrary
         public KeyEvent Event { get; set; }
 
         public Octave[] Octaves { get; set; }
-        //public Grid GridMain { get; set; }
+        //public Grid gridControls { get; set; }
         public Size WhiteKeySize { get; set; }
         public Size BlackKeySize { get; set; }
 
@@ -34,7 +34,7 @@ namespace UwpControlsLibrary
         private int highKey;
         public List<Image> ImagesToResize;
 
-        public Keyboard(Controls controls, int Id, Grid gridMain, Image[] imageList, Point position, int lowKey, int highKey, Boolean evenKeySpread = false)
+        public Keyboard(Controls controls, int Id, Grid gridControls, Image[] imageList, Point position, int lowKey, int highKey, Boolean evenKeySpread = false)
         {
             if (imageList.Length != 2 && imageList.Length != 4)
             {
@@ -43,7 +43,7 @@ namespace UwpControlsLibrary
 
             ImagesToResize = new List<Image>();
             this.Id = Id;
-            this.GridControls = gridMain;
+            this.GridControls = gridControls;
             this.lowKey = lowKey;
             this.highKey = highKey;
             LimitKeyRange();
@@ -70,8 +70,6 @@ namespace UwpControlsLibrary
 
             WhiteKeySize = new Size(imageList[0].ActualWidth, imageList[0].ActualHeight);
             BlackKeySize = new Size(imageList[1].ActualWidth, imageList[1].ActualHeight);
-            //imageList[0].Visibility = Visibility.Collapsed;
-            //imageList[1].Visibility = Visibility.Collapsed;
             ControlSizing = new ControlSizing(controls, this, Id, ImagesToResize.ToArray(), position.X, position.Y, Octaves);
         }
 
@@ -79,8 +77,8 @@ namespace UwpControlsLibrary
         {
             switch (eventType)
             {
-                //case EventType.POINTER_MOVED:
-                //    return PointerMovedEvent(pointerPosition);
+                case EventType.POINTER_MOVED:
+                    return PointerMovedEvent(pointerPosition);
                 case EventType.POINTER_PRESSED:
                     PointerPressedEvent(sender, pointerPosition, pointerButtonStates, key);
                     break;
@@ -91,10 +89,11 @@ namespace UwpControlsLibrary
             return -1;
         }
 
-        //private int PointerMovedEvent(Point pointerPosition)
-        //{
-        //    return -1;
-        //}
+        private int PointerMovedEvent(Point pointerPosition)
+        {
+            //foreach (Key key in Keyboard.)
+            return -1;
+        }
 
         public void PointerPressedEvent(object sender, Point pointerPosition, List<PointerButton> pointerButtonStates, Key key)
         {

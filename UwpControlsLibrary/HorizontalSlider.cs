@@ -32,10 +32,10 @@ namespace UwpControlsLibrary
         private Int32 value;
         public Double RelativeValue;
 
-        public HorizontalSlider(Controls controls, Int32 Id, Grid gridMain, Image[] imageList,
+        public HorizontalSlider(Controls controls, Int32 Id, Grid gridControls, Image[] imageList,
             Rect HitArea, Int32 MinValue = 0, Int32 MaxValue = 127)
         {
-            GridControls = gridMain;
+            GridControls = gridControls;
             ImageSize = new Point(imageList[imageList.Length - 1].ActualWidth,
                 imageList[imageList.Length - 1].ActualHeight);
             OriginalImageWidth = imageList[imageList.Length - 1].ActualWidth;

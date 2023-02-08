@@ -15,13 +15,13 @@ namespace UwpControlsLibrary
     public class Label : ControlBase
     {
         public string Text { get { return TextBlock.Text; } set { TextBlock.Text = value; } }
-        public Label(Controls controls, Int32 Id, Grid gridMain, Rect hitArea, string text = "", Int32 fontSize = 8,
+        public Label(Controls controls, Int32 Id, Grid gridControls, Rect hitArea, string text = null, Int32 fontSize = 8,
             TextAlignment textAlignment = TextAlignment.Center,
             ControlTextWeight textWeight = ControlTextWeight.NORMAL,
             TextWrapping textWrapping = TextWrapping.NoWrap, Brush foreground = null)
         {
             this.Id = Id;
-            GridControls = gridMain;
+            GridControls = gridControls;
             Double width = hitArea.Width;
             Double height = hitArea.Height;
 

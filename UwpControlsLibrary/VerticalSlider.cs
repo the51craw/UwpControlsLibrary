@@ -33,10 +33,10 @@ namespace UwpControlsLibrary
         private int value;
         public Double RelativeValue;
 
-        public VerticalSlider(Controls controls, int Id, Grid gridMain, Image[] imageList, 
+        public VerticalSlider(Controls controls, int Id, Grid gridControls, Image[] imageList, 
 			Rect HitArea, int MinValue = 0, int MaxValue = 127)
         {
-            GridControls = gridMain;
+            GridControls = gridControls;
             ImageSize = new Point(imageList[imageList.Length - 1].ActualWidth,
                 imageList[imageList.Length - 1].ActualHeight);
             OriginalImageWidth = imageList[imageList.Length - 1].ActualWidth;

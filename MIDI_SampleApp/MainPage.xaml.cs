@@ -58,7 +58,8 @@ namespace MIDI_SampleApp
             Controls.AddRotator((int)ControlId.SELECTOR_MIDI_OUT, gridControls, new Image[] { imgButtonBackground }, new Point(342, 5),
                 "", 24, TextAlignment.Center, ControlBase.ControlTextWeight.BOLD);
 
-            Controls.AddKeyBoard((int)ControlId.KEYBOARD, gridKeyboard, new Image[] { imgWhiteKey, imgBlackKey, imgWhiteKeyDown, imgBlackKeyDown },
+            Controls.AddKeyBoard((int)ControlId.KEYBOARD, gridKeyboard, 
+			new Image[] { imgWhiteKey, imgBlackKey, imgWhiteKeyDown, imgBlackKeyDown },
                 new Point(4, 40), 48, 72);
             foreach (Octave octave in ((Keyboard)Controls.GetControl((Int32)ControlId.KEYBOARD)).Octaves)
             {

@@ -97,7 +97,6 @@ namespace UwpControlsLibrary
         {
             StaticImage staticImage = new StaticImage(controls, Id, gridControls, imageList,
                 new Point(this.HitArea.Left + position.X, this.HitArea.Top + position.Y));
-            //StaticImage staticImage = new StaticImage(this, Id, image, position);
             SubControls.ControlsList.Add(staticImage);
             return staticImage;
         }

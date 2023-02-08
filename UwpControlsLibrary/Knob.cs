@@ -23,7 +23,7 @@ namespace UwpControlsLibrary
 
     public class Knob : ControlBase
     {
-        //public Grid GridMain;
+        //public Grid gridControls;
         //public Image Image;
         //public Point CenterPoint;
         public int AngleStart; // Image must have marker facing down. 
@@ -35,7 +35,7 @@ namespace UwpControlsLibrary
         private double startPosition;
         private Double PreviousPosition;
 
-        public Knob(Controls controls, int Id, Grid gridMain, Image[] imageList, Point CenterPoint, 
+        public Knob(Controls controls, int Id, Grid gridControls, Image[] imageList, Point CenterPoint, 
             int MinValue = 0, int MaxValue = 127,
             int AngleStart = 45, int AngleEnd = 315, Double StepSize = 1)
         {
@@ -48,7 +48,7 @@ namespace UwpControlsLibrary
             PreviousPosition = 0;
             this.StepSize = StepSize;
             this.Id = Id;
-            GridControls = gridMain;
+            GridControls = gridControls;
             HitArea = new Rect(
                 CenterPoint.X - imageList[0].ActualWidth / 2,
                 CenterPoint.Y - imageList[0].ActualHeight / 2,

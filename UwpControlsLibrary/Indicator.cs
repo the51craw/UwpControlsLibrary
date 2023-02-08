@@ -42,11 +42,11 @@ namespace UwpControlsLibrary
 
         private Boolean isOn;
 
-        public Indicator(Controls controls, Int32 Id, Grid gridMain, Image[] imageList, Point Position)
+        public Indicator(Controls controls, Int32 Id, Grid gridControls, Image[] imageList, Point Position)
         {
             isOn = false;
             this.Id = Id;
-            GridControls = gridMain;
+            GridControls = gridControls;
             Double width;
             Double height;
             // this.HitTarget = HitTarget;

@@ -1,0 +1,6 @@
+﻿* Left button opens/closes sub menus and opens patches.
+? Right button on a folder adds a patch and saves current settings in it.
+Right button on a patch and saves current settings in it. (Warns first!)
+Right button on a folder plus shift key adds a sub folder.
+* Any other button renames a menu item.
+Any other button plus shift key removes a menu item.

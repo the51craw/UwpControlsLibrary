@@ -1,0 +1,35 @@
+﻿<Page
+    x:Class="SynthesizerSampleapp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SynthesizerSampleapp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid x:Name = "gridMain" >
+        <Image x:Name = "imgGraph" Source = "ms-appx:///Images/Graph.png" Stretch = "None" />
+        <Image x:Name = "imgBlackKey" Source = "ms-appx:///Images/BlackKey.png" Stretch = "None" />
+        <Image x:Name = "imgBlackKeyDown" Source = "ms-appx:///Images/BlackKeyDown.png" Stretch = "None" />
+        <Image x:Name = "imgWhiteKey" Source = "ms-appx:///Images/WhiteKey.png" Stretch = "None" />
+        <Image x:Name = "imgWhiteKeyDown" Source = "ms-appx:///Images/WhiteKeyDown.png" Stretch = "None" />
+        <Image x:Name = "imgButtonDown" Source = "ms-appx:///Images/ButtonDown.png" Stretch = "None" />
+        <Image x:Name = "imgButtonUp" Source = "ms-appx:///Images/ButtonUp.png" Stretch = "None" />
+        <Image x:Name = "imgMenuButton" Source = "ms-appx:///Images/MenuButton.png" Stretch = "None" />
+        <Image x:Name = "imgPatchButton" Source = "ms-appx:///Images/PatchButton.png" Stretch = "None" />
+        <Image x:Name = "imgSeparator" Source = "ms-appx:///Images/Separator.png" Stretch = "None" />
+        <Image x:Name = "imgSliderBackground" Source = "ms-appx:///Images/SliderBackground.png" Stretch = "None" />
+        <Image x:Name = "imgSliderHandle" Source = "ms-appx:///Images/SliderHandle.png" Stretch = "None" />
+        <Image x:Name = "imgBackground" Source = "ms-appx:///Images/Background.png" Stretch = "Uniform" />
+        <Grid x:Name = "gridControls" SizeChanged = "gridControls_SizeChanged" />
+        <Image x:Name = "imgReadingPatches" Source = "ms-appx:///Images/ReadingPatches.png" Stretch = "Uniform" />
+        <Grid x:Name="gridKeyboard" />
+        <Image x:Name = "imgClickArea" Source = "ms-appx:///Images/Background.png" Stretch = "None" Opacity = "0"
+				PointerMoved = "imgClickArea_PointerMoved"
+				ImageOpened = "imgClickArea_ImageOpened"
+				PointerWheelChanged = "imgClickArea_PointerWheelChanged"
+				PointerReleased = "imgClickArea_PointerReleased"
+				PointerPressed = "imgClickArea_PointerPressed" />
+    </Grid >
+</Page>

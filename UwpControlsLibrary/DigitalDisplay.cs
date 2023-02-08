@@ -51,14 +51,14 @@ namespace UwpControlsLibrary
 
             if (imageList != null)
             {
-                if (imageList.Length == 13)
+                if (imageList.Length > 9 && imageList.Length < 14)
                 {
-                    for (int i = 1; i < imageList.Length - 2; i++)
+                    for (int i = 1; i < 12 && imageList[i] != null; i++)
                     {
                         if (imageList[i - 1].ActualWidth != imageList[i].ActualWidth
                             || imageList[i - 1].ActualWidth != imageList[i].ActualWidth)
                         {
-                            throw new Exception("All digits must have the same size.");
+                            throw new Exception("All digits must have the same size. If you supply a background image but no minus or dot, the minus and dot images must be given as null values.");
                         }
                     }
                 }
@@ -75,7 +75,7 @@ namespace UwpControlsLibrary
             }
 
             CopyImages(imageList);
-            if (ImageList[12] != null)
+            if (ImageList.Length > 12 && ImageList[12] != null)
             {
                 // We have a background image, add it to gridControls:
                 gridControls.Children.Add(ImageList[12]);
@@ -101,7 +101,7 @@ namespace UwpControlsLibrary
                 }
             }
 
-            if (imageList[12] != null)
+            if (ImageList.Length > 12 && imageList[12] != null)
             {
                 HitArea = new Rect(Position.X, Position.Y, imageList[12].ActualWidth, imageList[12].ActualHeight);
                 DigitsRelativeOffset = new Point(
