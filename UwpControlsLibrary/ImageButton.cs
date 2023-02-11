@@ -28,13 +28,25 @@ namespace UwpControlsLibrary
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public class ImageButton : ControlBase
     {
-        public Boolean IsOn;
+        public Boolean IsOn
+        {
+            get
+            {
+                return isOn;
+            }
+            set
+            {
+                isOn = value;
+                ShowImage(isOn);
+            }
+        }
+        private Boolean isOn;
 
         private int stateCount;
         private int state = 0;
         private int hoverImageCount;
         private bool hover;
-        private ImageButtonFunction function;
+        public ImageButtonFunction Function;
 
         public ImageButton(Controls controls, int Id, Grid gridControls, Image[] imageList,
 		Point Position, ImageButtonFunction function, bool hover = false,
@@ -48,7 +60,7 @@ namespace UwpControlsLibrary
             this.Id = Id;
             GridControls = gridControls;
             this.hover = hover;
-            this.function = function;
+            this.Function = function;
 
             if (VerifyImageList(imageList))
             {
@@ -71,7 +83,7 @@ namespace UwpControlsLibrary
                 throw new Exception("An ImageButton must have a list of images of the same size.");
             }
 
-            hoverImageCount = imageList.Count() % 2;
+            hoverImageCount = imageList.Count() > 1 ? imageList.Count() % 2 : 0;
             stateCount = imageList.Count() - hoverImageCount;
             if (stateCount == 4 && function == ImageButtonFunction.MOMENTARY)
             {
@@ -107,10 +119,13 @@ namespace UwpControlsLibrary
             HitArea = new Rect(Position.X, Position.Y, width, height);
             CopyImages(imageList);
             ControlSizing = new ControlSizing(controls, this);
-            IsOn = false;
+            isOn = false;
 
-            ResetHovering();
-            ImageList[1].Visibility = Visibility.Collapsed;
+            if (hoverImageCount > 0)
+            {
+                ResetHovering();
+                ImageList[1].Visibility = Visibility.Collapsed;
+            }
             if (stateCount > 3)
             {
                 ImageList[2].Visibility = Visibility.Collapsed;
@@ -128,98 +143,78 @@ namespace UwpControlsLibrary
 
         private void ShowImage(bool down) // down = pointer pressed, !down = pointer released
         {
-            for (int i = 0; i < stateCount; i++)
+            for (int i = 0; i < stateCount && i < ImageList.Count(); i++)
             {
                 ImageList[i].Visibility= Visibility.Collapsed;
             }
 
-            if (function == ImageButtonFunction.TOGGLE)
+            if (Function == ImageButtonFunction.TOGGLE)
             {
-                if (IsOn)
+                if (ImageList.Count() > 1)
                 {
-                    if (stateCount == 2)
+                    if (isOn)
                     {
-                        ControlSizing.ImageList[1].Visibility = Visibility.Visible;
+                        if (stateCount == 2)
+                        {
+                            ControlSizing.ImageList[1].Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            state++;
+                            state = state % 4;
+                            ControlSizing.ImageList[state].Visibility = Visibility.Visible;
+                        }
                     }
                     else
                     {
-                        state++;
-                        state = state % 4;
-                        ControlSizing.ImageList[state].Visibility = Visibility.Visible;
+                        if (stateCount == 2)
+                        {
+                            ControlSizing.ImageList[0].Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            state++;
+                            state = state % 4;
+                            ControlSizing.ImageList[state].Visibility = Visibility.Visible; // down, on.
+                        }
                     }
                 }
                 else
                 {
-                    if (stateCount == 2)
+                    if (isOn)
                     {
                         ControlSizing.ImageList[0].Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        state++;
-                        state = state % 4;
-                        ControlSizing.ImageList[state].Visibility = Visibility.Visible; // down, on.
+                        ControlSizing.ImageList[0].Visibility = Visibility.Collapsed;
                     }
                 }
             }
             else
             {
-                if (down)
+                if (ImageList.Count() > 1)
                 {
-                    ControlSizing.ImageList[1].Visibility = Visibility.Visible;
+                    if (down)
+                    {
+                        ControlSizing.ImageList[1].Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        ControlSizing.ImageList[0].Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    ControlSizing.ImageList[0].Visibility = Visibility.Visible;
+                    if (down)
+                    {
+                        ControlSizing.ImageList[0].Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        ControlSizing.ImageList[0].Visibility = Visibility.Collapsed;
+                    }
                 }
-                //if (IsOn)
-                //    {
-                //        if (stateCount == 2)
-                //        {
-                //            ControlSizing.ImageList[1].Visibility = Visibility.Visible;
-                //        }
-                //        else
-                //        {
-                //            ControlSizing.ImageList[3].Visibility = Visibility.Visible;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (stateCount == 2)
-                //        {
-                //            ControlSizing.ImageList[0].Visibility = Visibility.Visible;
-                //        }
-                //        else
-                //        {
-                //            ControlSizing.ImageList[3].Visibility = Visibility.Visible;
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    if (IsOn)
-                //    {
-                //        if (stateCount == 2)
-                //        {
-                //            ControlSizing.ImageList[0].Visibility = Visibility.Visible;
-                //        }
-                //        else
-                //        {
-                //            ControlSizing.ImageList[2].Visibility = Visibility.Visible;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (stateCount == 2)
-                //        {
-                //            ControlSizing.ImageList[1].Visibility = Visibility.Visible;
-                //        }
-                //        else
-                //        {
-                //            ControlSizing.ImageList[0].Visibility = Visibility.Visible;
-                //        }
-                //    }
-                //}
             }
         }
 
@@ -253,7 +248,7 @@ namespace UwpControlsLibrary
 
         public void HandlePointerPressedEvent(PointerRoutedEventArgs e)
         {
-            IsOn = !IsOn;
+            isOn = !isOn;
             ShowImage(true);
         }
 

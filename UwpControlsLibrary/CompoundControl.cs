@@ -118,11 +118,12 @@ namespace UwpControlsLibrary
         }
 
         public Knob AddKnob(int Id, Grid gridControls, Image[] imageList, Point position,
-            int MinValue = 0, int MaxValue = 127, int AngleStart = 45, int AngleEnd = 315, Double StepSize = 1)
+            int MinValue = 0, int MaxValue = 127, int AngleStart = 45, 
+            int AngleEnd = 315, Double StepSize = 1, bool WrapsAround = false)
         {
             Knob control = new Knob(controls, Id, gridControls, imageList,
                 new Point(this.HitArea.Left + position.X, this.HitArea.Top + position.Y),
-                MinValue, MaxValue, AngleStart, AngleEnd, StepSize);
+                MinValue, MaxValue, AngleStart, AngleEnd, StepSize, WrapsAround);
             SubControls.ControlsList.Add(control);
             return control;
         }

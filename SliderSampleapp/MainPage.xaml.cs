@@ -55,9 +55,11 @@ namespace SliderSampleapp
             Controls.Init(gridControls);
 
             // Create all controls:
-            logotype = Controls.AddStaticImage((int)ControlId.STATICIMAGE, gridControls, new Image[] { imgMrMartin }, new Point(10, 260));
+            logotype = Controls.AddStaticImage((int)ControlId.STATICIMAGE, gridControls, 
+                new Image[] { imgMrMartin }, new Point(10, 260));
             logotype.ImageList[0].Opacity = 0.0;
-            slider = Controls.AddVerticalSlider((int)ControlId.VERTICAL_SLIDER, gridControls, new Image[] { imgSliderHandle }, new Rect(216, 24, 102, 365));
+            slider = Controls.AddVerticalSlider((int)ControlId.VERTICAL_SLIDER, gridControls, 
+                new Image[] { imgSliderHandle }, new Rect(216, 24, 102, 365));
 
             // Make sure all controls has the correct size and position:
             Controls.ResizeControls(gridControls, Window.Current.Bounds);

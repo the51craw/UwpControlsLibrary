@@ -54,12 +54,12 @@ namespace PopupMenuSampleApp
 
             megaphone = Controls.AddPopupMenuButton(i++, gridControls, new Image[] { imgEffectButtonBackground, imgEffectButtonHover },
                 new Point(214, 250), ControlBase.PopupMenuButtonStyle.BUTTON, new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT,
-                ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER }, "MEGAPHONE", 14, false, ControlBase.ControlTextWeight.BOLD,
+                ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER }, 0, 127, "MEGAPHONE", 14, false, ControlBase.ControlTextWeight.BOLD,
                 ControlBase.ControlTextAlignment.CENTER, textOnColor, textOffColor);
 
             reverb = Controls.AddPopupMenuButton(i++, gridControls, new Image[] { imgEffectButtonBackground, imgEffectButtonHover },
                 new Point(960, 300), ControlBase.PopupMenuButtonStyle.BUTTON, new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT,
-                ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER }, "REVERB", 14, false, ControlBase.ControlTextWeight.BOLD, 
+                ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER }, 0, 127, "REVERB", 14, false, ControlBase.ControlTextWeight.BOLD, 
                 ControlBase.ControlTextAlignment.CENTER, textOnColor, textOffColor);
 
             verticalSlider = Controls.AddVerticalSlider(i++, gridControls, new Image[] { imgSliderHandle }, new Rect(new Point(77, 375), new Size(88, 365)), 0, 127);
@@ -71,19 +71,19 @@ namespace PopupMenuSampleApp
 
             PopupMenuButton item;
 
-            item = robot.AddMenuItem(m, mi++, robot, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
+            item = robot.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
                 new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
                 "Item 1", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = robot.AddMenuItem(m, mi++, robot, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
+            item = robot.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
                 new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
                 "Item 2", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = robot.AddMenuItem(m, mi++, robot, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
+            item = robot.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
                 new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
                 "Item 3", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = robot.AddMenuItem(m, mi++, robot, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
+            item = robot.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
                 new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
                 "Item 4", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
@@ -92,40 +92,40 @@ namespace PopupMenuSampleApp
             m = megaphone.AddMenu();
             PopupMenuButton subItem;
 
-            item = megaphone.AddMenuItem(m, mi++, megaphone, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
-                null, "Item 1", 14,
+            item = megaphone.AddMenuItem(m, mi++, new Image[] { imgMenuBackground, imgMenuItemSliderHandle }, 
+                ControlBase.PopupMenuButtonStyle.SLIDER, null, "Item 1", 14,
                 true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = megaphone.AddMenuItem(m, mi++, megaphone, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
-                null, "Item 2", 14,
+            item = megaphone.AddMenuItem(m, mi++, new Image[] { imgMenuBackground, imgMenuItemSliderHandle },
+                ControlBase.PopupMenuButtonStyle.SLIDER, null, "Item 2", 14,
                 true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
             subItem = item;
-            item = megaphone.AddMenuItem(m, mi++, megaphone, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
-                null, "Item 3", 14,
+            item = megaphone.AddMenuItem(m, mi++, new Image[] { imgMenuBackground, imgMenuItemSliderHandle },
+                ControlBase.PopupMenuButtonStyle.SLIDER, null, "Item 3", 14,
                 true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = megaphone.AddMenuItem(m, mi++, megaphone, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
-                null, "Item 4", 14,
+            item = megaphone.AddMenuItem(m, mi++, new Image[] { imgMenuBackground, imgMenuItemSliderHandle },
+                ControlBase.PopupMenuButtonStyle.SLIDER, null, "Item 4", 14,
                 true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
 
             mi = 0;
             m = reverb.AddMenu();
 
-            item = reverb.AddMenuItem(m, mi++, reverb, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
+            item = reverb.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
                 null, "Item 1", 14,
                 true, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = reverb.AddMenuItem(m, mi++, reverb, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
+            item = reverb.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
                 null, "Item 2", 14,
                 true, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = reverb.AddMenuItem(m, mi++, reverb, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
+            item = reverb.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
                 null, "Item 3", 14,
                 true, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = reverb.AddMenuItem(m, mi++, reverb, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
+            item = reverb.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
                 null, "Item 4", 14,
                 true, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
@@ -133,19 +133,19 @@ namespace PopupMenuSampleApp
             mi = 0;
             m = subItem.AddMenu();
 
-            item = subItem.AddMenuItem(m, mi++, subItem, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
+            item = subItem.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
                 null, "Item 1", 14,
                 true, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = subItem.AddMenuItem(m, mi++, subItem, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
+            item = subItem.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
                 null, "Item 2", 14,
                 true, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = subItem.AddMenuItem(m, mi++, subItem, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
+            item = subItem.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
                 null, "Item 3", 14,
                 true, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
-            item = subItem.AddMenuItem(m, mi++, subItem, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
+            item = subItem.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON, 
                 null, "Item 4", 14,
                 true, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
@@ -172,16 +172,19 @@ namespace PopupMenuSampleApp
         // object if and if so which control the pointer is over:
         private void imgClickArea_PointerMoved(object sender, PointerRoutedEventArgs e)
         {
-            if (Controls != null && toolTips != null)
+            if (Controls != null)
             {
                 Controls.PointerMoved(sender, e);
-                if (robot.IsSelected)
+                if (toolTips != null)
                 {
-                    toolTips.Show(sender, e, "Robot!");
-                }
-                else
-                {
-                    toolTips.Hide();
+                    if (robot.IsSelected)
+                    {
+                        toolTips.Show(sender, e, "Robot!");
+                    }
+                    else
+                    {
+                        toolTips.Hide();
+                    }
                 }
             }
         }
@@ -204,7 +207,10 @@ namespace PopupMenuSampleApp
 
         private void imgClickArea_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
-            Controls.PointerWheelChanged(sender, e);
+            if (Controls != null)
+            {
+                Controls.PointerWheelChanged(sender, e);
+            }
         }
     }
 }

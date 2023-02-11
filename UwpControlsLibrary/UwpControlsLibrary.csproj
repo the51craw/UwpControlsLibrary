@@ -167,6 +167,7 @@
   <ItemGroup>
     <Content Include="Event flow.txt" />
     <Content Include="Event routing.txt" />
+    <Content Include="ModusOperandi.txt" />
     <Content Include="ReadMe.txt" />
     <Content Include="Sizing.txt" />
   </ItemGroup>

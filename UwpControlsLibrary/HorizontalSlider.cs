@@ -62,8 +62,9 @@ namespace UwpControlsLibrary
         public Int32 SetValue(Point position)
         {
             Int32 left = (Int32)(ControlSizing.HitArea.Left + ImageList[ImageList.Length - 1].ActualWidth / 2);
-            Int32 right = (Int32)(ControlSizing.HitArea.Right - ImageList[ImageList.Length - 1].ActualHeight / 2);
-            Value = MaxValue - (Int32)(((float)right - (float)position.X) / ((float)right - (float)left) * (1.0 + (float)MaxValue - (float)MinValue + 1));
+            Int32 right = (Int32)(ControlSizing.HitArea.Right - ImageList[ImageList.Length - 1].ActualWidth / 2);
+            Value = MaxValue - (Int32)(((float)right - (float)position.X) /
+                ((float)right - (float)left) * (1.0 + (float)MaxValue - (float)MinValue + 1));
 
             Value = Value > MaxValue ? MaxValue : Value;
             Value = Value < MinValue ? MinValue : Value;
@@ -98,7 +99,7 @@ namespace UwpControlsLibrary
         {
             if (pointerButtonStates.Contains(PointerButton.LEFT))
             {
-                int value = SetValue(pointerPosition);
+                SetValue(pointerPosition);
                 SetPositionFromValue();
             }
         }

@@ -161,7 +161,7 @@ namespace SynthesizerSampleapp
             int buttonStart = 8;
             int buttonsSpacing = 254;
             midiInSelector = Controls.AddRotator((int)ControlId.MIDI_IN_SELECTOR, gridControls,
-                new Image[] { imgButtonUp }, new Point(buttonStart + buttonsSpacing * buttonsPos++, 35), "", 14,
+                new Image[] { imgButtonUp }, new Point(buttonStart + buttonsSpacing * buttonsPos++, 35), "dummy", 14,
                 TextAlignment.Center, ControlBase.ControlTextWeight.BOLD);
 
             waveform = Controls.AddRotator((int)ControlId.WAVEFORM, gridControls,
@@ -265,7 +265,7 @@ namespace SynthesizerSampleapp
             menu = Controls.AddPopupMenuButton((int)ControlId.MENU, gridControls, new Image[] { imgMenuButton },
                 new Point(5 + spacing * pos, 35), ControlBase.PopupMenuButtonStyle.MENU,
                 new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
-                "PATCHES", 14, false, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.CENTER);
+                0, 127, "PATCHES", 14, false, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.CENTER);
             menu.TextBlock.Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
 
             Controls.AddLabel(-1, gridControls, new Rect(left, 5, 700, 30), 
@@ -275,7 +275,7 @@ namespace SynthesizerSampleapp
             // Load patches:
             await LoadPatches();
 
-            synthesis = Controls.AddSynthesis((int)ControlId.SYNTHESIS, 6, 2, true);
+            synthesis = new Synthesis(Controls, (int)ControlId.SYNTHESIS, 6, 2, true);
             SetSubOscillator(1);
 
             midi = new MIDI(MidiInPort_MessageReceived);

@@ -56,3 +56,10 @@ the controls 'live'.
 MouseButton 1 and 2 are used in some controls, and any third in some.
 MouseWheel is used in all controls that can be manipulated by dragging, as well
 as Rotator controls.
+
+VERY IMPORTANT:
+I have developed UwpControlsLibrary as needed when developing other applications,
+and might make changes in the future that breaks old applications. Therefore,
+not only keep the version of UwpControlsLibrary.dll in your project, but also
+keep a copy of the entire UwpControlsLibrary.dll in your development folder.
+Not all versions might available in github, so spare yourself some future problems.

@@ -34,10 +34,11 @@ namespace UwpControlsLibrary
         private double doubleValue;
         private double startPosition;
         private Double PreviousPosition;
+        private bool wrapsAround;
 
         public Knob(Controls controls, int Id, Grid gridControls, Image[] imageList, Point CenterPoint, 
             int MinValue = 0, int MaxValue = 127,
-            int AngleStart = 45, int AngleEnd = 315, Double StepSize = 1)
+            int AngleStart = 45, int AngleEnd = 315, Double StepSize = 1, bool WrapsAround = false)
         {
             this.AngleStart = AngleStart;
             this.AngleEnd = AngleEnd;
@@ -47,6 +48,7 @@ namespace UwpControlsLibrary
             this.startPosition = 0;
             PreviousPosition = 0;
             this.StepSize = StepSize;
+            this.wrapsAround = WrapsAround;
             this.Id = Id;
             GridControls = gridControls;
             HitArea = new Rect(
@@ -92,13 +94,27 @@ namespace UwpControlsLibrary
             startPosition = position.Y;
 
             doubleValue += movement;
-            if (doubleValue > MaxValue)
+            if (wrapsAround)
             {
-                doubleValue = MaxValue;
+                if (doubleValue > MaxValue)
+                {
+                    doubleValue -= MaxValue;
+                }
+                if (doubleValue < MinValue)
+                {
+                    doubleValue += MaxValue;
+                }
             }
-            if (doubleValue < MinValue)
+            else
             {
-                doubleValue = MinValue;
+                if (doubleValue > MaxValue)
+                {
+                    doubleValue = MaxValue;
+                }
+                if (doubleValue < MinValue)
+                {
+                    doubleValue = MinValue;
+                }
             }
             value = (int)Math.Round(doubleValue, 0);
             SetRotationFromValue();
@@ -162,8 +178,16 @@ namespace UwpControlsLibrary
                 delta *= 8;
             }
             value += delta;
-            value = value > MaxValue ? MaxValue : value;
-            value = value < MinValue ? MinValue : value;
+            if (wrapsAround)
+            {
+                value = value > MaxValue ? value - MaxValue : value;
+                value = value < MinValue ? value + MaxValue : value;
+            }
+            else
+            {
+                value = value > MaxValue ? MaxValue : value;
+                value = value < MinValue ? MinValue : value;
+            }
             doubleValue = value;
             SetRotationFromValue();
             //return value;

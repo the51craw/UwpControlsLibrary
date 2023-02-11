@@ -117,9 +117,11 @@ namespace UwpControlsLibrary
         }
 
         public Knob AddKnob(int Id, Grid gridControls, Image[] imageList, Point position,
-            int MinValue = 0, int MaxValue = 127, int AngleStart = 45, int AngleEnd = 315, Double Sensitivity = 1)
+            int MinValue = 0, int MaxValue = 127, int AngleStart = 45,
+            int AngleEnd = 315, Double Sensitivity = 1, bool WrapsAround = false)
         {
-            Knob control = new Knob(this, Id, gridControls, imageList, position, MinValue, MaxValue, AngleStart, AngleEnd, Sensitivity);
+            Knob control = new Knob(this, Id, gridControls, imageList, position, 
+                MinValue, MaxValue, AngleStart, AngleEnd, Sensitivity, WrapsAround);
             ControlsList.Add(control);
             return control;
         }
@@ -187,9 +189,11 @@ namespace UwpControlsLibrary
         }
 
         public PopupMenuButton AddPopupMenuButton(int Id, Grid gridControls, Image[] imageList, Point position,
-            PopupMenuButtonStyle style, PointerButton[] buttons = null, string text = null, 
-            int fontSize = 16, bool edit = false, ControlTextWeight textWeight = ControlTextWeight.NORMAL,
-            ControlTextAlignment textAlignment = ControlTextAlignment.LEFT, Brush textOnColor = null, Brush textOffColor = null)
+            PopupMenuButtonStyle style, PointerButton[] buttons = null, int minValue = 0, int maxValue = 127,
+            string text = null, int fontSize = 16, bool edit = false, 
+            ControlTextWeight textWeight = ControlTextWeight.NORMAL,
+            ControlTextAlignment textAlignment = ControlTextAlignment.LEFT, 
+            Brush textOnColor = null, Brush textOffColor = null)
         {
             if (buttons == null)
             {
@@ -197,7 +201,7 @@ namespace UwpControlsLibrary
             }
 
             PopupMenuButton control = new PopupMenuButton(this, Id, gridControls, imageList, position,
-                style, buttons, text, fontSize, edit, textWeight, textAlignment, textOnColor, textOffColor);
+                style, buttons, minValue, maxValue, text, fontSize, edit, textWeight, textAlignment, textOnColor, textOffColor);
             ControlsList.Add(control);
             return control;
         }

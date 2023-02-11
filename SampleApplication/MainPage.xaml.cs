@@ -160,7 +160,7 @@ namespace SampleApplication
                 new Image[] { imgPopupMenuButtonBackground, imgImageButtonHover }, new Point(512, 19),
                 ControlBase.PopupMenuButtonStyle.BUTTON, 
                 new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT },
-                "MIDI", 20, false, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.CENTER,
+                0, 0, "MIDI", 20, false, ControlBase.ControlTextWeight.BOLD, ControlBase.ControlTextAlignment.CENTER,
                 new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)), new SolidColorBrush(Color.FromArgb(255, 255, 255, 255))); // Always white. I will toggle text on pointer pressed instead.
 
             menuItem = 0;

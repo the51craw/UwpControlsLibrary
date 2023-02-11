@@ -1,0 +1,97 @@
+﻿This explains how it all works.
+
+The controls does _not_ directly contain their own pointer event handlers. Instead, all events
+are caught by a topmost transparent image covering the entire application area, called imgClickArea.
+
+Each control consists of one or more objects of type Image, TextBlock and/or TextBox.
+Images are there for obvious reason. You can read about the images usage in each control class.
+A TextBlock may be present to display a text on the control.
+A TextBox may be present in order to let the user change the text on the control.
+At least one of the types above is included in each control type.
+
+Each control defines a rectangular area called ClickArea. Clickarea is defined either by the
+actual size and position of an Image or given at design time in the constructor.
+
+All controls are stored in a Controls object, in a list called ControlsList. It is possible
+to have more than one Controls object if the application design needs it.
+
+All controls are also stored in a Grid in order to be visible to the user. It is also possible
+to have more than one Grid if the application design needs it.
+
+You can study my application 'MIDI to tablature' for an example of using more than one Grid
+and Controls object. It mimics multi paging by maintaining paralell Grid object.
+
+The Grid is normally called gridControls.
+
+All control images are stored in MainPage.xaml and are copied by UwpControlsLibrary to each
+control at application startup when the image imgClickArea is loaded. This means that the
+same image can be used in multiple controls.
+
+Events:
+
+Each event on imgClickArea calls methods in UwpControlsLibrary that performs a few tasks:
+Pointer button states are stored in a list.
+Pointer wheel changes are stored as either 1, 0 or -1.
+All controls are looped to find which one was hit. Note that if controls overlap, it is the
+topmost one that will be hit, so, add controls in such order that topmost controls are added
+last.
+Some control specific handling are also done.
+A handler in the control is called in order to let the control update its status.
+At last a handler in MainPage is called to perform application specific actions.
+
+Sizing:
+
+One of the major features of UwpControlsLibrary is that the application can be resized
+without loosing controls that no longer fits into the applications visible area, because
+all controls are also resized when the application area is. This is handled by an object
+of type ControlSizing. Each control gets its own object of type ControlSizing.
+
+When imgClickArea is resized, all controls are looped in order to be resized the same amount.
+Controls keeps original sizes. ControlSizing calculates relative size values and uses them
+to calculate new Margin for each control object.
+
+The ratio of the application area may not always be the same, but in order to keep knobs
+round, and other controls containing texts have the text fit the same way regardless of
+application size ratio, the usable application area always keeps the same ratio. If the
+ratio differs from the ratio of imgClickArea, extra margins are calculated and stored in
+ExtraMarginX or ExtraMarginY. Using background color or an image behind the controls Grid
+with Stretch set to StretcToFill will make the unused area look better.
+
+Creating a new project:
+
+There is a lot to get right when using UwpControlsLibrary. Putting images and Grids into
+MainPage.xaml, creating controls and setting up the handlers. I have therefore added
+an application in the UwpControlsLibrary solution that does that.
+
+This is the procedure to get started.
+Obviously you start by creating a UWP application.
+Add a folder called 'Images'.
+Put all the images you need in that folder. The application background image should be
+called 'Background.png' to avoid some extra editing. It will also be used as imgClickArea.
+Run the application GenerateCode and do the following:
+Click 'Select image folder' and browse to and select your new folder 'Images'.
+Click 'Get xaml content' and paste the clipboard content to replace the empty Grid in
+your applications MainPage.xaml file.
+Click 'Get MainPage.xaml.cs content' and paste it to replace the entire MainPage class
+in the MainPage.xaml.cs file.
+Build UwpControlsLibrary and copy the file
+<your development path>\UwpControlsLibrary\UwpControlsLibrary\bin\x64\Release\UwpControlsLibrary.dll
+to your project.
+Set your project to be x64.
+Add a reference to the file UwpControlsLibrary.dll in your application folder.
+Add a using clause for UwpControlsLibrary to MainPage.xaml.cs.
+
+There is a sample control in MainPage.xaml.cs. Either change it to a control of your
+own, or remove it, since it referes to an image file you probably do not have.
+
+Add all your controls.
+
+In order to access your controls from your application there are two ways:
+You can use their Id and/or you can assign it to a control object.
+
+There are also a few sample applications in the UwpControlsLibrary solution. Study
+them to see how to proceed.
+
+Some of my other projects in github uses UwpControlsLibrary and you can study
+them to get ideas on how to build your application.
+

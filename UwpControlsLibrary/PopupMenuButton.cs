@@ -1,9 +1,12 @@
-﻿using System;
+﻿//using MathNet.Numerics;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Windows.Foundation;
 using Windows.UI;
+using Windows.UI.Input;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,9 +20,11 @@ namespace UwpControlsLibrary
     /// <summary>
     /// PopupMenuButton is a container for PopupMenuButton objects.
     /// PopupMenuButton can act as an on/off button or only as a button to show menu(s).
-    /// If a PopupMenuButton is based on a TextBlock rather than an image it can also be editable by adding a TextBox to it.
-    /// PopupMenuButton can have up to five menus activated by different pointer buttons, four if it also acts as a button
-    /// or can be edited, of three if it also acts as a butto _and_ can be edited.
+    /// If a PopupMenuButton is based on a TextBlock rather than an image it can also be editable 
+    ///     by adding a TextBox to it.
+    /// PopupMenuButton can have up to five menus activated by different pointer buttons, four 
+    ///     if it also acts as a button or can be edited, of three if it also acts as a butto _and_ 
+    ///     can be edited.
     /// A PopupMenuButton without any images will act as a 'normal' popup menu and show up where the pointer is clicked.
     /// If a PopupMenuButton has images, the last one is for hover effect. If you do not want hover effect, just supply a 
     /// transparent image as last image.
@@ -53,11 +58,17 @@ namespace UwpControlsLibrary
             }
             set
             {
-                foreach (Image image in ImageList)
+                if (ImageList != null)
                 {
-                    image.Visibility = value;
+                    foreach (Image image in ImageList)
+                    {
+                        image.Visibility = value;
+                    }
                 }
-                TextBlock.Visibility = value;
+                if (TextBlock != null)
+                {
+                    TextBlock.Visibility = value;
+                }
                 visible = value;
             }
         }
@@ -68,6 +79,15 @@ namespace UwpControlsLibrary
             get { return isOn; }
             set { Toggle(); }
         }
+
+        public Int32 Value { get { return value; } set { this.value = value; SetPositionFromValue(); } }
+        public Point ImageSize { get; set; }
+        public Double OriginalImageWidth { get; set; }
+        public Double OriginalImageHeight { get; set; }
+
+        private Int32 value;
+        public Double RelativeValue;
+
 
         public bool IsEditing;
 
@@ -122,7 +142,7 @@ namespace UwpControlsLibrary
         private Brush textOffColor;
         public PopupMenuButton parent;
         public int Menu;
-
+        //public HorizontalSlider slider;
         public ControlTextWeight TextWeight;
         public ControlTextAlignment TextAlignment;
 
@@ -147,8 +167,8 @@ namespace UwpControlsLibrary
         /// <exception cref="Exception">Throws error if images are not present or not all the same size.</exception>
         /// </summary>
         public PopupMenuButton(Controls controls, int Id, Grid gridControls, Image[] imageList, Point position,
-            PopupMenuButtonStyle style, PointerButton[] buttons = null, string text = null,
-            int fontSize = 16, bool edit = false, ControlTextWeight textWeight = ControlTextWeight.NORMAL, 
+            PopupMenuButtonStyle style, PointerButton[] buttons = null, Int32 MinValue = 0, Int32 MaxValue = 127,
+			string text = null, int fontSize = 16, bool edit = false, ControlTextWeight textWeight = ControlTextWeight.NORMAL, 
             ControlTextAlignment textAlignment = ControlTextAlignment.LEFT,
             Brush textOnColor = null, Brush textOffColor = null)
         {
@@ -161,10 +181,35 @@ namespace UwpControlsLibrary
 
             this.controls = controls;
             this.gridControls = gridControls;
+
+
+
+
+            if (style == PopupMenuButtonStyle.SLIDER)
+            {
+                if (imageList.Count() < 2)
+                {
+                    throw new InvalidOperationException(
+                        "You need two images to make a menu item with a slider. One background and one handle");
+                }
+                //slider = AddHorizontalSlider(Id, gridControls, 
+                //    imageList, new Rect(pos, new Size(ImageList[0].Width, ImageList[0].Height)), 0, 255);
+
+                ImageSize = new Point(imageList[1].ActualWidth,
+                    imageList[1].ActualHeight);
+                OriginalImageWidth = imageList[1].ActualWidth;
+                OriginalImageHeight = imageList[1].ActualHeight;
+                this.MinValue = MinValue;
+                this.MaxValue = MaxValue;
+            }
+
+
+
             this.Id = Id;
             this.parent = null;
             GridControls = gridControls;
             this.fontSize = fontSize;
+
             if (buttons == null)
             {
                 this.ButtonMap = new PointerButton[] { PointerButton.LEFT };
@@ -181,7 +226,7 @@ namespace UwpControlsLibrary
                 HitArea = new Rect(position.X, position.Y, width, height);
                 CopyImages(imageList);
 
-                if (ImageList.Length > 1)
+                if (ImageList.Length > 1 && style != PopupMenuButtonStyle.SLIDER)
                 {
                     for (int i = 1; i < ImageList.Length; i++)
                     {
@@ -202,7 +247,7 @@ namespace UwpControlsLibrary
                             hoverImage = 2;
                         }
                     }
-                    else
+                    else if (style != PopupMenuButtonStyle.SLIDER)
                     {
                         offImage = 0;
                         hoverImage = 1;
@@ -227,13 +272,19 @@ namespace UwpControlsLibrary
             TextWeight = textWeight;
             TextAlignment = textAlignment;
             Children = new List<List<PopupMenuButton>>();
+
             if (buttons != null)
             {
                 this.ButtonMap = buttons;
             }
             else
             {
-                this.ButtonMap = new PointerButton[] { PointerButton.LEFT, PointerButton.RIGHT, PointerButton.MIDDLE, PointerButton.EXTRA1, PointerButton.EXTRA2 };
+                this.ButtonMap = new PointerButton[] 
+                { 
+                    PointerButton.LEFT, PointerButton.RIGHT, 
+                    PointerButton.MIDDLE, PointerButton.EXTRA1, 
+                    PointerButton.EXTRA2
+                };
             }
 
             Text = text;
@@ -311,14 +362,21 @@ namespace UwpControlsLibrary
         }
 
         public PopupMenuButton AddMenuItem(int menuNumber, int itemNumber, Image[] imageList,
-            PopupMenuButtonStyle style, PointerButton[] buttons = null, string text = null, int fontSize = 16, bool edit = false, 
-            ControlTextWeight textWeight = ControlTextWeight.NORMAL, ControlTextAlignment textAlignment = ControlTextAlignment.LEFT,
-            double xOffset = -1.0, double yOffset = 0.0, double ySpacing = 0.0, Brush textOnColor = null, Brush textOffColor = null)
+            PopupMenuButtonStyle style, PointerButton[] buttons = null, 
+            string text = null, int fontSize = 16, bool edit = false, 
+            ControlTextWeight textWeight = ControlTextWeight.NORMAL, 
+            ControlTextAlignment textAlignment = ControlTextAlignment.LEFT,
+            double xOffset = -1.0, double yOffset = 0.0, double ySpacing = 0.0, 
+            Brush textOnColor = null, Brush textOffColor = null)
         {
             Menu = menuNumber;
-            Point pos = new Point(HitArea.X + xOffset * HitArea.Width, HitArea.Y + yOffset * HitArea.Height + itemNumber * (1.0 + ySpacing) * HitArea.Height);
-            PopupMenuButton control = new PopupMenuButton(controls, itemNumber, gridControls, imageList, 
-                pos, style, buttons, text, fontSize, edit, textWeight, textAlignment, textOnColor, textOffColor);
+            Point pos = new Point(HitArea.X + xOffset * HitArea.Width, 
+                HitArea.Y + yOffset * HitArea.Height + itemNumber * 
+                (1.0 + ySpacing) * HitArea.Height);
+
+            PopupMenuButton control = new PopupMenuButton(controls, itemNumber, 
+                gridControls, imageList, pos, style, buttons, 0, 127, text, fontSize, 
+                edit, textWeight, textAlignment, textOnColor, textOffColor);
             this.xOffset = xOffset;
             this.yOffset = yOffset;
             this.ySpacing = ySpacing;
@@ -329,7 +387,17 @@ namespace UwpControlsLibrary
             return control;
         }
 
-        private void ShowSubMenu(int menu)
+        //public HorizontalSlider AddHorizontalSlider(int Id, Grid gridControls, Image[] imageList, Rect hitArea,
+        //    int MinValue = 0, int MaxValue = 127)
+        //{
+        //    HorizontalSlider control = new HorizontalSlider(controls, Id, gridControls, imageList,
+        //        new Rect(this.HitArea.Left + hitArea.Left, this.HitArea.Top + hitArea.Top, hitArea.Width, hitArea.Height),
+        //        MinValue, MaxValue);
+        //    controls.ControlsList.Add(control);
+        //    return control;
+        //}
+
+        public void ShowSubMenu(int menu)
         {
             foreach (PopupMenuButton menuItem in Children[menu])
             {
@@ -339,6 +407,14 @@ namespace UwpControlsLibrary
 
         public void HideAllMenus()
         {
+            //foreach (object obj in controls.ControlsList)
+            //{
+            //    if (obj.GetType() == typeof(PopupMenuButton))
+            //    {
+            //        HideAllSubMenus((PopupMenuButton)obj);
+            //        ((PopupMenuButton)obj).Visibility = Visibility.Collapsed;
+            //    }
+            //}
             foreach (List<PopupMenuButton> menuItems in Children)
             {
                 foreach (PopupMenuButton menuItem in menuItems)
@@ -428,7 +504,17 @@ namespace UwpControlsLibrary
             {
                 if (string.IsNullOrEmpty(Text))
                 {
-                    ImageList[onImage].Visibility = Visibility.Visible;
+                    if (ImageList != null)
+                    {
+                        if (onImage > -1)
+                        {
+                            ImageList[onImage].Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            ImageList[0].Visibility = Visibility.Visible;
+                        }
+                    }
                 }
                 else
                 {
@@ -439,7 +525,17 @@ namespace UwpControlsLibrary
             {
                 if (string.IsNullOrEmpty(Text))
                 {
-                    ImageList[onImage].Visibility = Visibility.Collapsed;
+                    if (ImageList != null)
+                    {
+                        if (onImage > -1)
+                        {
+                            ImageList[onImage].Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            ImageList[0].Visibility = Visibility.Collapsed;
+                        }
+                    }
                 }
                 else
                 {
@@ -450,7 +546,7 @@ namespace UwpControlsLibrary
 
         public void ResetHovering()
         {
-            if (hoverImage > -1)
+            if (Style != PopupMenuButtonStyle.SLIDER && hoverImage > -1)
             {
                 ImageList[hoverImage].Visibility = Visibility.Collapsed;
             }
@@ -464,24 +560,64 @@ namespace UwpControlsLibrary
             }
         }
 
-        public void HandleEvent(PointerRoutedEventArgs e, EventType eventType, List<ControlBase.PointerButton> PointerButtonStates,int delta, int menuNumber = 0)
+        public Int32 SetValue(Point position)
+        {
+            if (ImageList.Count() > 1)
+            {
+                // Limit handle space to let edges reach Hitarea edges, not center of handle:
+                // From background image or HitArea left to handle center:
+                Int32 left = (Int32)(ControlSizing.HitArea.Left + ImageList[1].ActualWidth / 2);
+                // From background image or HitArea Right to handle center:
+                Int32 right = (Int32)(ControlSizing.HitArea.Right - ImageList[1].ActualWidth / 2);
+                Value = MaxValue -
+                    // Distance between rightmost position and pointer position:
+                    (Int32)(((float)right - (float)position.X) /
+                    // Total span between handle space limits:
+                    ((float)right - (float)left) *
+                    // Value range:
+                    (1.0 + (float)MaxValue - (float)MinValue + 1));
+
+                Value = Value > MaxValue ? MaxValue : Value;
+                Value = Value < MinValue ? MinValue : Value;
+                SetPositionFromValue();
+            }
+            return Value;
+        }
+
+        public void SetPositionFromValue()
+        {
+            if (ControlGraphicsFollowsValue)
+            {
+                RelativeValue = ((Double)value - (Double)MinValue) / ((Double)MaxValue - (Double)MinValue);
+                ControlSizing.Controls.CalculateExtraMargins(Controls.AppSize);
+                ControlSizing.UpdatePositions();
+            }
+        }
+
+        public void HandleEvent(PointerRoutedEventArgs e, EventType eventType, Point pointerPosition, List<ControlBase.PointerButton> PointerButtonStates,int delta, int menuNumber = 0)
         {
             switch (eventType)
             {
                 case EventType.POINTER_MOVED:
-                    HandlePointerMovedEvent(e, eventType, PointerButtonStates);
+                    HandlePointerMovedEvent(e, eventType, pointerPosition, PointerButtonStates);
                     break;
                 case EventType.POINTER_PRESSED:
                     HandlePointerPressedEvent(e, eventType, PointerButtonStates);
                     break;
                 case EventType.POINTER_WHEEL_CHANGED:
-                    HandlePointerWheelChangedEvent(delta, menuNumber);
+                    HandlePointerWheelChangedEvent(delta, menuNumber, PointerButtonStates);
                     break;
             }
         }
 
-        public void HandlePointerMovedEvent(PointerRoutedEventArgs e, EventType eventType, List<ControlBase.PointerButton> PointerButtonStates)
+        public void HandlePointerMovedEvent(PointerRoutedEventArgs e, EventType eventType, Point pointerPosition, List<ControlBase.PointerButton> PointerButtonStates)
         {
+            if (PointerButtonStates.Contains(PointerButton.LEFT))
+            {
+                SetValue(pointerPosition);
+                SetPositionFromValue();
+            }
+
             if (hoverImage > -1 && ImageList[0].Visibility == Visibility.Visible)
             {
                 ImageList[hoverImage].Visibility = Visibility.Visible;
@@ -511,11 +647,19 @@ namespace UwpControlsLibrary
                 int buttonPressed = -1;
                 for (int button = 0; button < PointerButtonStates.Count; button++)
                 {
-                    if (PointerButtonStates.Count > 0 && PointerButtonStates[button] == ButtonMap[0])
+                    for (int map = 0; map < ButtonMap.Length; map++)
                     {
-                        buttonPressed = button;
-                        break;
+                        if (PointerButtonStates[button] == ButtonMap[map])
+                        {
+                            buttonPressed = map;
+                            break;
+                        }
                     }
+                    //if (PointerButtonStates.Count > 0 && PointerButtonStates[button] == ButtonMap[0])
+                    //{
+                    //    buttonPressed = button;
+                    //    break;
+                    //}
                 }
 
                 if (buttonPressed > -1)
@@ -568,9 +712,28 @@ namespace UwpControlsLibrary
             }
         }
 
-        public void HandlePointerWheelChangedEvent(int delta, int menu)
+        public void HandlePointerWheelChangedEvent(int delta, int menu, List<ControlBase.PointerButton> PointerButtonStates)
         {
-            ScrollMenu(menu, delta);
+            if (Style != PopupMenuButtonStyle.SLIDER || PointerButtonStates.Contains(PointerButton.OTHER))
+            {
+                ScrollMenu(menu, delta);
+            }
+
+            if (Style == PopupMenuButtonStyle.SLIDER)
+            {
+                if (PointerButtonStates.Contains(PointerButton.LEFT))
+                {
+                    delta *= 4;
+                }
+                if (PointerButtonStates.Contains(PointerButton.RIGHT))
+                {
+                    delta *= 8;
+                }
+                value += delta;
+                value = value > MaxValue ? MaxValue : value;
+                value = value < MinValue ? MinValue : value;
+                SetPositionFromValue();
+            }
         }
     }
 }

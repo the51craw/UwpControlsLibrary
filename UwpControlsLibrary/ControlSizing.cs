@@ -321,9 +321,12 @@ namespace UwpControlsLibrary
             }
             else if (Owner.GetType() == typeof(PopupMenuButton))
             {
-                foreach (Image image in ((PopupMenuButton)Owner).ImageList)
+                if (((PopupMenuButton)Owner).ImageList != null && ((PopupMenuButton)Owner).ImageList.Count() > 0)
                 {
-                    image.Margin = new Thickness(left, top, right, bottom);
+                    foreach (Image image in ((PopupMenuButton)Owner).ImageList)
+                    {
+                        image.Margin = new Thickness(left, top, right, bottom);
+                    }
                 }
                 if (((PopupMenuButton)Owner).TextBlock != null)
                 {
@@ -341,6 +344,39 @@ namespace UwpControlsLibrary
                     if (((PopupMenuButton)Owner).TextAlignment == ControlBase.ControlTextAlignment.LEFT)
                     {
                         ((PopupMenuButton)Owner).TextBox.Padding = new Thickness(RelativeFontsize * ImgClickArea.ActualHeight, 0, 0, 0);
+                    }
+                }
+                if (((PopupMenuButton)Owner).Style == ControlBase.PopupMenuButtonStyle.SLIDER)
+                {
+                    // Image size is not the same as HitArea, so we must do slider specific calculations
+                    // to get correct margins for the slider handle. It is also depending on orientation:
+                    // We need a factor for relative size compared to original size for the vertical calculations:
+                    Double sizeFactor = ImgClickArea.ActualWidth / Controls.OriginalWidth;
+
+                    // Calculate the resized width of the handle image:
+                    Double ResizedImageWidth = ((PopupMenuButton)Owner).OriginalImageWidth * sizeFactor;
+
+                    // Calculate the margins between the handle top and bottom and the HitArea top and bottom margins
+                    // (shared betwee top and bottom):
+                    Double handleSideMargin = (RelativeHitArea.Height * ImgClickArea.ActualHeight -
+                        ((PopupMenuButton)Owner).ImageSize.Y * sizeFactor) / 2;
+
+                    // Calculate left and right offset for the handle within the HitArea depending on slider value:
+                    Double leftOffset = (HitArea.Width - ResizedImageWidth) * (((PopupMenuButton)Owner).RelativeValue);
+                    Double rightOffset = (HitArea.Width - ResizedImageWidth) * (1 - ((PopupMenuButton)Owner).RelativeValue);
+
+                    // Adjust the margins with the calculated offsets:
+                    left += leftOffset;
+                    right += rightOffset;
+                    top += handleSideMargin;
+                    bottom += handleSideMargin;
+                    try
+                    {
+                        ((PopupMenuButton)Owner).ImageList[1].Margin = new Thickness(left, top, right, bottom);
+                    }
+                    catch
+                    {
+                        throw new InvalidOperationException("Image for handle in a PopupMenuButton must be second image!");
                     }
                 }
             }

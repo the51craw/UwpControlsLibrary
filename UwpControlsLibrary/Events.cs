@@ -188,7 +188,7 @@ namespace UwpControlsLibrary
                     }
                     else if (control.GetType() == typeof(PopupMenuButton))
                     {
-                        ((PopupMenuButton)control).HandleEvent(e, eventType, PointerButtonStates, delta);
+                        ((PopupMenuButton)control).HandleEvent(e, eventType, pp.Position, PointerButtonStates, delta);
                         return control;
                     }
                     else if (control.GetType() == typeof(TouchpadKeyboard))

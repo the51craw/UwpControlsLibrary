@@ -108,7 +108,7 @@ namespace UwpControlsLibrary
         {
             if (pointerButtonStates.Contains(PointerButton.LEFT))
             {
-                int value = SetValue(pointerPosition);
+                SetValue(pointerPosition);
                 SetPositionFromValue();
             }
         }
@@ -126,7 +126,6 @@ namespace UwpControlsLibrary
             value += delta;
             value = value > MaxValue ? MaxValue : value;
             value = value < MinValue ? MinValue : value;
-            double Value = value;
             SetPositionFromValue();
         }
     }
