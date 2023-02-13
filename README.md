@@ -34,3 +34,6 @@ All theese controls are resizable and most has a lot of optional settings allowi
 Many controls can have its own background image but that could also be part of the common backgorund image. If you emulate a device you may want to 
 take a picture of its front panel and remove only slider handles and such. Then you supply the rest of the image as a background image and uses e.g.
 an image of a slider handle when creating the slider. 
+
+Note that this is a work in progress. Some parts are not even started and changes may break applications.
+Read ModusOperandi.txt and ReadMe.txt before you use it.
