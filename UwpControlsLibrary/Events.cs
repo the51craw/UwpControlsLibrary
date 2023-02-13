@@ -93,29 +93,29 @@ namespace UwpControlsLibrary
         {
             PointerPoint pp = e.GetCurrentPoint(imgClickArea);
 
-            if (PointerButtonStates.Count != 0)
-            {
-                int controlsHit = 0;
-                foreach (Object control in ControlsList)
-                {
-                    ((ControlBase)control).IsSelected = ((ControlBase)control).ControlSizing.IsHit(pp.Position);
-                    if (((ControlBase)control).IsSelected)
-                    {
-                        controlsHit++;
-                        break;
-                    }
-                }
-                if (controlsHit == 0)
-                {
-                    foreach (Object ctrl in ControlsList)
-                    {
-                        if (ctrl.GetType() == typeof(PopupMenuButton))
-                        {
-                            ((PopupMenuButton)ctrl).HideAllMenus();
-                        }
-                    }
-                }
-            }
+            //if (PointerButtonStates.Count != 0)
+            //{
+            //    int controlsHit = 0;
+            //    foreach (Object control in ControlsList)
+            //    {
+            //        ((ControlBase)control).IsSelected = ((ControlBase)control).ControlSizing.IsHit(pp.Position);
+            //        if (((ControlBase)control).IsSelected)
+            //        {
+            //            controlsHit++;
+            //            break;
+            //        }
+            //    }
+            //    if (controlsHit == 0)
+            //    {
+            //        foreach (Object ctrl in ControlsList)
+            //        {
+            //            if (ctrl.GetType() == typeof(PopupMenuButton))
+            //            {
+            //                ((PopupMenuButton)ctrl).HideAllMenus();
+            //            }
+            //        }
+            //    }
+            //}
             return SelectAndCall(this.ControlsList, pp, sender, e, eventType, delta);
         }
 
@@ -141,7 +141,18 @@ namespace UwpControlsLibrary
                     }
                 }
             }
-            if (control != null)
+            if (control == null)
+            {
+                // No controls under mouse pointer, hide all popup menu buttons:
+                foreach (Object ctrl in ControlsList)
+                {
+                    if (ctrl.GetType() == typeof(PopupMenuButton))
+                    {
+                        ((PopupMenuButton)ctrl).HideAllMenus();
+                    }
+                }
+            }
+            else
             { 
                 Current = ((ControlBase)control).Id;
                 if (control.GetType() == typeof(PopupMenuButton))

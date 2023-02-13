@@ -383,6 +383,45 @@ namespace UwpControlsLibrary
             return null;
         }
 
+        /// <summary>
+        /// Returns the topmost (last created) control that is hit.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public object GetCurrentControl(object obj)
+        {
+            object foundControl = null;
+
+            if (obj == null)
+            {
+                foreach (object control in ControlsList)
+                {
+                    if (control.GetType() == typeof(CompoundControl))
+                    {
+                        return GetCurrentControl(control);
+                    }
+                    else
+                    {
+                        if (((ControlBase)control).IsSelected)
+                        {
+                            foundControl = control;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (object control in ((CompoundControl)obj).SubControls.ControlsList)
+                {
+                    if (((ControlBase)control).IsSelected)
+                    {
+                        foundControl = control;
+                    }
+                }
+            }
+            return foundControl;
+        }
+
         public void CalculateExtraMargins(Rect AppSize)
         {
             // Calculate the extra margins outside the workarea (when the window is set to
