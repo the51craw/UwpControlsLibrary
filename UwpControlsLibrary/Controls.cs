@@ -13,6 +13,8 @@ namespace UwpControlsLibrary
         public ControlsUnderPointer ControlsHit { get { return controlsHit; } }
         public ControlsUnderPointer controlsHit;
 
+        public int previousControl = -1;
+
         /// <summary>
         /// To avoid changing value other controls than the intended control,
         /// set Current to true on PointerPressed and false on PointerReleased.
@@ -59,6 +61,8 @@ namespace UwpControlsLibrary
         //private List<Image> imagesToHide;
         //private List<TextBlock> textBlocksToHide;
 
+        private DispatcherTimer closeMenuTimer;
+
         public Controls(Rect AppSize, Image ClickArea)
         {
             AppSize = new Rect(AppSize.Left, AppSize.Top, AppSize.Width, AppSize.Height);
@@ -68,6 +72,9 @@ namespace UwpControlsLibrary
             ControlsList = new List<Object>();
             //imagesToHide = new List<Image>();
             //textBlocksToHide = new List<TextBlock>();
+            closeMenuTimer = new DispatcherTimer();
+            closeMenuTimer.Interval = new TimeSpan(0, 0, 0, 1);
+            closeMenuTimer.Tick += CloseMenuTimer_Tick;
         }
 
         public void Init(Grid gridControls)

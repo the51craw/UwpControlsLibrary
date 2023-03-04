@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.Foundation;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -27,6 +28,7 @@ namespace UwpControlsLibrary
             POPUP,  // No button, click a listed pointer button anywhere, where there is no control, to open a menu.
             BUTTON, // A button. Act as a button on first listed pointer button. All other pointer button opens different menus.
             MENU,   // A menu. All listed pointer buttons may be used to open different menus.
+            ITEM,   // A menu item. Primary listed pointer button may be used to select the item.
             SLIDER, // A menu with a slider on it.
         }
 
@@ -63,6 +65,9 @@ namespace UwpControlsLibrary
             OTHER,
         }
 
+        public PointerPoint PointerPoint;
+        public Point PointerXY;
+
         /// <summary>
         /// If a control is not enabled, it will not show any images.
         /// Calling application must decide wether to call events
@@ -90,6 +95,16 @@ namespace UwpControlsLibrary
                             image.Visibility = visibility;
                         }
                     }
+                }
+
+                if (TextBlock != null)
+                {
+                    TextBlock.Visibility = visibility;
+                }
+
+                if (TextBox != null)
+                {
+                    TextBox.Visibility = visibility;
                 }
 
                 if (this.GetType() == typeof(CompoundControl))

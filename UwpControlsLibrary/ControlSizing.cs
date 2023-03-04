@@ -543,7 +543,7 @@ namespace UwpControlsLibrary
         {
             Boolean isHit = false;
             if (Owner.GetType() != typeof(StaticImage) && Owner.GetType() != typeof(Indicator)
-                && !(Owner.GetType() == typeof(PopupMenuButton) && ((PopupMenuButton)Owner).Visibility== Visibility.Collapsed))
+                && !(Owner.GetType() == typeof(PopupMenuButton) && ((PopupMenuButton)Owner).Visibility == Visibility.Collapsed))
             {
                 isHit = Point.X >= HitArea.Left && Point.X <= HitArea.Right
                     && Point.Y >= HitArea.Top && Point.Y <= HitArea.Bottom;

@@ -143,21 +143,18 @@ namespace UwpControlsLibrary
             }
             if (control == null)
             {
-                // No controls under mouse pointer, hide all popup menu buttons:
-                foreach (Object ctrl in ControlsList)
-                {
-                    if (ctrl.GetType() == typeof(PopupMenuButton))
-                    {
-                        ((PopupMenuButton)ctrl).HideAllMenus();
-                    }
-                }
+                closeMenuTimer.Start();
             }
             else
-            { 
+            {
                 Current = ((ControlBase)control).Id;
                 if (control.GetType() == typeof(PopupMenuButton))
                 {
                     ((PopupMenuButton)control).ResetHovering();
+                    if (((PopupMenuButton)control).Id == Current)
+                    {
+                        closeMenuTimer.Stop();
+                    }
                 }
                 else if (control.GetType() == typeof(ImageButton))
                 {
@@ -167,6 +164,8 @@ namespace UwpControlsLibrary
                 ((ControlBase)control).IsSelected = ((ControlBase)control).ControlSizing.IsHit(pp.Position);
                 if (((ControlBase)control).IsSelected)
                 {
+                    ((ControlBase)control).PointerPoint = pp;
+                    ((ControlBase)control).PointerXY = pp.Position;
                     if (control.GetType() == typeof(Knob))
                     {
                         ((Knob)control).HandleEvent(pp.Position, eventType, PointerButtonStates, delta);
@@ -220,6 +219,23 @@ namespace UwpControlsLibrary
                 }
             }
             return null;
+        }
+
+        private void CloseMenuTimer_Tick(object sender, object e)
+        {
+            CloseAllMenuItems();
+        }
+
+        public void CloseAllMenuItems()
+        {
+            foreach (object obj in ControlsList)
+            {
+                if (obj.GetType() == typeof(PopupMenuButton)
+                    && ((PopupMenuButton)obj).MenuNumber > -1)
+                {
+                    ((PopupMenuButton)obj).Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         public void ClosePopupMenu(PopupMenuButton menu)

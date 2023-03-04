@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Text;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -49,8 +50,9 @@ namespace PopupMenuSampleApp
             volume = Controls.AddKnob(i++, gridControls, new Image[] { imgSmallKnob }, new Point(121, 158), 0, 127, 30, 330, 2);
 
             robot = Controls.AddPopupMenuButton(i++, gridControls, new Image[] { imgRobotOn, imgEffectButtonHover },
-                new Point(69, 250), ControlBase.PopupMenuButtonStyle.BUTTON, new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT,
-                ControlBase.PointerButton.RIGHT });
+                new Point(69, 250), ControlBase.PopupMenuButtonStyle.BUTTON, 
+                new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT,
+                ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER });
 
             megaphone = Controls.AddPopupMenuButton(i++, gridControls, new Image[] { imgEffectButtonBackground, imgEffectButtonHover },
                 new Point(214, 250), ControlBase.PopupMenuButtonStyle.BUTTON, new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT,
@@ -87,6 +89,27 @@ namespace PopupMenuSampleApp
                 new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
                 "Item 4", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
                 textOnColor, textOffColor);
+
+            mi = 0;
+            m = robot.AddMenu();
+
+            item = robot.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
+                new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
+                "Other item 1", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
+                textOnColor, textOffColor);
+            item = robot.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
+                new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
+                "Other item 2", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
+                textOnColor, textOffColor);
+            item = robot.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
+                new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
+                "Other item 3", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
+                textOnColor, textOffColor);
+            item = robot.AddMenuItem(m, mi++, new Image[] { imgMenuBackground }, ControlBase.PopupMenuButtonStyle.BUTTON,
+                new ControlBase.PointerButton[] { ControlBase.PointerButton.LEFT, ControlBase.PointerButton.RIGHT, ControlBase.PointerButton.OTHER },
+                "Other item 4", 14, true, ControlBase.ControlTextWeight.NORMAL, ControlBase.ControlTextAlignment.LEFT, 1.0, 0.0, 0.0,
+                textOnColor, textOffColor);
+
 
             mi = 0;
             m = megaphone.AddMenu();
@@ -174,7 +197,11 @@ namespace PopupMenuSampleApp
         {
             if (Controls != null)
             {
-                Controls.PointerMoved(sender, e);
+                ControlBase control = (ControlBase)Controls.PointerMoved(sender, e);
+                //if (control == null)
+                //{
+                //    CloseAllMenuItems();
+                //}
                 if (toolTips != null)
                 {
                     if (robot.IsSelected)
@@ -210,6 +237,31 @@ namespace PopupMenuSampleApp
             if (Controls != null)
             {
                 Controls.PointerWheelChanged(sender, e);
+            }
+        }
+
+        public void CloseAllMenuItems()
+        {
+            foreach (object menuItem in Controls.ControlsList)
+            {
+                if (menuItem.GetType() == typeof(PopupMenuButton))
+                {
+                    //foreach (List<List<PopupMenuButton>> control in Controls.ControlsList)
+                    {
+                        // Iterate menus for left and right mouse button:
+                        //foreach (List<PopupMenuButton> mouseButton in control)
+                        {
+                            // Iterate the items of the menu:
+                            //foreach (PopupMenuButton menuItem in mouseButton)
+                            {
+                                ((PopupMenuButton)menuItem).HideAllMenus();
+                                //((PopupMenuButton)menuItem).TextBlock.Visibility = Visibility.Visible;
+                                //((PopupMenuButton)menuItem).TextBox.Visibility = Visibility.Collapsed;
+                                //((PopupMenuButton)menuItem).Visibility = Visibility.Collapsed;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
