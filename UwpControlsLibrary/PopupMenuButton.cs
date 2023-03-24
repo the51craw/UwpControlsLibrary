@@ -752,7 +752,7 @@ namespace UwpControlsLibrary
                     else if (Style == PopupMenuButtonStyle.MENU)
                     {
                         // If any of the items in the menu given is visible, then all of them are.
-                        if (Children != null && Children.Count > 0)
+                        if (Children != null && Children.Count > 0 && buttonPressed < Children.Count)
                         {
                             closed = Children[buttonPressed][0].Visibility == Visibility.Collapsed;
 

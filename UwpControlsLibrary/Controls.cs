@@ -85,6 +85,13 @@ namespace UwpControlsLibrary
             //AddControlsToHide(gridControls);
         }
 
+        public AreaButton AddAreaButton(int Id, Grid gridMain, Rect HitArea)
+        {
+            AreaButton button = new AreaButton(this, Id, gridMain, HitArea);
+            ControlsList.Add(button);
+            return button;
+        }
+		
         public StaticImage AddStaticImage(int Id, Grid gridControls, Image[] imageList, Point position)
         {
             StaticImage staticImage = new StaticImage(this, Id, gridControls, imageList, position);
